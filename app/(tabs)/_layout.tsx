@@ -34,12 +34,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="drills"
         options={{
-          title: 'Explore',
+          title: 'Entrainements',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
+      {/* Ensure DribblingFundamentalsDrills is not included in the Tabs */}
     </Tabs>
   );
 }
