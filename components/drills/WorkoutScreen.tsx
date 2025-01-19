@@ -1,36 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { WebView } from 'react-native-webview';
 import * as Speech from 'expo-speech';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+
 import { drills } from './drillsData.js';
+
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState(4);
+  const [isMuted, setIsMuted] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
-        Speech.speak(drills[currentDrillIndex].title, { language: 'fr-FR' });        
-        if(drills[currentDrillIndex].duration >=1)
-            {
-                Speech.speak(drills[currentDrillIndex].duration + ' minute', { language: 'fr-FR' });
-            }  
-        else{
-            let seconds = drills[currentDrillIndex].duration * 60;
-            Speech.speak(seconds+ 'secondes', { language: 'fr-FR' });
+    if (currentDrillIndex === -1) {
+      if (!isMuted) Speech.speak('Prêt à y aller...', { language: 'fr-FR' });
+    } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
+      if (!isMuted) {
+        Speech.speak(drills[currentDrillIndex].title, { language: 'fr-FR' });
+        if (drills[currentDrillIndex].duration >= 1) {
+          Speech.speak(drills[currentDrillIndex].duration + ' minute', { language: 'fr-FR' });
+        } else {
+          let seconds = drills[currentDrillIndex].duration * 60;
+          Speech.speak(seconds + ' secondes', { language: 'fr-FR' });
         }
-        
-        Speech.speak(drills[currentDrillIndex].description, { language: 'fr-FR' });
+        Speech.speak(drills[currentDrillIndex].instructions, { language: 'fr-FR' });
+      }
     }
-  }, [currentDrillIndex]);
+  }, [currentDrillIndex, isMuted]);
 
   useEffect(() => {
     if (currentDrillIndex === -1) {
       const timer = setTimeout(() => {
         setCurrentDrillIndex(0);
         setTimeRemaining(drills[0].duration * 60);
-      }, 4000); // 4 seconds delay
+      }, 2000); // 2 seconds delay
       return () => clearTimeout(timer);
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       const interval = setInterval(() => {
@@ -39,8 +46,8 @@ export default function WorkoutScreen() {
 
       const timer = setTimeout(() => {
         setCurrentDrillIndex((prevIndex) => prevIndex + 1);
-        setTimeRemaining(drills[currentDrillIndex + 1].duration * 60);
-      }, drills[currentDrillIndex].duration * 60 * 1000); // 10 seconds per drill
+        setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
+      }, drills[currentDrillIndex].duration * 60 * 1000); // duration per drill
 
       return () => {
         clearTimeout(timer);
@@ -49,14 +56,35 @@ export default function WorkoutScreen() {
     }
   }, [currentDrillIndex]);
 
-  //if time remaining is half of the total time, the app will speak the remaining time
-    useEffect(() => {
-        if (currentDrillIndex >= 0 && timeRemaining === drills[currentDrillIndex].duration * 30) {
-        Speech.speak('Mi-temps', { language: 'fr-FR' });
-        }
-    }, [timeRemaining]);
+  useEffect(() => {
+    if (currentDrillIndex >= 0 && timeRemaining === drills[currentDrillIndex].duration * 30) {
+      if (!isMuted) Speech.speak('Mi-temps', { language: 'fr-FR' });
+    }
+  }, [timeRemaining, isMuted]);
 
-  const videoHtml = (uri) => `
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        Speech.stop();
+      };
+    }, [])
+  );
+
+  const handleMuteToggle = () => {
+    setIsMuted(!isMuted);
+    Speech.stop();
+  };
+
+  const handleNextDrill = () => {
+    Speech.stop();
+    setCurrentDrillIndex((prevIndex) => prevIndex + 1);
+    if(currentDrillIndex !== drills.length - 1) {
+    setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
+    }
+   
+  };
+
+  const videoHtml = (uri: string) => `
     <html>
       <body style="margin: 0; padding: 0; background-color: black;">
         <video src="${uri}" autoplay muted loop style="width: 100%; height: 100%;"></video>
@@ -66,6 +94,11 @@ export default function WorkoutScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
+          <Icon name={isMuted ? "volume-off" : "volume-up"} size={30} color={'gray'} />
+        </TouchableOpacity>
+      </View>
       {currentDrillIndex === -1 ? (
         <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
       ) : currentDrillIndex < drills.length ? (
@@ -85,9 +118,15 @@ export default function WorkoutScreen() {
           ) : (
             <ThemedText style={styles.noVideoText}>Pas de vidéo disponible</ThemedText>
           )}
+          <ThemedText style={styles.sectionTitle}>Instruction</ThemedText>
+          <ThemedText style={styles.drillInstructions}>{drills[currentDrillIndex].instructions}</ThemedText>
+          <ThemedText style={styles.sectionTitle}>Objectif</ThemedText>
           <ThemedText style={styles.drillDescription}>{drills[currentDrillIndex].description}</ThemedText>
           <ThemedText style={styles.timerText}>Temps restant: {timeRemaining} secondes</ThemedText>
-        </View> 
+          <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
+            <ThemedText style={styles.nextButtonText}>Exercice suivant</ThemedText>
+          </TouchableOpacity>
+        </View>
       ) : (
         <ThemedText style={styles.text}>Entraînement terminé!</ThemedText>
       )}
@@ -101,12 +140,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  header: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 16,
+    position: 'absolute',
+    top: 0,
+    zIndex: 1,
+  },
+  iconButton: {
+    padding: 8,
+  },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
   },
   drillContainer: {
     alignItems: 'center',
+    marginHorizontal: 6,
   },
   drillTitle: {
     marginTop: 20,
@@ -116,11 +168,18 @@ const styles = StyleSheet.create({
   drillDuration: {
     fontSize: 18,
   },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
+  drillInstructions: {
+    fontSize: 16,
+    marginVertical: 10,
+  },
   drillDescription: {
     fontSize: 16,
-    marginVertical: 0,
-    marginTop: 10,
-    marginBottom: 100,
+    marginVertical: 10,
   },
   timerText: {
     fontSize: 16,
@@ -131,11 +190,26 @@ const styles = StyleSheet.create({
     height: 100,
     marginVertical: 10,
     flex: 1,
-    backgroundColor: 'transparant', // Add background color for debugging
+    backgroundColor: 'transparent', // Add background color for debugging
   },
   noVideoText: {
     fontSize: 16,
     color: 'gray',
     marginTop: 10,
   },
+  nextButton: {
+    backgroundColor: '#1E90FF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  nextButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
+

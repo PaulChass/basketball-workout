@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function DribblingFundamentalsDrills() {
   const navigation = useNavigation();
   
-  const videoHtml = (uri) => `
+  const videoHtml = (uri: string) => `
   <html>
     <body style="margin: 0; padding: 0;">
       <video src="${uri}" autoplay muted loop style="width: 100%; height: 100%;"></video>
@@ -60,7 +60,7 @@ export default function DribblingFundamentalsDrills() {
           <ThemedText type="default">Durée: 1 min</ThemedText>
         </View>
         <View style={styles.drillContainer}>
-          <ThemedText type="subtitle">Exercice 5: Mouvement de rotation</ThemedText>
+          <ThemedText type="subtitle">Exercice 5: Dribble avant/arrière</ThemedText>
           <ThemedText type="default">Durée: 1 min</ThemedText>
         </View>
       </ParallaxScrollView>
