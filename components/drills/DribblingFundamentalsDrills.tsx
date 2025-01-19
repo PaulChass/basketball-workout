@@ -1,9 +1,11 @@
 import React from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
-import { View, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
+import { drills } from './drillsData';
+
 
 export default function DribblingFundamentalsDrills() {
   const navigation = useNavigation();
@@ -25,44 +27,27 @@ export default function DribblingFundamentalsDrills() {
             style={styles.reactLogo}
           />
         }>
-        <View style={styles.container}>
+       <View style={styles.container}>
           <ThemedText type="title">Exercices Fondamentaux de Dribble</ThemedText>
           <View style={styles.infoContainer}>
             <ThemedText type="default">5 min</ThemedText>
             <ThemedText type="default">5 exercices</ThemedText>
           </View>
         </View>
-        
-        <View style={styles.drillContainer}>
-          <ThemedText type="subtitle">Exercice 1: Dribble fort</ThemedText>
-          <ThemedText type="default">Durée: 1 min</ThemedText>
-          <WebView
-            originWhitelist={['*']}
-            source={{ html: videoHtml('https://balldontlie.fr/poundDribble.mp4') }}
-            style={styles.animation}
-          />
-        </View>
-        <View style={styles.drillContainer}>
-          <ThemedText type="subtitle">Exercice 2: Dribble croisé</ThemedText>
-          <ThemedText type="default">Durée: 1 min</ThemedText>
-          <WebView
-            originWhitelist={['*']}
-            source={{ html: videoHtml('https://balldontlie.fr/crossover.mp4') }}
-            style={styles.animation}
-          />
-        </View>
-        <View style={styles.drillContainer}>
-          <ThemedText type="subtitle">Exercice 3: Entre les jambes</ThemedText>
-          <ThemedText type="default">Durée: 1 min</ThemedText>
-        </View>
-        <View style={styles.drillContainer}>
-          <ThemedText type="subtitle">Exercice 4: Derrière le dos</ThemedText>
-          <ThemedText type="default">Durée: 1 min</ThemedText>
-        </View>
-        <View style={styles.drillContainer}>
-          <ThemedText type="subtitle">Exercice 5: Dribble avant/arrière</ThemedText>
-          <ThemedText type="default">Durée: 1 min</ThemedText>
-        </View>
+
+        {drills.map((drill, index) => (
+          <TouchableOpacity key={index} style={styles.drillContainer} onPress={() =>     navigation.navigate('DrillDetailsScreen', { drill })}>
+            <ThemedText type="subtitle">{drill.title}</ThemedText>
+            <ThemedText type="default">Durée: {drill.duration} min</ThemedText>
+            {drill.videoUrl && (
+              <WebView
+                originWhitelist={['*']}
+                source={{ html: videoHtml(drill.videoUrl) }}
+                style={styles.animation}
+              />
+            )}
+          </TouchableOpacity>
+        ))}
       </ParallaxScrollView>
       <View style={styles.startButtonContainer}>
         <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen')}>

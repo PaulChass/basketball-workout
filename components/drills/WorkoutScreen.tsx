@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { ThemedText } from '../ThemedText';
-import { WebView } from 'react-native-webview';
 import * as Speech from 'expo-speech';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
 
 import { drills } from './drillsData.js';
-
+import DrillDetails from './DrillDetails';
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
@@ -20,14 +20,13 @@ export default function WorkoutScreen() {
       if (!isMuted) Speech.speak('Prêt à y aller...', { language: 'fr-FR' });
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       if (!isMuted) {
-        Speech.speak(drills[currentDrillIndex].title, { language: 'fr-FR' });
+        Speech.speak(drills[currentDrillIndex].title);
         if (drills[currentDrillIndex].duration >= 1) {
           Speech.speak(drills[currentDrillIndex].duration + ' minute', { language: 'fr-FR' });
         } else {
           let seconds = drills[currentDrillIndex].duration * 60;
           Speech.speak(seconds + ' secondes', { language: 'fr-FR' });
         }
-        Speech.speak(drills[currentDrillIndex].instructions, { language: 'fr-FR' });
       }
     }
   }, [currentDrillIndex, isMuted]);
@@ -45,8 +44,11 @@ export default function WorkoutScreen() {
       }, 1000);
 
       const timer = setTimeout(() => {
-        setCurrentDrillIndex((prevIndex) => prevIndex + 1);
-        setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
+        
+        if(currentDrillIndex !== drills.length - 1) {
+          setCurrentDrillIndex((prevIndex) => prevIndex + 1);
+          setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);}
+        else{setCurrentDrillIndex(-2);}
       }, drills[currentDrillIndex].duration * 60 * 1000); // duration per drill
 
       return () => {
@@ -93,6 +95,14 @@ export default function WorkoutScreen() {
   `;
 
   return (
+    <ParallaxScrollView
+            headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+            headerImage={
+              <Image
+                source={require('@/assets/images/fundamentals.png')}
+                style={styles.reactLogo}
+              />
+            }>
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
@@ -101,38 +111,28 @@ export default function WorkoutScreen() {
       </View>
       {currentDrillIndex === -1 ? (
         <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
-      ) : currentDrillIndex < drills.length ? (
+      ) : currentDrillIndex >= drills.length || currentDrillIndex===-2 ? (
+        <ThemedText style={styles.text}>Bravo, vous avez terminé!</ThemedText>
+      ) :
+      (
         <View style={styles.drillContainer}>
-          <ThemedText style={styles.drillTitle}>{drills[currentDrillIndex].title}</ThemedText>
-          <ThemedText style={styles.drillDuration}>{drills[currentDrillIndex].duration} minute</ThemedText>
-          {drills[currentDrillIndex].videoUrl ? (
-            <WebView
-              originWhitelist={['*']}
-              source={{ html: videoHtml(drills[currentDrillIndex].videoUrl) }}
-              style={styles.animation}
-              onError={(syntheticEvent) => {
-                const { nativeEvent } = syntheticEvent;
-                console.warn('WebView error: ', nativeEvent);
-              }}
-            />
-          ) : (
-            <ThemedText style={styles.noVideoText}>Pas de vidéo disponible</ThemedText>
-          )}
-          <ThemedText style={styles.sectionTitle}>Instruction</ThemedText>
-          <ThemedText style={styles.drillInstructions}>{drills[currentDrillIndex].instructions}</ThemedText>
-          <ThemedText style={styles.sectionTitle}>Objectif</ThemedText>
-          <ThemedText style={styles.drillDescription}>{drills[currentDrillIndex].description}</ThemedText>
-          <ThemedText style={styles.timerText}>Temps restant: {timeRemaining} secondes</ThemedText>
-          <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Exercice suivant</ThemedText>
-          </TouchableOpacity>
+          <DrillDetails
+            drill={drills[currentDrillIndex]}
+            videoHtml={videoHtml}
+          />
+        <ThemedText style={styles.timerText}> {timeRemaining} secondes</ThemedText>
+        <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
+
+          <ThemedText style={styles.nextButtonText}>Exercice suivant</ThemedText>
+        </TouchableOpacity>
         </View>
-      ) : (
-        <ThemedText style={styles.text}>Entraînement terminé!</ThemedText>
-      )}
+      ) }
+  
     </View>
+    </ParallaxScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   timerText: {
     fontSize: 16,
-    marginTop: 10,
+    marginTop: 0,
   },
   animation: {
     width: 300,
@@ -197,14 +197,21 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginTop: 10,
   },
+  reactLogo: {
+    height: 250,
+    width: '100%',
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+  },
   nextButton: {
     backgroundColor: '#1E90FF',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 0,
   },
   nextButtonText: {
     color: '#FFFFFF',

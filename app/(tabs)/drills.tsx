@@ -9,13 +9,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
 import DribblingFundamentalsDrills from '../../components/drills/DribblingFundamentalsDrills';
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
+import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
 function DrillsList() {
   const navigation = useNavigation();
-
   return (
     <View style={styles.tabContainer}>
       <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
@@ -42,7 +42,7 @@ function DrillsList() {
 function TabOne() {
   return (
     <View style={styles.tabContainer}>
-      <Text>Content for Tab One</Text>
+      <Text></Text>
     </View>
   );
 }
@@ -62,6 +62,7 @@ export default function DrillsScreen() {
         <Stack.Screen name="DrillsTabs" component={DrillsTabs} options={{ headerShown: false }} />
         <Stack.Screen name="DribblingFundamentalsDrills" component={DribblingFundamentalsDrills} />
         <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} />
+        <Stack.Screen name="DrillDetailsScreen" component={DrillDetailsScreen} /> 
       </Stack.Navigator>
     </NavigationIndependentTree>
   );
