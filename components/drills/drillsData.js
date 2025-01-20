@@ -1,34 +1,34 @@
 export const drills = [
   { 
     title: 'Pound Dribble',
-    duration: 0.5, 
-    description: 'Cet exercice se concentre sur l\'amélioration de votre contrôle de balle et de votre force en dribblant la balle fort et rapidement.', 
+    duration: 1, 
+    description: 'Amélioration de votre contrôle de balle et de l\'explosivité de vos dribbles.', 
     videoUrl: 'https://balldontlie.fr/poundDribble.mp4',
-    instructions: 'Dribblez la balle avec force en utilisant uniquement votre main dominante. Gardez votre regard vers l\'avant et essayez de ne pas regarder la balle.'
+    instructions: 'Dribblez la balle avec force en utilisant une seule main.'
   },
   { 
     title: 'Crossover', 
     duration: 1, 
-    description: 'Cet exercice vous aide à pratiquer le changement de direction rapidement tout en gardant le contrôle de la balle.', 
+    description: 'Amélioration de votre coordination et de votre rapidité de dribble.', 
     videoUrl: 'https://balldontlie.fr/crossover.mp4',
-    instructions: 'Dribblez la balle d\'une main à l\'autre en passant devant votre corps. Gardez votre regard vers l\'avant et essayez de ne pas regarder la balle.'
+    instructions: 'Dribblez la balle d\'une main à l\'autre en passant devant votre corps.'
   },
   { 
-    title: 'Between the Legs', 
+    title: 'Dribble devant et derrière la ligne', 
     duration: 1, 
-    description: 'Cet exercice améliore votre capacité à changer de direction et à protéger la balle des défenseurs.',
-    instructions: 'Dribblez la balle d\'une main à l\'autre en passant entre vos jambes. Gardez votre regard vers l\'avant et essayez de ne pas regarder la balle.'
+    description: 'Amélioration du controle de balle sous pression défensive.', 
+    instructions: 'Placez-vous devant une ligne. Dribblez la balle une fois devant la ligne, puis une fois derrière la ligne. Répétez ce mouvement en gardant un rythme constant.'
   },
   { 
-    title: 'Behind the Back', 
+    title: 'Entre les jambes', 
     duration: 1, 
-    description: 'Cet exercice vous aide à pratiquer le changement de direction et à créer de l\'espace entre vous et le défenseur.',
+    description: 'Amélioration de votre capacité à protéger la balle des défenseurs at aux changements de direction.',
+    instructions: 'Dribblez la balle entre vos jambes en changeant de main à chaque fois.'
+  },
+  { 
+    title: 'Derrière le dos', 
+    duration: 1, 
+    description: 'Cet exercice vous aide à changer rapidement de direction pour créer de l\'espace entre vous et un défenseur lorsqu\'il est en surpression.',
     instructions: 'Dribblez la balle d\'une main à l\'autre en passant derrière votre dos. Gardez votre regard vers l\'avant et essayez de ne pas regarder la balle.'
-  },
-  { 
-    title: 'Walk the Dog', 
-    duration: 1, 
-    description: 'Cet exercice se concentre sur l\'amélioration de votre contrôle de balle en cas de pression défensive.', 
-    instructions: 'Placez-vous devant une ligne. Dribblez la balle une fois devant la ligne, puis une fois derrière la ligne. Répétez ce mouvement en gardant un rythme constant et en maintenant votre regard vers l\'avant.'
   },
 ];

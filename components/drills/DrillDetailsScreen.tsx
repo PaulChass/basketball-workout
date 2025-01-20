@@ -1,5 +1,5 @@
 import React from 'react';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import Animated from 'react-native-reanimated';
 import { View, StyleSheet, Image } from 'react-native';
 import DrillDetails from '../../components/drills/DrillDetails';
 import { useRoute } from '@react-navigation/native';
@@ -17,21 +17,14 @@ export default function DrillDetailsScreen() {
   `;
 
   return (
-    <ParallaxScrollView
-                    headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-                    headerImage={
-                      <Image
-                        source={require('@/assets/images/fundamentals.png')}
-                        style={styles.reactLogo}
-                      />
-                    }>
+    <Animated.ScrollView>
     <View style={styles.container}>
       <DrillDetails
         drill={drill}
         videoHtml={videoHtml}
       />
     </View>
-    </ParallaxScrollView>
+    </Animated.ScrollView>
   );
 }
 

@@ -4,8 +4,11 @@ import { ThemedText } from '@/components/ThemedText';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
-import { drills } from './drillsData';
+import { drills as allDrills } from './drillsData';
 
+const drills = allDrills.filter(drill =>
+  ["Pound Dribble", "Crossover", "Dribble devant et derrière la ligne", "Entre les jambes", "Derrière le dos"].includes(drill.title)
+);
 
 export default function DribblingFundamentalsDrills() {
   const navigation = useNavigation();
@@ -36,7 +39,8 @@ export default function DribblingFundamentalsDrills() {
         </View>
 
         {drills.map((drill, index) => (
-          <TouchableOpacity key={index} style={styles.drillContainer} onPress={() =>     navigation.navigate('DrillDetailsScreen', { drill })}>
+          <TouchableOpacity key={index} style={styles.drillContainer} 
+          onPress={() =>navigation.navigate('DrillDetailsScreen', { drill })}>
             <ThemedText type="subtitle">{drill.title}</ThemedText>
             <ThemedText type="default">Durée: {drill.duration} min</ThemedText>
             {drill.videoUrl && (
@@ -50,7 +54,8 @@ export default function DribblingFundamentalsDrills() {
         ))}
       </ParallaxScrollView>
       <View style={styles.startButtonContainer}>
-        <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen')}>
+        <TouchableOpacity style={styles.startButton} 
+          onPress={() => navigation.navigate('WorkoutScreen')}>
           <ThemedText style={styles.startButtonText}>Commencer</ThemedText>
         </TouchableOpacity>
       </View>

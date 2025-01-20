@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedText } from '../ThemedText';
+import { WebView } from 'react-native-webview';
 import * as Speech from 'expo-speech';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
 
 import { drills } from './drillsData.js';
-import DrillDetails from './DrillDetails';
+
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
@@ -44,11 +44,9 @@ export default function WorkoutScreen() {
       }, 1000);
 
       const timer = setTimeout(() => {
-        
+        setCurrentDrillIndex((prevIndex) => prevIndex + 1);
         if(currentDrillIndex !== drills.length - 1) {
-          setCurrentDrillIndex((prevIndex) => prevIndex + 1);
-          setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);}
-        else{setCurrentDrillIndex(-2);}
+        setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);}
       }, drills[currentDrillIndex].duration * 60 * 1000); // duration per drill
 
       return () => {
@@ -95,14 +93,6 @@ export default function WorkoutScreen() {
   `;
 
   return (
-    <ParallaxScrollView
-            headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-            headerImage={
-              <Image
-                source={require('@/assets/images/fundamentals.png')}
-                style={styles.reactLogo}
-              />
-            }>
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
@@ -111,28 +101,38 @@ export default function WorkoutScreen() {
       </View>
       {currentDrillIndex === -1 ? (
         <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
-      ) : currentDrillIndex >= drills.length || currentDrillIndex===-2 ? (
-        <ThemedText style={styles.text}>Bravo, vous avez terminé!</ThemedText>
-      ) :
-      (
+      ) : currentDrillIndex < drills.length ? (
         <View style={styles.drillContainer}>
-          <DrillDetails
-            drill={drills[currentDrillIndex]}
-            videoHtml={videoHtml}
-          />
-        <ThemedText style={styles.timerText}> {timeRemaining} secondes</ThemedText>
-        <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
-
-          <ThemedText style={styles.nextButtonText}>Exercice suivant</ThemedText>
-        </TouchableOpacity>
+          <ThemedText style={styles.drillTitle}>{drills[currentDrillIndex].title}</ThemedText>
+          <ThemedText style={styles.drillDuration}>{drills[currentDrillIndex].duration} minute</ThemedText>
+          {drills[currentDrillIndex].videoUrl ? (
+            <WebView
+              originWhitelist={['*']}
+              source={{ html: videoHtml(drills[currentDrillIndex].videoUrl) }}
+              style={styles.animation}
+              onError={(syntheticEvent) => {
+                const { nativeEvent } = syntheticEvent;
+                console.warn('WebView error: ', nativeEvent);
+              }}
+            />
+          ) : (
+            <ThemedText style={styles.noVideoText}>Pas de vidéo disponible</ThemedText>
+          )}
+          <ThemedText style={styles.sectionTitle}>Instruction</ThemedText>
+          <ThemedText style={styles.drillInstructions}>{drills[currentDrillIndex].instructions}</ThemedText>
+          <ThemedText style={styles.sectionTitle}>Objectif</ThemedText>
+          <ThemedText style={styles.drillDescription}>{drills[currentDrillIndex].description}</ThemedText>
+          <ThemedText style={styles.timerText}>Temps restant: {timeRemaining} secondes</ThemedText>
+          <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
+            <ThemedText style={styles.nextButtonText}>Exercice suivant</ThemedText>
+          </TouchableOpacity>
         </View>
-      ) }
-  
+      ) : (
+        <ThemedText style={styles.text}>Entraînement terminé!</ThemedText>
+      )}
     </View>
-    </ParallaxScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   timerText: {
     fontSize: 16,
-    marginTop: 0,
+    marginTop: 10,
   },
   animation: {
     width: 300,
@@ -197,13 +197,6 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginTop: 10,
   },
-  reactLogo: {
-    height: 250,
-    width: '100%',
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
   nextButton: {
     backgroundColor: '#1E90FF',
     paddingVertical: 15,
@@ -211,11 +204,10 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 0,
   },
   nextButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
 });
