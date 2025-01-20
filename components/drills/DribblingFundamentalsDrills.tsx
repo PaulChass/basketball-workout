@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { drills as allDrills } from './drillsData';
 
-const drills = allDrills.filter(drill =>
+const initialDrills = allDrills.filter(drill =>
   ["Pound Dribble", "Crossover", "Dribble devant et derrière la ligne", "Entre les jambes", "Derrière le dos"].includes(drill.title)
 );
 
 export default function DribblingFundamentalsDrills() {
+  const [drills, setDrills] = useState(initialDrills);
   const navigation = useNavigation();
-  
+
   const videoHtml = (uri: string) => `
   <html>
     <body style="margin: 0; padding: 0;">
@@ -20,6 +22,12 @@ export default function DribblingFundamentalsDrills() {
     </body>
   </html>
 `;
+
+  const handleDeleteDrill = (index: number) => {
+    const newDrills = drills.filter((_, i) => i !== index);
+    setDrills(newDrills);
+  };
+
   return (
     <View style={styles.container}>
       <ParallaxScrollView
@@ -30,33 +38,42 @@ export default function DribblingFundamentalsDrills() {
             style={styles.reactLogo}
           />
         }>
-       <View style={styles.container}>
+        <View style={styles.container}>
           <ThemedText type="title">Exercices Fondamentaux de Dribble</ThemedText>
           <View style={styles.infoContainer}>
-            <ThemedText type="default">2 min 30 sec
-            </ThemedText>
+            <ThemedText type="default">2 min 30 sec</ThemedText>
             <ThemedText type="default">5 exercices</ThemedText>
           </View>
         </View>
 
         {drills.map((drill, index) => (
-          <TouchableOpacity key={index} style={styles.drillContainer} 
-          onPress={() =>navigation.navigate('DrillDetailsScreen', { drill })}>
-            <ThemedText type="subtitle">{drill.title}</ThemedText>
-            <ThemedText type="default">Durée: {drill.duration < 1 ? `${drill.duration * 60} sec` : `${drill.duration} min`}</ThemedText>
-            {drill.videoUrl && (
-              <WebView
-                originWhitelist={['*']}
-                source={{ html: videoHtml(drill.videoUrl) }}
-                style={styles.animation}
-              />
-            )}
-          </TouchableOpacity>
+          <View key={index} style={styles.drillContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('DrillDetailsScreen', { drill })}>
+              <View style={styles.infoBar}>
+                <ThemedText type="subtitle">{drill.title}
+                </ThemedText>
+                <ThemedText type="default">Durée: {drill.duration < 1 ? `${drill.duration * 60} sec` : `${drill.duration} min`}
+                </ThemedText>
+              </View>
+
+              {drill.videoUrl && (
+                <View style={styles.animationBar}>
+                  <WebView
+                    originWhitelist={['*']}
+                    source={{ html: videoHtml(drill.videoUrl) }}
+                    style={styles.animation}
+                  />
+                  <TouchableOpacity onPress={() => handleDeleteDrill(index)} style={styles.deleteButton}>
+                    <Icon name="delete" size={24} color="gray" />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
         ))}
       </ParallaxScrollView>
       <View style={styles.startButtonContainer}>
-        <TouchableOpacity style={styles.startButton} 
-          onPress={() => navigation.navigate('WorkoutScreen')}>
+        <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen')}>
           <ThemedText style={styles.startButtonText}>Commencer</ThemedText>
         </TouchableOpacity>
       </View>
@@ -97,6 +114,24 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     paddingVertical: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  deleteButton: {
+    padding: 8,
+    justifyContent: 'center',
+  },
+  infoBar: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: 8,
+  },
+  animationBar: {
+    flexDirection: 'row',
   },
   startButtonContainer: {
     position: 'absolute',

@@ -8,6 +8,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
 import DribblingFundamentalsDrills from '../../components/drills/DribblingFundamentalsDrills';
+import DribblingChallenge from '@/components/drills/DribblingChallenge';  
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
@@ -30,11 +31,11 @@ function DribbleWorkoutsList() {
           <ThemedText type="default">5 min - 5 exercices</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Navigate to Workout 2')}>
-        <Text style={styles.buttonText}>Workout 2</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}> >
+        <ThemedText style={styles.buttonText}>Avancées</ThemedText>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Navigate to Workout 3')}>
-        <Text style={styles.buttonText}>Workout 3</Text>
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
+        <Text style={styles.buttonText}>Combos / Moves</Text>
       </TouchableOpacity>
     </View>
   );
@@ -56,11 +57,11 @@ function ShootWorkoutsList() {
           <ThemedText type="default">1 minute</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Navigate to Workout 2')}>
-        <Text style={styles.buttonText}>Shooting Workout 2</Text>
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
+        <Text style={styles.buttonText}>Programme d'entrainement</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Navigate to Workout 3')}>
-        <Text style={styles.buttonText}>Workout 3</Text>
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
+        <Text style={styles.buttonText}>Séance de tir</Text>
       </TouchableOpacity>
     </View>
   );
@@ -72,21 +73,21 @@ function LayupsWorkoutsList() {
   return (
     <View style={styles.tabContainer}>
       <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
-      <TouchableOpacity onPress={() => alert('Patience, bientôt disponible!')}>
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
         <ImageBackground
           source={require('@/assets/images/layups.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
           <Text style={styles.buttonText}>Fondamentaux</Text>
-          <ThemedText type="default">5 min - 5 exercices</ThemedText>
+          <ThemedText type="default">5 x 5 Double pas</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Navigate to Workout 2')}>
-        <Text style={styles.buttonText}>Workout 2</Text>
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
+        <Text style={styles.buttonText}>Layups Avancées</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Navigate to Workout 3')}>
-        <Text style={styles.buttonText}>Workout 3</Text>
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
+        <Text style={styles.buttonText}>Counter - Layups</Text>
       </TouchableOpacity>
     </View>
   );
@@ -101,6 +102,7 @@ export default function DrillsScreen() {
         <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} />
         <Stack.Screen name="DrillDetailsScreen" component={DrillDetailsScreen} />
         <Stack.Screen name="ThreePointChallenge" component={ThreePointChallenge} />
+        <Stack.Screen name="DribblingChallenge" component={DribblingChallenge} />
       </Stack.Navigator>
     </NavigationIndependentTree>
   );

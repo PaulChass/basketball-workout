@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { getProgress } from '@/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
+import { saveProgress } from '../../utils/storage';
 
 export default function TabTwoScreen() {
   const [progress, setProgress] = useState(null);
@@ -26,6 +27,18 @@ export default function TabTwoScreen() {
     }, [])
   );
 
+  const resetStats = async () => {
+    try {
+      await saveProgress('workout', null);
+      await saveProgress('threePointChallenge', null);
+      setProgress(null);
+      setThreePointChallenge(null);
+      alert('Les statistiques ont été réinitialisées.');
+    } catch (e) {
+      console.error('Failed to reset stats.', e);
+    }
+  };
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -45,13 +58,19 @@ export default function TabTwoScreen() {
         <View style={styles.progressContainer}>
           <ThemedText>Dernier entraînement terminé le: </ThemedText>
           <ThemedText>
-            {progress && new Date(progress.date).toLocaleDateString()}</ThemedText>
+            {progress && new Date(progress.date).toLocaleDateString()}
+            </ThemedText>
         </View>
         <View style={styles.progressContainer}>
-          <ThemedText>Record au 3 Point Challenge: </ThemedText>
+          <ThemedText>Record au 3 Point Challenge:
+          </ThemedText>
           <ThemedText>
-            {threePointChallenge && threePointChallenge.threesMade}</ThemedText>
+            {threePointChallenge && threePointChallenge.threesMade}
+            </ThemedText>
         </View>
+        <TouchableOpacity  onPress={resetStats}>
+        <ThemedText >Réinitialiser les statistiques</ThemedText>
+      </TouchableOpacity>
     </ParallaxScrollView>
   );
 }

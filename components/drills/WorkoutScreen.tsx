@@ -19,7 +19,7 @@ export default function WorkoutScreen() {
   useEffect(() => {
     if (currentDrillIndex === -1) {
       if (!isMuted) Speech.speak('Prêt à y aller...', { language: 'fr-FR' });
-    } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length-1) {
+    } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       if (!isMuted) {
         Speech.speak(drills[currentDrillIndex].title);
         if (drills[currentDrillIndex].duration >= 1) {
@@ -49,7 +49,7 @@ export default function WorkoutScreen() {
       const timer = setTimeout(() => {
         if (!isPaused) {
           setCurrentDrillIndex((prevIndex) => prevIndex + 1);
-          if (currentDrillIndex !== drills.length-1) {
+          if (currentDrillIndex !== drills.length - 1) {
             setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
           } else {
             const completionDate = new Date().toISOString();
@@ -106,12 +106,14 @@ export default function WorkoutScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
-          <Icon name={isMuted ? "volume-off" : "volume-up"} size={30} color={'gray'} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handlePauseToggle} style={styles.iconButton}>
-          <Icon name={isPaused ? "play-arrow" : "pause"} size={30} color={'gray'} />
-        </TouchableOpacity>
+        {currentDrillIndex !== drills.length && (<>
+          <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
+            <Icon name={isMuted ? "volume-off" : "volume-up"} size={30} color={'gray'} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handlePauseToggle} style={styles.iconButton}>
+            <Icon name={isPaused ? "play-arrow" : "pause"} size={30} color={'gray'} />
+          </TouchableOpacity></>
+        )}
       </View>
       {currentDrillIndex === -1 ? (
         <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
@@ -142,7 +144,10 @@ export default function WorkoutScreen() {
           </TouchableOpacity>
         </View>
       ) : (
-        <ThemedText style={styles.text}>Entraînement terminé!</ThemedText>
+        <>
+          <ThemedText style={styles.text}>Ici , mettre un formulaire de reours d'expérience.
+          </ThemedText>
+        </>
       )}
     </View>
   );

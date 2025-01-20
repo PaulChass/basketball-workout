@@ -4,7 +4,7 @@ export const drills = [
     duration: 0.5, 
     description: 'Amélioration de votre contrôle de balle et de l\'explosivité de vos dribbles.', 
     videoUrl: 'https://balldontlie.fr/poundDribble.mp4',
-    instructions: 'Dribblez la balle avec force en utilisant une seule main. Après 10 dribbles, changez de main.'
+    instructions: 'Dribblez la balle avec force en utilisant une seule main. Changez de main tout les 10 dribbles.'
   },
   { 
     title: 'Crossover', 
@@ -17,13 +17,13 @@ export const drills = [
     title: 'Dribble devant et derrière la ligne', 
     duration: 0.5, 
     description: 'Amélioration du controle de balle sous pression défensive.', 
-    instructions: 'Placez-vous devant une ligne. Dribblez la balle une fois devant la ligne, puis une fois derrière la ligne. Après 10 dribbles, changez de main.'
+    instructions: 'Placez-vous devant une ligne. Dribblez la balle une fois devant la ligne, puis une fois derrière la ligne. Changez de main tous les 10 dribbles.'
   },
   { 
     title: 'Entre les jambes', 
     duration: 0.5, 
-    description: 'Amélioration de votre capacité à protéger la balle des défenseurs at aux changements de direction. Après 10 dribbles, changez de direction.',
-    instructions: 'Dribblez la balle entre vos jambes en changeant de main à chaque fois.'
+    description: 'Amélioration de votre capacité à protéger la balle des défenseurs at aux changements de direction. ',
+    instructions: 'Dribblez la balle entre vos jambes en changeant de main à chaque fois. Changez de diagonale tous les 10 dribbles.'
   },
   { 
     title: 'Derrière le dos', 

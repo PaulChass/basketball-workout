@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Image, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import * as Speech from 'expo-speech';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { saveProgress, getProgress } from '@/utils/storage';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 const ThreePointChallenge = () => {
   const [timer, setTimer] = useState(60);
@@ -40,8 +41,11 @@ const ThreePointChallenge = () => {
         const { threesMade: prevThreesMade } = progress;
         const newThreesMade = parseInt(threesMade, 10);
         if (newThreesMade > prevThreesMade) {
-          Speech.speak('Nouveau record! Félicitations!', { language: 'fr-FR' });
+          alert('Nouveau record! Félicitations!');
           saveProgress('threePointChallenge', { threesMade: newThreesMade, date: completionDate });
+        }
+        else {
+          alert('Pas de record cette fois-ci. Essayez encore!');
         }
       }
     } catch (e) {
@@ -66,15 +70,29 @@ const ThreePointChallenge = () => {
           />
         }>
         {!showInput && (
-          <>
+          <View style={styles.container}>
             <ThemedText style={styles.description}>
               Marquez autant de 3 points que possible en une minute.
             </ThemedText>
-            <ThemedText style={styles.timer}>{timer} secondes restantes</ThemedText>
-          </>
+            <AnimatedCircularProgress
+              size={200}
+              width={10}
+              fill={(timer / 60) * 100}
+              tintColor="#00e0ff"
+              backgroundColor="#3d5875"
+              rotation={180}
+              lineCap="round"
+            >
+              {() => (
+                <ThemedText style={styles.timer}>{timer} secondes restantes</ThemedText>
+              )}
+            </AnimatedCircularProgress>
+          </View>
         )}
         {!isTimerRunning && !showInput && (
-          <Button title="Commencer le minuteur" onPress={startTimer} />
+          <TouchableOpacity style={styles.button} onPress={startTimer}>
+            <Text style={styles.buttonText}>Commencer</Text>
+          </TouchableOpacity>
         )}
         {showInput && (
           <View>
@@ -86,8 +104,12 @@ const ThreePointChallenge = () => {
               value={threesMade}
               onChangeText={setThreesMade}
             />
-            <Button title='Réessayer' onPress={() => handleRestart()} />
-            <Button title="Soumettre" onPress={handleSubmit} />
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Soumettre</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleRestart}>
+              <Text style={styles.buttonText}>Réessayer</Text>
+            </TouchableOpacity>
           </View>
         )}
       </ParallaxScrollView>
@@ -108,8 +130,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   timer: {
-    fontSize: 14,
-    marginBottom: 16,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 10,
+    textAlign: 'center',
   },
   input: {
     height: 40,
@@ -126,6 +150,20 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  button: {
+    backgroundColor: '#1E90FF',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 
