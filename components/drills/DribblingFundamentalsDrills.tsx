@@ -33,7 +33,8 @@ export default function DribblingFundamentalsDrills() {
        <View style={styles.container}>
           <ThemedText type="title">Exercices Fondamentaux de Dribble</ThemedText>
           <View style={styles.infoContainer}>
-            <ThemedText type="default">5 min</ThemedText>
+            <ThemedText type="default">2 min 30 sec
+            </ThemedText>
             <ThemedText type="default">5 exercices</ThemedText>
           </View>
         </View>
@@ -42,7 +43,7 @@ export default function DribblingFundamentalsDrills() {
           <TouchableOpacity key={index} style={styles.drillContainer} 
           onPress={() =>navigation.navigate('DrillDetailsScreen', { drill })}>
             <ThemedText type="subtitle">{drill.title}</ThemedText>
-            <ThemedText type="default">Durée: {drill.duration} min</ThemedText>
+            <ThemedText type="default">Durée: {drill.duration < 1 ? `${drill.duration * 60} sec` : `${drill.duration} min`}</ThemedText>
             {drill.videoUrl && (
               <WebView
                 originWhitelist={['*']}

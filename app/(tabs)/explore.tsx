@@ -1,10 +1,31 @@
-import { StyleSheet, Image, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Image, View } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { getProgress } from '@/utils/storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function TabTwoScreen() {
+  const [progress, setProgress] = useState(null);
+  const [threePointChallenge, setThreePointChallenge] = useState(null);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchProgress = async () => {
+        const savedProgress = await getProgress('workout');
+        setProgress(savedProgress);
+      };
+      const fetchThreePointChallenge = async () => {
+        const savedThreePointChallenge = await getProgress('threePointChallenge');
+        setThreePointChallenge(savedThreePointChallenge);
+      };
+      fetchProgress();
+      fetchThreePointChallenge();
+    }, [])
+  );
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -19,10 +40,18 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Rapport</ThemedText>
       </ThemedView>
-      <ThemedText>Ici les stats de l'utilisateur, les exercices effectués, les progrès, etc.
-      </ThemedText>
-     
+      <ThemedText>Ici les stats de l'utilisateur, les exercices effectués, les progrès, etc.</ThemedText>
       
+        <View style={styles.progressContainer}>
+          <ThemedText>Dernier entraînement terminé le: </ThemedText>
+          <ThemedText>
+            {progress && new Date(progress.date).toLocaleDateString()}</ThemedText>
+        </View>
+        <View style={styles.progressContainer}>
+          <ThemedText>Record au 3 Point Challenge: </ThemedText>
+          <ThemedText>
+            {threePointChallenge && threePointChallenge.threesMade}</ThemedText>
+        </View>
     </ParallaxScrollView>
   );
 }
@@ -37,5 +66,8 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+  },
+  progressContainer: {
+    marginTop: 20,
   },
 });

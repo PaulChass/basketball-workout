@@ -72,9 +72,9 @@ function LayupsWorkoutsList() {
   return (
     <View style={styles.tabContainer}>
       <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
-      <TouchableOpacity onPress={() => navigation.navigate('DribblingFundamentalsDrills')}>
+      <TouchableOpacity onPress={() => alert('Patience, bientôt disponible!')}>
         <ImageBackground
-          source={require('@/assets/images/fundamentals.png')}
+          source={require('@/assets/images/layups.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >

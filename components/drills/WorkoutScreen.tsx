@@ -5,20 +5,21 @@ import { WebView } from 'react-native-webview';
 import * as Speech from 'expo-speech';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { saveProgress, getProgress } from '../../utils/storage';
 
-import { drills } from './drillsData.js';
-
+import { drills } from './drillsData';
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState(4);
   const [isMuted, setIsMuted] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
     if (currentDrillIndex === -1) {
       if (!isMuted) Speech.speak('Prêt à y aller...', { language: 'fr-FR' });
-    } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
+    } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length-1) {
       if (!isMuted) {
         Speech.speak(drills[currentDrillIndex].title);
         if (drills[currentDrillIndex].duration >= 1) {
@@ -40,13 +41,21 @@ export default function WorkoutScreen() {
       return () => clearTimeout(timer);
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       const interval = setInterval(() => {
-        setTimeRemaining((prev) => prev - 1);
+        if (!isPaused) {
+          setTimeRemaining((prev) => prev - 1);
+        }
       }, 1000);
 
       const timer = setTimeout(() => {
-        setCurrentDrillIndex((prevIndex) => prevIndex + 1);
-        if(currentDrillIndex !== drills.length - 1) {
-        setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);}
+        if (!isPaused) {
+          setCurrentDrillIndex((prevIndex) => prevIndex + 1);
+          if (currentDrillIndex !== drills.length-1) {
+            setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
+          } else {
+            const completionDate = new Date().toISOString();
+            saveProgress('workout', { completed: true, date: completionDate });
+          }
+        }
       }, drills[currentDrillIndex].duration * 60 * 1000); // duration per drill
 
       return () => {
@@ -54,13 +63,7 @@ export default function WorkoutScreen() {
         clearInterval(interval);
       };
     }
-  }, [currentDrillIndex]);
-
-  useEffect(() => {
-    if (currentDrillIndex >= 0 && timeRemaining === drills[currentDrillIndex].duration * 30) {
-      if (!isMuted) Speech.speak('Mi-temps', { language: 'fr-FR' });
-    }
-  }, [timeRemaining, isMuted]);
+  }, [currentDrillIndex, isPaused]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -75,13 +78,21 @@ export default function WorkoutScreen() {
     Speech.stop();
   };
 
+  const handlePauseToggle = () => {
+    setIsPaused(!isPaused);
+  };
+
   const handleNextDrill = () => {
     Speech.stop();
     setCurrentDrillIndex((prevIndex) => prevIndex + 1);
-    if(currentDrillIndex !== drills.length - 1) {
-    setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
+    if (currentDrillIndex !== drills.length - 1) {
+      setTimeRemaining(drills[currentDrillIndex + 1]?.duration * 60 || 0);
     }
-   
+    else {
+      const completionDate = new Date().toISOString();
+      saveProgress('workout', { completed: true, date: completionDate });
+      alert('Entraînement terminé!');
+    }
   };
 
   const videoHtml = (uri: string) => `
@@ -98,13 +109,16 @@ export default function WorkoutScreen() {
         <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
           <Icon name={isMuted ? "volume-off" : "volume-up"} size={30} color={'gray'} />
         </TouchableOpacity>
+        <TouchableOpacity onPress={handlePauseToggle} style={styles.iconButton}>
+          <Icon name={isPaused ? "play-arrow" : "pause"} size={30} color={'gray'} />
+        </TouchableOpacity>
       </View>
       {currentDrillIndex === -1 ? (
         <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
       ) : currentDrillIndex < drills.length ? (
         <View style={styles.drillContainer}>
           <ThemedText style={styles.drillTitle}>{drills[currentDrillIndex].title}</ThemedText>
-          <ThemedText style={styles.drillDuration}>{drills[currentDrillIndex].duration} minute</ThemedText>
+          <ThemedText style={styles.drillDuration}>{drills[currentDrillIndex].duration < 1 ? `${drills[currentDrillIndex].duration * 60} sec` : `${drills[currentDrillIndex].duration} min`}</ThemedText>
           {drills[currentDrillIndex].videoUrl ? (
             <WebView
               originWhitelist={['*']}
@@ -211,4 +225,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
