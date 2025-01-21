@@ -31,7 +31,7 @@ function DribbleWorkoutsList() {
           <ThemedText type="default">5 min - 5 exercices</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}> >
+      <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}>
         <ThemedText style={styles.buttonText}>Avancées</ThemedText>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >

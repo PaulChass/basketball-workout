@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { WebView } from 'react-native-webview';
 
-const DrillDetails = ({ drill , videoHtml }) => {
+const DrillDetails = ({ drill, videoHtml }) => {
   return (
     <View style={styles.drillContainer}>
       <ThemedText style={styles.drillTitle}>{drill.title}</ThemedText>
@@ -11,18 +11,18 @@ const DrillDetails = ({ drill , videoHtml }) => {
         {drill.duration >= 1 ? 
         `${drill.duration} minute${drill.duration > 1 ? 's' : ''}` : 
         `${drill.duration * 60} secondes`}
-        </ThemedText>
+      </ThemedText>
       {drill.videoUrl ? (
         <View style={styles.animationContainer}>
-        <WebView
-          originWhitelist={['*']}
-          source={{ html: videoHtml(drill.videoUrl) }}
-          style={styles.animation}
-          onError={(syntheticEvent) => {
-            const { nativeEvent } = syntheticEvent;
-            console.warn('WebView error: ', nativeEvent);
-          }}
-        />
+          <WebView
+            originWhitelist={['*']}
+            source={{ html: videoHtml(drill.videoUrl) }}
+            style={styles.animation}
+            onError={(syntheticEvent) => {
+              const { nativeEvent } = syntheticEvent;
+              console.warn('WebView error: ', nativeEvent);
+            }}
+          />
         </View>
       ) : (
         <ThemedText style={styles.noVideoText}>Pas de vidéo disponible</ThemedText>
@@ -31,6 +31,16 @@ const DrillDetails = ({ drill , videoHtml }) => {
       <ThemedText style={styles.drillInstructions}>{drill.instructions}</ThemedText>
       <ThemedText style={styles.sectionTitle}>Objectif</ThemedText>
       <ThemedText style={styles.drillDescription}>{drill.description}</ThemedText>
+      <ThemedText style={styles.sectionTitle}>Conseils</ThemedText>
+      {drill.tips && drill.tips.length > 0 ? (
+        <View style={styles.tipsContainer}>
+          {drill.tips.map((tip, index) => (
+            <ThemedText key={index} style={styles.tipItem}>{tip}</ThemedText>
+          ))}
+        </View>
+      ) : (
+        <ThemedText style={styles.noTipsText}>Pas de conseils disponibles</ThemedText>
+      )}
     </View>
   );
 };
@@ -38,6 +48,7 @@ const DrillDetails = ({ drill , videoHtml }) => {
 const styles = StyleSheet.create({
   drillContainer: {
     alignItems: 'center',
+    textAlign: 'center',
     marginHorizontal: 6,
     marginVertical: 50,
   },
@@ -74,17 +85,29 @@ const styles = StyleSheet.create({
     padding: 0,
     backgroundColor: 'transparent',
   },
-    animationContainer: {
-        width: 300,
-        height: 150,
-        marginVertical: 10,
-    },
+  animationContainer: {
+    width: 300,
+    height: 150,
+    marginVertical: 10,
+  },
   noVideoText: {
     fontSize: 16,
     color: 'gray',
     marginTop: 10,
   },
-  
+  tipsContainer: {
+    marginTop: 10,
+    alignItems: 'flex-start',
+  },
+  tipItem: {
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  noTipsText: {
+    fontSize: 16,
+    color: 'gray',
+    marginTop: 10,
+  },
 });
 
 export default DrillDetails;

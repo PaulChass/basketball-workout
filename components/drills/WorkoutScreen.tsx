@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { WebView } from 'react-native-webview';
 import * as Speech from 'expo-speech';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { saveProgress, getProgress } from '../../utils/storage';
+import DrillDetails from './DrillDetails';
 
 import { drills } from './drillsData';
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState(4);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const navigation = useNavigation();
 
@@ -37,7 +38,7 @@ export default function WorkoutScreen() {
       const timer = setTimeout(() => {
         setCurrentDrillIndex(0);
         setTimeRemaining(drills[0].duration * 60);
-      }, 2000); // 2 seconds delay
+      }, 3000); // 2 seconds delay
       return () => clearTimeout(timer);
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       const interval = setInterval(() => {
@@ -115,39 +116,24 @@ export default function WorkoutScreen() {
           </TouchableOpacity></>
         )}
       </View>
-      {currentDrillIndex === -1 ? (
-        <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
-      ) : currentDrillIndex < drills.length ? (
-        <View style={styles.drillContainer}>
-          <ThemedText style={styles.drillTitle}>{drills[currentDrillIndex].title}</ThemedText>
-          <ThemedText style={styles.drillDuration}>{drills[currentDrillIndex].duration < 1 ? `${drills[currentDrillIndex].duration * 60} sec` : `${drills[currentDrillIndex].duration} min`}</ThemedText>
-          {drills[currentDrillIndex].videoUrl ? (
-            <WebView
-              originWhitelist={['*']}
-              source={{ html: videoHtml(drills[currentDrillIndex].videoUrl) }}
-              style={styles.animation}
-              onError={(syntheticEvent) => {
-                const { nativeEvent } = syntheticEvent;
-                console.warn('WebView error: ', nativeEvent);
-              }}
-            />
-          ) : (
-            <ThemedText style={styles.noVideoText}>Pas de vidéo disponible</ThemedText>
-          )}
-          <ThemedText style={styles.sectionTitle}>Instruction</ThemedText>
-          <ThemedText style={styles.drillInstructions}>{drills[currentDrillIndex].instructions}</ThemedText>
-          <ThemedText style={styles.sectionTitle}>Objectif</ThemedText>
-          <ThemedText style={styles.drillDescription}>{drills[currentDrillIndex].description}</ThemedText>
-          <ThemedText style={styles.timerText}>Temps restant: {timeRemaining} secondes</ThemedText>
-          <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Exercice suivant</ThemedText>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <>
-          <ThemedText style={styles.text}>Ici , mettre un formulaire de reours d'expérience.
-          </ThemedText>
-        </>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {currentDrillIndex === -1 ? (
+          <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
+        ) : currentDrillIndex < drills.length ? (
+          <View style={styles.drillContainer}>
+            <DrillDetails drill={drills[currentDrillIndex]} videoHtml={videoHtml} />
+          </View>
+        ) : (
+          <ThemedText style={styles.text}>Ici , mettre un formulaire de reours d'expérience.</ThemedText>
+        )}
+      </ScrollView>
+      {currentDrillIndex !== drills.length && currentDrillIndex !== -1 && (
+      <View style={styles.nextButtonContainer}>
+        <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
+          <ThemedText style={styles.nextButtonText}>Exercice suivant ( {timeRemaining}s )</ThemedText>
+        </TouchableOpacity>
+       
+      </View>
       )}
     </View>
   );
@@ -156,8 +142,6 @@ export default function WorkoutScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   header: {
     width: '100%',
@@ -174,47 +158,28 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 100, // Add padding to avoid content being hidden behind the button
   },
   drillContainer: {
     alignItems: 'center',
     marginHorizontal: 6,
   },
-  drillTitle: {
-    marginTop: 20,
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  drillDuration: {
-    fontSize: 18,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-  },
-  drillInstructions: {
-    fontSize: 16,
-    marginVertical: 10,
-  },
-  drillDescription: {
-    fontSize: 16,
-    marginVertical: 10,
-  },
   timerText: {
     fontSize: 16,
     marginTop: 10,
   },
-  animation: {
-    width: 300,
-    height: 100,
-    marginVertical: 10,
-    flex: 1,
-    backgroundColor: 'transparent', // Add background color for debugging
-  },
-  noVideoText: {
-    fontSize: 16,
-    color: 'gray',
-    marginTop: 10,
+  nextButtonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
   },
   nextButton: {
     backgroundColor: '#1E90FF',

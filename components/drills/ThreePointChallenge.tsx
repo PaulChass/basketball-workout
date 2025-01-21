@@ -48,6 +48,10 @@ const ThreePointChallenge = () => {
           alert('Pas de record cette fois-ci. Essayez encore!');
         }
       }
+      else {
+        saveProgress('threePointChallenge', { threesMade: parseInt(threesMade, 10), date: completionDate });
+        alert('Nombre de 3 points enregistré avec succès!');
+      }
     } catch (e) {
       console.error('Failed to save the number of 3-pointers.', e);
     }

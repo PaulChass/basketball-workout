@@ -73,7 +73,7 @@ export default function DribblingFundamentalsDrills() {
         ))}
       </ParallaxScrollView>
       <View style={styles.startButtonContainer}>
-        <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen')}>
+        <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen', { drills })}>
           <ThemedText style={styles.startButtonText}>Commencer</ThemedText>
         </TouchableOpacity>
       </View>
