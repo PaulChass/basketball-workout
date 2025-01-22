@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { ThemedText } from '../ThemedText';
-import { WebView } from 'react-native-webview';
 import * as Speech from 'expo-speech';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { saveProgress, getProgress } from '../../utils/storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { saveProgress } from '../../utils/storage';
 import DrillDetails from './DrillDetails';
+import { useRoute } from '@react-navigation/native';
 
-import { drills } from './drillsData';
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState(4);
   const [isMuted, setIsMuted] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const navigation = useNavigation();
+  const route = useRoute();
+  const { drills } = route.params as { drills: { title: string; duration: number; instructions: string; description: string }[] };
 
   useEffect(() => {
     if (currentDrillIndex === -1) {

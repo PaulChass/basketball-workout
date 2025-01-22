@@ -12,12 +12,16 @@ import DribblingChallenge from '@/components/drills/DribblingChallenge';
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
+import { DrillDetailsScreenProps } from '../../types/navigationTypes';
+
+
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
+
 function DribbleWorkoutsList() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   return (
     <View style={styles.tabContainer}>
       <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
@@ -32,7 +36,13 @@ function DribbleWorkoutsList() {
         </ImageBackground>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}>
-        <ThemedText style={styles.buttonText}>Avancées</ThemedText>
+      <ImageBackground
+          source={require('@/assets/images/dribble-challenge.png')}
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage}
+        >
+        <ThemedText style={styles.buttonText}>Dribble Challenge</ThemedText>
+       </ImageBackground>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
         <Text style={styles.buttonText}>Combos / Moves</Text>
@@ -42,7 +52,7 @@ function DribbleWorkoutsList() {
 }
 
 function ShootWorkoutsList() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
 
   return (
     <View style={styles.tabContainer}>
@@ -68,7 +78,7 @@ function ShootWorkoutsList() {
 }
 
 function LayupsWorkoutsList() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
  
   return (
     <View style={styles.tabContainer}>

@@ -1,16 +1,31 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { WebView } from 'react-native-webview';
 
-const DrillDetails = ({ drill, videoHtml }) => {
+interface Drill {
+  title: string;
+  duration: number | string;
+  videoUrl?: string;
+  instructions: string;
+  description: string;
+  tips?: string[];
+}
+
+interface DrillDetailsProps {
+  drill: Drill;
+  videoHtml: (url: string) => string;
+}
+
+const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
   return (
     <View style={styles.drillContainer}>
       <ThemedText style={styles.drillTitle}>{drill.title}</ThemedText>
       <ThemedText style={styles.drillDuration}>
-        {drill.duration >= 1 ? 
-        `${drill.duration} minute${drill.duration > 1 ? 's' : ''}` : 
-        `${drill.duration * 60} secondes`}
+        {typeof drill.duration !== 'number' ? drill.duration :
+          drill.duration < 1 ? `${drill.duration * 60} sec` : `${Math.floor(drill.duration)} min` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} sec` : '')}
+
+       
       </ThemedText>
       {drill.videoUrl ? (
         <View style={styles.animationContainer}>
@@ -18,9 +33,8 @@ const DrillDetails = ({ drill, videoHtml }) => {
             originWhitelist={['*']}
             source={{ html: videoHtml(drill.videoUrl) }}
             style={styles.animation}
-            onError={(syntheticEvent) => {
-              const { nativeEvent } = syntheticEvent;
-              console.warn('WebView error: ', nativeEvent);
+            onError={() => {
+              console.error('Error loading video');
             }}
           />
         </View>

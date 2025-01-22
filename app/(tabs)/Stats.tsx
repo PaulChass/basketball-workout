@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { getProgress } from '@/utils/storage';
+import { getProgress, saveProgress } from '@/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
-import { saveProgress } from '../../utils/storage';
+
 
 export default function TabTwoScreen() {
-  const [progress, setProgress] = useState(null);
-  const [threePointChallenge, setThreePointChallenge] = useState(null);
+  const [progress, setProgress] = useState<{ date: string } | null>(null);
+  const [threePointChallenge, setThreePointChallenge] = useState<{ threesMade: number } | null>(null);
+  const [dribblingChallenge, setDribblingChallenge] = useState<{ timeTaken: number }[] | null>(null);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -22,8 +23,13 @@ export default function TabTwoScreen() {
         const savedThreePointChallenge = await getProgress('threePointChallenge');
         setThreePointChallenge(savedThreePointChallenge);
       };
+      const fetchDribblingChallenge = async () => {
+        const savedDribblingChallenge = await getProgress('dribblingChallenge');
+        setDribblingChallenge(savedDribblingChallenge);
+      };
       fetchProgress();
       fetchThreePointChallenge();
+      fetchDribblingChallenge();
     }, [])
   );
 
@@ -31,13 +37,29 @@ export default function TabTwoScreen() {
     try {
       await saveProgress('workout', null);
       await saveProgress('threePointChallenge', null);
+      await saveProgress('dribblingChallenge', null);
       setProgress(null);
       setThreePointChallenge(null);
+      setDribblingChallenge(null);
       alert('Les statistiques ont été réinitialisées.');
     } catch (e) {
       console.error('Failed to reset stats.', e);
     }
   };
+
+  const calculateBestTime = (challenges: { timeTaken: number }[]) => {
+    if (!challenges || challenges.length === 0) return null;
+    return Math.min(...challenges.map((challenge: { timeTaken: number }) => challenge.timeTaken));
+  };
+
+  const calculateAverageTime = (challenges: { timeTaken: number }[]) => {
+    if (!challenges || challenges.length === 0) return null;
+    const total = challenges.reduce((sum: number, challenge: { timeTaken: number }) => sum + challenge.timeTaken, 0);
+    return total / challenges.length;
+  };
+
+  const bestTime = dribblingChallenge ? calculateBestTime(dribblingChallenge) : null;
+  const averageTime = dribblingChallenge ? calculateAverageTime(dribblingChallenge) : null;
 
   return (
     <ParallaxScrollView
@@ -55,21 +77,40 @@ export default function TabTwoScreen() {
       </ThemedView>
       <ThemedText>Ici les stats de l'utilisateur, les exercices effectués, les progrès, etc.</ThemedText>
       
-        <View style={styles.progressContainer}>
-          <ThemedText>Dernier entraînement terminé le: </ThemedText>
-          <ThemedText>
-            {progress && new Date(progress.date).toLocaleDateString()}
-            </ThemedText>
-        </View>
-        <View style={styles.progressContainer}>
-          <ThemedText>Record au 3 Point Challenge:
-          </ThemedText>
-          <ThemedText>
-            {threePointChallenge && threePointChallenge.threesMade}
-            </ThemedText>
-        </View>
-        <TouchableOpacity  onPress={resetStats}>
-        <ThemedText >Réinitialiser les statistiques</ThemedText>
+      <View style={styles.progressContainer}>
+        <ThemedText>Dernier entraînement terminé le: </ThemedText>
+        <ThemedText>
+          {progress && new Date(progress.date).toLocaleDateString()}
+        </ThemedText>
+      </View>
+      <View style={styles.progressContainer}>
+        <ThemedText>Record au 3 Point Challenge:</ThemedText>
+        <ThemedText>
+          {threePointChallenge && threePointChallenge.threesMade}
+        </ThemedText>
+      </View>
+      <View style={styles.progressContainer}>
+        <ThemedText>Meilleur temps pour le Dribbling Challenge:</ThemedText>
+        <ThemedText>
+          {bestTime !== null && (
+            bestTime < 60 
+              ? `${bestTime} sec` 
+              : `${Math.floor(bestTime / 60)} min ${bestTime % 60} sec`
+          )}
+        </ThemedText>
+      </View>
+      <View style={styles.progressContainer}>
+        <ThemedText>Temps moyen pour le Dribbling Challenge:</ThemedText>
+        <ThemedText>
+          {averageTime !== null && (
+            averageTime < 60 
+              ? `${averageTime.toFixed(2)} sec` 
+              : `${Math.floor(averageTime / 60)} min ${(averageTime % 60).toFixed(2)} sec`
+          )}
+        </ThemedText>
+      </View>
+      <TouchableOpacity onPress={resetStats}>
+        <ThemedText>Réinitialiser les statistiques</ThemedText>
       </TouchableOpacity>
     </ParallaxScrollView>
   );

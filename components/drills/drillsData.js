@@ -24,7 +24,7 @@ export const drills = [
     ]
   },
   { 
-    title: 'Dribble devant et derrière la ligne', 
+    title: 'Dribble avant/arrière', 
     duration: 0.5, 
     description: 'Amélioration du controle de balle sous pression défensive.', 
     videoUrl: 'https://balldontlie.fr/avantArriere.mp4?v=1.0',
@@ -40,7 +40,7 @@ export const drills = [
     duration: 0.5, 
     description: 'Amélioration de votre capacité à protéger la balle des défenseurs at aux changements de direction.',
     videoUrl: 'https://balldontlie.fr/entreLesJambes.mp4?v=1.1',
-    instructions: 'Dribblez la balle entre vos jambes en changeant de main à chaque fois. Changez de diagonale tous les 10 dribbles.',
+    instructions: 'Dribblez la balle entre vos jambes. Changez de diagonale tous les 10 dribbles.',
     tips: [
       'Gardez vos genoux fléchis pour faciliter le mouvement.',
       'Utilisez un mouvement rapide et fluide pour passer la balle entre vos jambes.',
@@ -57,6 +57,54 @@ export const drills = [
       'Gardez votre dos droit et vos genoux légèrement fléchis.',
       'Utilisez un mouvement rapide et fluide pour passer la balle derrière votre dos.',
       'Restez bas lorsque vous dribblez pour une meilleure protection de la balle et pour faciliter les changements de direction.'
+    ]
+  },
+  { 
+    title: 'Wrap Around (sans dribble)', 
+    duration: '10x dans chaque sens', 
+    description: 'Amélioration de votre capacité à réaliser des dribble dans le dos rapidement.',
+    videoUrl: 'https://balldontlie.fr/wrapAround.mp4?v=1.0',
+    instructions: 'Faites passer la balle autour de vos jambes le plus rapidement possible. ',
+    tips: [
+      'Si vous avez du mal à dribbler autour de vos jambes, commencez par la taille et progressez vers les jambes.',
+      'Essayez de garder la balle aussi proche de votre corps que possible.',
+      'Maintenez un rythme constant pour améliorer votre coordination et votre contrôle.'
+    ]
+  },
+  { 
+    title: 'Figure 8 (sans dribble)', 
+    duration: '10x dans chaque sens', 
+    description: 'Amélioration de votre capacité à réaliser des dribble dans le dos rapidement.',
+    videoUrl: 'https://balldontlie.fr/figure8.mp4?v=1.0',
+    instructions: 'Dribblez la balle en formant un 8 entre vos jambes. ',
+    tips: [
+      'Gardez vos genoux fléchis pour faciliter le mouvement.',
+      'Utilisez un mouvement rapide et fluide pour dribbler en formant un 8.',
+      'Concentrez-vous sur le contrôle de la balle pour éviter les pertes.'
+    ]
+  },
+  { 
+    title: 'Wrap Around (avec dribble)', 
+    duration: '10x dans chaque sens', 
+    description: 'Amélioration de votre capacité à dribbler autour de votre corps.',
+    videoUrl: 'https://balldontlie.fr/wrapAround.mp4?v=1.0',
+    instructions: 'Dribblez la balle autour de votre taille en changeant de main à chaque tour. Changez de direction tous les 10 dribbles.',
+    tips: [
+      'Gardez vos genoux légèrement fléchis pour faciliter le mouvement.',
+      'Utilisez un mouvement rapide et fluide pour dribbler autour de votre taille.',
+      'Concentrez-vous sur le contrôle de la balle pour éviter les pertes.'
+    ]
+  },
+  { 
+    title: 'Figure 8 (avec dribble)', 
+    duration: '10x dans chaque sens', 
+    description: 'Amélioration de votre capacité à dribbler entre vos jambes en formant un 8.',
+    videoUrl: 'https://balldontlie.fr/figure8.mp4?v=1.0',
+    instructions: 'Dribblez la balle en formant un 8 entre vos jambes. Changez de direction tous les 10 dribbles.',
+    tips: [
+      'Gardez vos genoux fléchis pour faciliter le mouvement.',
+      'Utilisez un mouvement rapide et fluide pour dribbler en formant un 8.',
+      'Concentrez-vous sur le contrôle de la balle pour éviter les pertes.'
     ]
   }
 ];

@@ -1,11 +1,11 @@
 import React from 'react';
 import Animated from 'react-native-reanimated';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import DrillDetails from '../../components/drills/DrillDetails';
 import { useRoute } from '@react-navigation/native';
 
 export default function DrillDetailsScreen() {
-  const route = useRoute();
+  const route = useRoute<{ key: string; name: string; params: { drill: any } }>();
   const { drill } = route.params;
 
   const videoHtml = (uri: string) => `
