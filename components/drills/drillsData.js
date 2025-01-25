@@ -15,7 +15,7 @@ export const drills = [
     title: 'Crossover', 
     duration: 0.5, 
     description: 'Amélioration de votre capacité à changer de direction rapidement.',
-    videoUrl: 'https://balldontlie.fr/crossover.mp4?v=1.0',
+    videoUrl: 'https://balldontlie.fr/crossover.mp4?v=1.5',
     instructions: 'Dribblez la balle d\'une main à l\'autre devant votre corps. Changez de diagonale tous les 10 dribbles.',
     tips: [
       'Gardez votre centre de gravité bas pour un meilleur équilibre.',

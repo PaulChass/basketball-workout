@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import * as Speech from 'expo-speech';
@@ -11,6 +11,8 @@ const ThreePointChallenge = () => {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [threesMade, setThreesMade] = useState('');
   const [showInput, setShowInput] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [showRestart, setShowRestart] = useState(false);
 
   useEffect(() => {
     if (timer <= 3 && timer > 0 && isTimerRunning) {
@@ -20,10 +22,10 @@ const ThreePointChallenge = () => {
 
   const startTimer = () => {
     setIsTimerRunning(true);
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer <= 1) {
-          clearInterval(interval);
+          clearInterval(intervalRef.current!);
           setIsTimerRunning(false);
           setShowInput(true);
           return 0;
@@ -31,6 +33,15 @@ const ThreePointChallenge = () => {
         return prevTimer - 1;
       });
     }, 1000);
+  };
+
+  const stopTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setIsTimerRunning(false);
+    setShowRestart(true);
   };
 
   const handleSubmit = async () => {
@@ -60,7 +71,13 @@ const ThreePointChallenge = () => {
   const handleRestart = () => {
     setThreesMade('');
     setShowInput(false);
+    setShowRestart(false);
     setTimer(60);
+  };
+
+  const resumeTimer = () => {
+    setShowRestart(false);
+    startTimer();
   };
 
   return (
@@ -94,8 +111,25 @@ const ThreePointChallenge = () => {
           </View>
         )}
         {!isTimerRunning && !showInput && (
-          <TouchableOpacity style={styles.button} onPress={startTimer}>
-            <Text style={styles.buttonText}>Commencer</Text>
+          showRestart ? (
+            <View style={styles.containerButtons}>
+            <TouchableOpacity style={styles.button} onPress={() => resumeTimer()}>
+              <Text style={styles.buttonText}>Continuer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleRestart}>
+              <Text style={styles.buttonText}>Réessayer</Text>
+            </TouchableOpacity>
+            
+            </View>
+          ) : (
+            <TouchableOpacity style={styles.button} onPress={startTimer}>
+              <Text style={styles.buttonText}>Commencer</Text>
+            </TouchableOpacity>
+          )
+        )}
+        {isTimerRunning && !showInput && (
+          <TouchableOpacity style={styles.button} onPress={stopTimer}>
+            <Text style={styles.buttonText}>Arrêter</Text>
           </TouchableOpacity>
         )}
         {showInput && (
@@ -128,6 +162,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
   },
+  containerButtons: {
+    marginTop: -20,
+    },
   description: {
     fontSize: 18,
     marginBottom: 16,

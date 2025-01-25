@@ -3,18 +3,17 @@ import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { useNavigation } from '@react-navigation/native';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
-import drills, { drills as allDrills } from './drillsData';
+import { drills as allDrills } from './drillsData';
 import DrillsList from './DrillsList';
 
 const initialDrills = allDrills.filter(drill =>
   ["Pound Dribble", "Crossover", "Dribble avant/arrière", "Entre les jambes", "Derrière le dos", "Wrap Around", "Figure 8"]
   .includes(drill.title)
 );
-
-
-const setDrills = (drills: any) => drills;
 export default function DribblingFundamentalsDrills() {
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
+  const [drills, setDrills] = useState(initialDrills);
+  
 
   return (
     <View style={styles.container}>

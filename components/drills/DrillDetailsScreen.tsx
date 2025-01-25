@@ -18,12 +18,12 @@ export default function DrillDetailsScreen() {
 
   return (
     <Animated.ScrollView>
-    <View style={styles.container}>
-      <DrillDetails
-        drill={drill}
-        videoHtml={videoHtml}
-      />
-    </View>
+      <View style={styles.container}>
+        <DrillDetails
+          drill={drill}
+          videoHtml={videoHtml}
+        />
+      </View>
     </Animated.ScrollView>
   );
 }

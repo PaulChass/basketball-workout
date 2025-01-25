@@ -7,11 +7,10 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { getProgress, saveProgress } from '@/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
 
-
 export default function TabTwoScreen() {
   const [progress, setProgress] = useState<{ date: string } | null>(null);
   const [threePointChallenge, setThreePointChallenge] = useState<{ threesMade: number } | null>(null);
-  const [dribblingChallenge, setDribblingChallenge] = useState<{ timeTaken: number }[] | null>(null);
+  const [dribblingChallenge, setDribblingChallenge] = useState<{ timeTaken: number }[]>([]); // Initialize with an empty array
 
   useFocusEffect(
     React.useCallback(() => {
@@ -25,7 +24,7 @@ export default function TabTwoScreen() {
       };
       const fetchDribblingChallenge = async () => {
         const savedDribblingChallenge = await getProgress('dribblingChallenge');
-        setDribblingChallenge(savedDribblingChallenge);
+        setDribblingChallenge(savedDribblingChallenge || []); // Ensure it's an array
       };
       fetchProgress();
       fetchThreePointChallenge();
@@ -40,7 +39,7 @@ export default function TabTwoScreen() {
       await saveProgress('dribblingChallenge', null);
       setProgress(null);
       setThreePointChallenge(null);
-      setDribblingChallenge(null);
+      setDribblingChallenge([]); // Reset to an empty array
       alert('Les statistiques ont été réinitialisées.');
     } catch (e) {
       console.error('Failed to reset stats.', e);
@@ -48,18 +47,18 @@ export default function TabTwoScreen() {
   };
 
   const calculateBestTime = (challenges: { timeTaken: number }[]) => {
-    if (!challenges || challenges.length === 0) return null;
+    if (!Array.isArray(challenges) || challenges.length === 0) return null;
     return Math.min(...challenges.map((challenge: { timeTaken: number }) => challenge.timeTaken));
   };
 
   const calculateAverageTime = (challenges: { timeTaken: number }[]) => {
-    if (!challenges || challenges.length === 0) return null;
+    if (!Array.isArray(challenges) || challenges.length === 0) return null;
     const total = challenges.reduce((sum: number, challenge: { timeTaken: number }) => sum + challenge.timeTaken, 0);
     return total / challenges.length;
   };
 
-  const bestTime = dribblingChallenge ? calculateBestTime(dribblingChallenge) : null;
-  const averageTime = dribblingChallenge ? calculateAverageTime(dribblingChallenge) : null;
+  const bestTime = calculateBestTime(dribblingChallenge);
+  const averageTime = calculateAverageTime(dribblingChallenge);
 
   return (
     <ParallaxScrollView

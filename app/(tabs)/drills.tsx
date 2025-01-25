@@ -32,7 +32,7 @@ function DribbleWorkoutsList() {
           imageStyle={styles.buttonImage}
         >
           <Text style={styles.buttonText}>Fondamentaux</Text>
-          <ThemedText type="default">5 min - 5 exercices</ThemedText>
+          <ThemedText style={styles.default} type="default">5 min - 5 exercices</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}>
@@ -156,6 +156,10 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 16,
   },
+  default: {
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
   reactLogo: {
     height: 250,
     width: '100%',
@@ -181,5 +185,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+  
   },
 });
