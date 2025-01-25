@@ -7,7 +7,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { saveProgress } from '../../utils/storage';
 import DrillDetails from './DrillDetails';
 import { useRoute } from '@react-navigation/native';
-
+import CountdownCircle from '../ui/CountdownCircle';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 export default function WorkoutScreen() {
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
@@ -38,7 +39,7 @@ export default function WorkoutScreen() {
       const timer = setTimeout(() => {
         setCurrentDrillIndex(0);
         setTimeRemaining(drills[0].duration * 60);
-      }, 3000); // 2 seconds delay
+      }, timeRemaining * 1000);
       return () => clearTimeout(timer);
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       const interval = setInterval(() => {
@@ -111,17 +112,34 @@ export default function WorkoutScreen() {
           <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
             <Icon name={isMuted ? "volume-off" : "volume-up"} size={30} color={'gray'} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handlePauseToggle} style={styles.iconButton}>
-            <Icon name={isPaused ? "play-arrow" : "pause"} size={30} color={'gray'} />
-          </TouchableOpacity></>
+          </>
         )}
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {currentDrillIndex === -1 ? (
-          <ThemedText style={styles.text}>Prêt à y aller...</ThemedText>
+          <View style={styles.readyContainer}>
+            <ThemedText style={styles.readyText}>Prêt à y aller...</ThemedText>
+            <CountdownCircle totalTime={timeRemaining} />
+          </View>
         ) : currentDrillIndex < drills.length ? (
           <View style={styles.drillContainer}>
             <DrillDetails drill={drills[currentDrillIndex]} videoHtml={videoHtml} />
+            <AnimatedCircularProgress
+              size={200}
+              width={10}
+              fill={(timeRemaining / drills[currentDrillIndex].duration / 60) * 100}
+              tintColor="#00e0ff"
+              backgroundColor="#3d5875"
+              rotation={180}
+              lineCap="round"
+            >
+              {() => (
+                <ThemedText style={styles.timerText}>
+                  {timeRemaining < 60 ? `${timeRemaining} sec` : `${Math.floor(timeRemaining / 60)} min ${timeRemaining % 60} sec`}
+                </ThemedText>
+              )}  
+            </AnimatedCircularProgress>
+
           </View>
         ) : (
           <ThemedText style={styles.text}>Ici , mettre un formulaire de reours d'expérience.</ThemedText>
@@ -129,10 +147,17 @@ export default function WorkoutScreen() {
       </ScrollView>
       {currentDrillIndex !== drills.length && currentDrillIndex !== -1 && (
       <View style={styles.nextButtonContainer}>
+        <TouchableOpacity onPress={handlePauseToggle} style={styles.nextButton}>
+            <Icon style={styles.pauseIcon} name={isPaused ? "play-arrow" : "pause"} size={30}  />
+          </TouchableOpacity>
+
         <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
-          <ThemedText style={styles.nextButtonText}>Exercice suivant ( {timeRemaining}s )</ThemedText>
+          <ThemedText style={styles.nextButtonText}>Suivant ( {timeRemaining}s )</ThemedText>
         </TouchableOpacity>
-       
+        
+        <TouchableOpacity onPress={() => setTimeRemaining((prev) => prev + 15)} style={styles.nextButton}>
+          <ThemedText style={styles.nextButtonText}>+ 15s</ThemedText>  
+          </TouchableOpacity> 
       </View>
       )}
     </View>
@@ -160,6 +185,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  readyText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 40,
+  },
+  pauseIcon: {
+    color: 'white',
+  },
   scrollContainer: {
     flexGrow: 1,
     alignItems: 'center',
@@ -176,6 +210,8 @@ const styles = StyleSheet.create({
   },
   nextButtonContainer: {
     position: 'absolute',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     bottom: 20,
     left: 0,
     right: 0,
@@ -191,7 +227,12 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 'bold',
+  },
+  readyContainer: {
+    alignItems: 'center',
+  
+    justifyContent: 'center',
   },
 });

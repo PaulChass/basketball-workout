@@ -13,6 +13,7 @@ import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
+import FreeShootingSession from '@/components/drills/FreeShootingSession';
 
 
 
@@ -70,9 +71,17 @@ function ShootWorkoutsList() {
       <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
         <Text style={styles.buttonText}>Programme d'entrainement</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
-        <Text style={styles.buttonText}>Séance de tir</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
+      <ImageBackground
+          source={require('@/assets/images/shooting-challenge.png')}
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage}
+        >
+          <Text style={styles.buttonText}>Seance de tir libre</Text>
+          
+        </ImageBackground>
       </TouchableOpacity>
+        
     </View>
   );
 }
@@ -113,6 +122,7 @@ export default function DrillsScreen() {
         <Stack.Screen name="DrillDetailsScreen" component={DrillDetailsScreen} />
         <Stack.Screen name="ThreePointChallenge" component={ThreePointChallenge} />
         <Stack.Screen name="DribblingChallenge" component={DribblingChallenge} />
+        <Stack.Screen name="FreeShootingSession" component={FreeShootingSession} />
       </Stack.Navigator>
     </NavigationIndependentTree>
   );

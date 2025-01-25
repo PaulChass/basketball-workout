@@ -82,7 +82,7 @@ const ThreePointChallenge = () => {
 
   return (
     <View style={styles.container}>
-      <ParallaxScrollView
+       <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={
           <Image
