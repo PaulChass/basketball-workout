@@ -1,12 +1,12 @@
 import React from 'react';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
-
 import { Image } from 'react-native';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import DribblingFundamentalsDrills from '../../components/drills/DribblingFundamentalsDrills';
 import DribblingChallenge from '@/components/drills/DribblingChallenge';  
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
@@ -15,100 +15,96 @@ import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import FreeShootingSession from '@/components/drills/FreeShootingSession';
 
-
-
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-
 function DribbleWorkoutsList() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   return (
     <View style={styles.tabContainer}>
-      <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
+      <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
       <TouchableOpacity onPress={() => navigation.navigate('DribblingFundamentalsDrills')}>
         <ImageBackground
           source={require('@/assets/images/fundamentals.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
-          <Text style={styles.buttonText}>Fondamentaux</Text>
-          <ThemedText style={styles.default} type="default">5 min - 5 exercices</ThemedText>
+          <Text style={styles.buttonText}>{t('Fundamentals')}</Text>
+          <ThemedText style={styles.default} type="default">{t('5 min - 5 exercises')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}>
-      <ImageBackground
+        <ImageBackground
           source={require('@/assets/images/dribble-challenge.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
-        <ThemedText style={styles.buttonText}>Dribble Challenge</ThemedText>
-       </ImageBackground>
+          <ThemedText style={styles.buttonText}>{t('Dribble Challenge')}</ThemedText>
+        </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
-        <Text style={styles.buttonText}>Combos / Moves</Text>
+      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
+        <Text style={styles.buttonText}>{t('Combos / Moves')}</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 function ShootWorkoutsList() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
 
   return (
     <View style={styles.tabContainer}>
-      <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
+      <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
       <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
-      <ImageBackground
+        <ImageBackground
           source={require('@/assets/images/shooting-free.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage} 
         >
-          <Text style={styles.buttonText}>Seance de tir libre</Text>
-          
+          <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
         </ImageBackground>
       </TouchableOpacity>
-      
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
-        <Text style={styles.buttonText}>Programme d'entrainement</Text>
+      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
+        <Text style={styles.buttonText}>{t('Training Program')}</Text>
       </TouchableOpacity>
-     
       <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
         <ImageBackground
           source={require('@/assets/images/shooting-challenge.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
-          <Text style={styles.buttonText}>3pt Challenge</Text>
-          <ThemedText type="default">1 minute</ThemedText>
+          <Text style={styles.buttonText}>{t('3pt Challenge')}</Text>
+          <ThemedText style={styles.default} type="default">{t('1 minute')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-        
     </View>
   );
 }
 
 function LayupsWorkoutsList() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
  
   return (
     <View style={styles.tabContainer}>
-      <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
+      <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
+      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
         <ImageBackground
           source={require('@/assets/images/layups.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
-          <Text style={styles.buttonText}>Fondamentaux</Text>
-          <ThemedText type="default">5 x 5 Double pas</ThemedText>
+          <Text style={styles.buttonText}>{t('Fundamentals')}</Text>
+          <ThemedText style={styles.default} type="default">{t('5 x 5 Layups')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
-        <Text style={styles.buttonText}>Layups Avancées</Text>
+      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
+        <Text style={styles.buttonText}>{t('Advanced Layups')}</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')}>
-        <Text style={styles.buttonText}>Counter - Layups</Text>
+      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
+        <Text style={styles.buttonText}>{t('Counter - Layups')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -173,10 +169,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   reactLogo: {
-    height: 250,
+    height: '100%',
     width: '100%',
+    resizeMode: 'cover',
     bottom: 0,
     left: 0,
+    right: 0,
+    top: 0,
     position: 'absolute',
   },
   tabNavigatorContainer: {

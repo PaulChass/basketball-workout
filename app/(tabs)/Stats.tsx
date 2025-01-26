@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,21 +7,15 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { getProgress, saveProgress } from '@/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useTranslation } from 'react-i18next';
-import i18n from '@/i18n';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
-
-export default function Stats() {
-  const { t } = useTranslation();
+export default function TabTwoScreen() {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [progress, setProgress] = useState<{ date: string } | null>(null);
   const [threePointChallenge, setThreePointChallenge] = useState<{ threesMade: number } | null>(null);
   const [dribblingChallenge, setDribblingChallenge] = useState<{ timeTaken: number }[]>([]);
   const [zoneStats, setZoneStats] = useState<{ [key: string]: { shotsAttempted: number, shotsMade: number } }>({});
   const [updated, setUpdated] = useState(false);
-
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -76,11 +70,10 @@ export default function Stats() {
       setThreePointChallenge(null);
       setDribblingChallenge([]);
       setZoneStats({});
-      alert(t('Success'), t('Progress saved successfully.'));
+      alert(t('Stats have been reset.'));
       setUpdated(!updated);
     } catch (e) {
       console.error('Failed to reset stats.', e);
-      alert(t('Error'), t('Failed to save progress.'));
     }
   };
 
@@ -98,11 +91,10 @@ export default function Stats() {
         newZoneStats[key] = { shotsAttempted: 0, shotsMade: 0 };
         setZoneStats(newZoneStats);
       }
-      alert(t('Success'), t('Progress saved successfully.'));
+      alert(t('Stat has been reset.'));
       setUpdated(!updated);
     } catch (e) {
       console.error('Failed to reset stat.', e);
-      alert(t('Error'), t('Failed to save progress.'));
     }
   };
 
@@ -149,15 +141,9 @@ export default function Stats() {
           style={styles.headerImage}
         />
       }>
-      <ThemedView style={styles.titleContainer}>  
-        <ThemedText type="title">{t('Settings')}</ThemedText>
-      </ThemedView>
-      <ThemedText>{t('Language')}</ThemedText>
-      <View style={styles.container}>
-        <Button title="English" onPress={() => changeLanguage('en')} />
-        <Button title="Français" onPress={() => changeLanguage('fr')} />
-      </View>
-      
+        <ThemedView style={styles.titleContainer}>  
+          <ThemedText type="title">{t('Settings')}</ThemedText>
+        </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">{t('Report')}</ThemedText>
       </ThemedView>
@@ -183,21 +169,21 @@ export default function Stats() {
       </View>
       <View style={styles.progressContainer}>
         <View style={styles.fullWidth}> 
-          <ThemedText style={styles.fullWidth}>{t('Dribble Challenge:')}</ThemedText>
-          <ThemedText>{t('Best time:')}  
-            {bestTime !== null ? (
-              bestTime < 60 
-                ? `${bestTime} sec` 
-                : `${Math.floor(bestTime / 60)} min ${ bestTime % 60} sec`
-            ) : ' N/A'}
-          </ThemedText>
-          <ThemedText>{t('Average time:')}
-            {averageTime !== null ? (
-              averageTime < 60 
-                ? `${averageTime.toFixed(2)} sec` 
-                : `${Math.floor(averageTime / 60)} min ${(averageTime % 60).toFixed(2)} sec`
-            ) : ' N/A'}
-          </ThemedText>
+        <ThemedText style={styles.fullWidth}>{t('Dribble Challenge:')}</ThemedText>
+        <ThemedText>{t('Best time:')}  
+          {bestTime !== null ? (
+            bestTime < 60 
+              ? `${bestTime} sec` 
+              : `${Math.floor(bestTime / 60)} min ${ bestTime % 60} sec`
+          ) : ' N/A'}
+        </ThemedText>
+        <ThemedText>{t('Average time:')}
+          {averageTime !== null ? (
+            averageTime < 60 
+              ? `${averageTime.toFixed(2)} sec` 
+              : `${Math.floor(averageTime / 60)} min ${(averageTime % 60).toFixed(2)} sec`
+          ) : ' N/A'}
+        </ThemedText>
         </View>
         <TouchableOpacity onPress={() => resetSpecificStat('dribblingChallenge')} style={styles.resetIcon}>
           <Icon name="refresh" size={24} color="gray" />
@@ -207,10 +193,11 @@ export default function Stats() {
         {Object.keys(zoneStats).map((zone) => (
           <View key={zone} style={styles.zoneContainer}>
             <View style={styles.fullWidth}>
-              <ThemedText style={styles.zoneLabel}>{zoneLabels[zone as keyof typeof zoneLabels]}:</ThemedText>
-              <ThemedText>{t('Shots Made')}: {zoneStats[zone].shotsMade}</ThemedText>
-              <ThemedText>{t('Shots Attempted')}: {zoneStats[zone].shotsAttempted}</ThemedText>
-              <ThemedText>{t('Success Rate')}: {calculateSuccessRate(zoneStats[zone].shotsAttempted, zoneStats[zone].shotsMade)}</ThemedText>
+            <ThemedText style={styles.zoneLabel}>{zoneLabels[zone as keyof typeof zoneLabels]}:</ThemedText>
+            <ThemedText>{t('Shots Made')}: {zoneStats[zone].shotsMade}</ThemedText>
+            <ThemedText>{t('Shots Attempted')}: {zoneStats[zone].shotsAttempted}</ThemedText>
+            <ThemedText>{t('Success Rate')}: {calculateSuccessRate(zoneStats[zone].shotsAttempted, zoneStats[zone].shotsMade)}</ThemedText>
+            
             </View>
             <TouchableOpacity onPress={() => resetSpecificStat(`progress_${zone}`)} style={styles.resetIcon}>
               <Icon name="refresh" size={24} color="black" />
@@ -262,10 +249,5 @@ const styles = StyleSheet.create({
   },
   resetIcon: {
     marginLeft: 10,
-  },
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    margin: 16,
   },
 });
