@@ -58,6 +58,21 @@ function ShootWorkoutsList() {
   return (
     <View style={styles.tabContainer}>
       <ThemedText style={styles.subtitle}>Select a workout:</ThemedText>
+      <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
+      <ImageBackground
+          source={require('@/assets/images/shooting-free.png')}
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage} 
+        >
+          <Text style={styles.buttonText}>Seance de tir libre</Text>
+          
+        </ImageBackground>
+      </TouchableOpacity>
+      
+      <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
+        <Text style={styles.buttonText}>Programme d'entrainement</Text>
+      </TouchableOpacity>
+     
       <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
         <ImageBackground
           source={require('@/assets/images/shooting-challenge.png')}
@@ -66,19 +81,6 @@ function ShootWorkoutsList() {
         >
           <Text style={styles.buttonText}>3pt Challenge</Text>
           <ThemedText type="default">1 minute</ThemedText>
-        </ImageBackground>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert('Bientôt disponible!')} >
-        <Text style={styles.buttonText}>Programme d'entrainement</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
-      <ImageBackground
-          source={require('@/assets/images/shooting-challenge.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage}
-        >
-          <Text style={styles.buttonText}>Seance de tir libre</Text>
-          
         </ImageBackground>
       </TouchableOpacity>
         
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
   default: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: 'white',
   },
   reactLogo: {
     height: 250,

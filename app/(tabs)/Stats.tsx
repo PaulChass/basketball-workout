@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ScrollView, Button } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,12 +7,21 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { getProgress, saveProgress } from '@/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/i18n';
 
-export default function TabTwoScreen() {
+
+export default function Stats() {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState<{ date: string } | null>(null);
   const [threePointChallenge, setThreePointChallenge] = useState<{ threesMade: number } | null>(null);
   const [dribblingChallenge, setDribblingChallenge] = useState<{ timeTaken: number }[]>([]);
   const [zoneStats, setZoneStats] = useState<{ [key: string]: { shotsAttempted: number, shotsMade: number } }>({});
+  const [updated, setUpdated] = useState(false);
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -47,8 +56,8 @@ export default function TabTwoScreen() {
       fetchProgress();
       fetchThreePointChallenge();
       fetchDribblingChallenge();
-      fetchZoneStats();
-    }, [])
+      fetchZoneStats(); 
+    }, [updated])
   );
 
   const resetStats = async () => {
@@ -67,9 +76,11 @@ export default function TabTwoScreen() {
       setThreePointChallenge(null);
       setDribblingChallenge([]);
       setZoneStats({});
-      alert('Les statistiques ont été réinitialisées.');
+      alert(t('Success'), t('Progress saved successfully.'));
+      setUpdated(!updated);
     } catch (e) {
       console.error('Failed to reset stats.', e);
+      alert(t('Error'), t('Failed to save progress.'));
     }
   };
 
@@ -87,23 +98,25 @@ export default function TabTwoScreen() {
         newZoneStats[key] = { shotsAttempted: 0, shotsMade: 0 };
         setZoneStats(newZoneStats);
       }
-      alert('Statistique réinitialisée.');
+      alert(t('Success'), t('Progress saved successfully.'));
+      setUpdated(!updated);
     } catch (e) {
       console.error('Failed to reset stat.', e);
+      alert(t('Error'), t('Failed to save progress.'));
     }
   };
 
   const zoneLabels = {
-    '3pt-left-corner': '3PT - Coin Gauche',
-    '3pt-left-wing': '3PT - 45° Gauche',
-    '3pt-top': '3PT - Centre',
-    '3pt-right-wing': '3PT - 45° Droite',
-    '3pt-right-corner': '3PT - Coin Droit',
-    'mid-left': 'Mi-distance Gauche',
-    'mid-left-center': 'Mi-distance Centre Gauche',
-    'mid-center': 'Mi-distance Centre',
-    'mid-right-center': 'Mi-distance Centre Droite',
-    'mid-right': 'Mi-distance Droite',
+    '3pt-left-corner': t('3PT - Left Corner'),
+    '3pt-left-wing': t('3PT - Left Wing'),
+    '3pt-top': t('3PT - Top'),
+    '3pt-right-wing': t('3PT - Right Wing'),
+    '3pt-right-corner': t('3PT - Right Corner'),
+    'mid-left': t('Mid-range Left'),
+    'mid-left-center': t('Mid-range Left Center'),
+    'mid-center': t('Mid-range Center'),
+    'mid-right-center': t('Mid-range Right Center'),
+    'mid-right': t('Mid-range Right'),
   };
 
   const calculateBestTime = (challenges: { timeTaken: number }[]) => {
@@ -136,13 +149,22 @@ export default function TabTwoScreen() {
           style={styles.headerImage}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Rapport</ThemedText>
+      <ThemedView style={styles.titleContainer}>  
+        <ThemedText type="title">{t('Settings')}</ThemedText>
       </ThemedView>
-      <ThemedText>Ici les stats de l'utilisateur, les exercices effectués, les progrès, etc.</ThemedText>
+      <ThemedText>{t('Language')}</ThemedText>
+      <View style={styles.container}>
+        <Button title="English" onPress={() => changeLanguage('en')} />
+        <Button title="Français" onPress={() => changeLanguage('fr')} />
+      </View>
+      
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">{t('Report')}</ThemedText>
+      </ThemedView>
+      <ThemedText>{t('Here are the user stats, completed exercises, progress, etc.')}</ThemedText>
       
       <View style={styles.progressContainer}>
-        <ThemedText>Dernier entraînement terminé le: </ThemedText>
+        <ThemedText>{t('Last workout completed on:')}</ThemedText>
         <ThemedText>
           {progress ? new Date(progress.date).toLocaleDateString() : 'N/A'}
         </ThemedText>
@@ -151,7 +173,7 @@ export default function TabTwoScreen() {
         </TouchableOpacity>
       </View>
       <View style={styles.progressContainer}>
-        <ThemedText>Record au 3 Point Challenge:</ThemedText>
+        <ThemedText>{t('Record in the 3 Point Challenge:')}</ThemedText>
         <ThemedText>
           {threePointChallenge ? threePointChallenge.threesMade : 'N/A'}
         </ThemedText>
@@ -161,21 +183,21 @@ export default function TabTwoScreen() {
       </View>
       <View style={styles.progressContainer}>
         <View style={styles.fullWidth}> 
-        <ThemedText style={styles.fullWidth}>Dribble Challenge:</ThemedText>
-        <ThemedText >Meilleur temps:  
-          {bestTime !== null ? (
-            bestTime < 60 
-              ? `${bestTime} sec` 
-              : `${Math.floor(bestTime / 60)} min ${ bestTime % 60} sec`
-          ) : ' N/A'}
-        </ThemedText>
-        <ThemedText>Temps Moyen:
-          {averageTime !== null ? (
-            averageTime < 60 
-              ? `${averageTime.toFixed(2)} sec` 
-              : `${Math.floor(averageTime / 60)} min ${(averageTime % 60).toFixed(2)} sec`
-          ) : ' N/A'}
-        </ThemedText>
+          <ThemedText style={styles.fullWidth}>{t('Dribble Challenge:')}</ThemedText>
+          <ThemedText>{t('Best time:')}  
+            {bestTime !== null ? (
+              bestTime < 60 
+                ? `${bestTime} sec` 
+                : `${Math.floor(bestTime / 60)} min ${ bestTime % 60} sec`
+            ) : ' N/A'}
+          </ThemedText>
+          <ThemedText>{t('Average time:')}
+            {averageTime !== null ? (
+              averageTime < 60 
+                ? `${averageTime.toFixed(2)} sec` 
+                : `${Math.floor(averageTime / 60)} min ${(averageTime % 60).toFixed(2)} sec`
+            ) : ' N/A'}
+          </ThemedText>
         </View>
         <TouchableOpacity onPress={() => resetSpecificStat('dribblingChallenge')} style={styles.resetIcon}>
           <Icon name="refresh" size={24} color="gray" />
@@ -184,18 +206,20 @@ export default function TabTwoScreen() {
       <ScrollView>
         {Object.keys(zoneStats).map((zone) => (
           <View key={zone} style={styles.zoneContainer}>
-            <ThemedText style={styles.zoneLabel}>{zoneLabels[zone as keyof typeof zoneLabels]}:</ThemedText>
-            <ThemedText>Tirs réussis: {zoneStats[zone].shotsMade}</ThemedText>
-            <ThemedText>Tirs tentés: {zoneStats[zone].shotsAttempted}</ThemedText>
-            <ThemedText>Pourcentage de réussite: {calculateSuccessRate(zoneStats[zone].shotsAttempted, zoneStats[zone].shotsMade)}</ThemedText>
+            <View style={styles.fullWidth}>
+              <ThemedText style={styles.zoneLabel}>{zoneLabels[zone as keyof typeof zoneLabels]}:</ThemedText>
+              <ThemedText>{t('Shots Made')}: {zoneStats[zone].shotsMade}</ThemedText>
+              <ThemedText>{t('Shots Attempted')}: {zoneStats[zone].shotsAttempted}</ThemedText>
+              <ThemedText>{t('Success Rate')}: {calculateSuccessRate(zoneStats[zone].shotsAttempted, zoneStats[zone].shotsMade)}</ThemedText>
+            </View>
             <TouchableOpacity onPress={() => resetSpecificStat(`progress_${zone}`)} style={styles.resetIcon}>
-              <Icon name="refresh" size={24} color="gray" />
+              <Icon name="refresh" size={24} color="black" />
             </TouchableOpacity>
           </View>
         ))}
       </ScrollView>
       <TouchableOpacity onPress={resetStats}>
-        <ThemedText>Réinitialiser les statistiques</ThemedText>
+        <ThemedText>{t('Reset stats')}</ThemedText>
       </TouchableOpacity>
     </ParallaxScrollView>
   );
@@ -222,7 +246,7 @@ const styles = StyleSheet.create({
   zoneContainer: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: 'grey',
+    width: '100%',
     flexWrap: 'wrap',
     borderRadius: 5,
     flexDirection: 'row',
@@ -238,5 +262,10 @@ const styles = StyleSheet.create({
   },
   resetIcon: {
     marginLeft: 10,
+  },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin: 16,
   },
 });

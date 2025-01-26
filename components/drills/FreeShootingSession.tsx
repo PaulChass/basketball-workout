@@ -3,8 +3,10 @@ import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'reac
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BasketballCourt from '../ui/BasketballCourt';
 import { ThemedText } from '@/components/ThemedText';
+import { useTranslation } from 'react-i18next';
 
 const FreeShootingSession: React.FC = () => {
+  const { t } = useTranslation();
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
   const [shotsAttempted, setShotsAttempted] = useState<string>('');
   const [shotsMade, setShotsMade] = useState<string>('');
@@ -17,7 +19,11 @@ const FreeShootingSession: React.FC = () => {
 
   const handleSave = async () => {
     if (!selectedZone || !shotsAttempted || !shotsMade) {
-      Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+      Alert.alert(t('Error'), t('Please fill in all fields.'));
+      return;
+    }
+    if (parseInt(shotsMade, 10) > parseInt(shotsAttempted, 10)) {
+      Alert.alert(t('Error'), t('The number of shots made cannot be greater than the number of shots attempted.'));
       return;
     }
 
@@ -25,50 +31,51 @@ const FreeShootingSession: React.FC = () => {
       zone: selectedZone,
       shotsAttempted: parseInt(shotsAttempted, 10),
       shotsMade: parseInt(shotsMade, 10),
+      date: new Date().toISOString(),
     };
 
     try {
       await AsyncStorage.setItem(`progress_${selectedZone}`, JSON.stringify(progress));
-      Alert.alert('Succès', 'Progression sauvegardée avec succès.');
+      Alert.alert(t('Success'), t('Progress saved successfully.'));
       setSelectedZone(null);
       setShotsAttempted('');
       setShotsMade('');
     } catch (e) {
       console.error('Failed to save progress.', e);
-      Alert.alert('Erreur', 'Échec de la sauvegarde de la progression.');
+      Alert.alert(t('Error'), t('Failed to save progress.'));
     }
   };
 
   return (
     <View style={styles.container}>
-        <ThemedText style={styles.inputLabel}>Sélectionnez une zone</ThemedText>
-        <View style={styles.inputZone}>
-      <BasketballCourt onZoneSelect={handleZoneSelect} />
-        </View>
+      <ThemedText style={styles.inputLabel}>{t('Select a zone')}</ThemedText>
+      <View style={styles.inputZone}>
+        <BasketballCourt onZoneSelect={handleZoneSelect} />
+      </View>
+      {selectedZone && (
         <View style={styles.inputContainer}>
-          <ThemedText style={styles.inputTitle}>Zone sélectionnée : {selectedZone && selectedZone}</ThemedText>
-          <ThemedText style={styles.inputLabel}>Nombre de tirs réussis</ThemedText>
+          <ThemedText style={styles.inputTitle}>{t('Selected zone')}: {selectedZone}</ThemedText>
+          <ThemedText style={styles.inputLabel}>{t('Shots Made')}</ThemedText>
           <TextInput
             style={styles.input}
-            placeholder="Nombre de tirs réussis"
+            placeholder={t('Shots Made')}
             keyboardType="numeric"
             value={shotsMade}
             onChangeText={setShotsMade}
           />
-          <ThemedText style={styles.inputLabel}>Nombre de tirs tentés</ThemedText>
+          <ThemedText style={styles.inputLabel}>{t('Shots Attempted')}</ThemedText>
           <TextInput
             style={styles.input}
-            placeholder="Nombre de tirs tentés"
+            placeholder={t('Shots Attempted')}
             keyboardType="numeric"
             value={shotsAttempted}
             onChangeText={setShotsAttempted}
-            
           />
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Sauvegarder</Text>
+            <Text style={styles.saveButtonText}>{t('Save')}</Text>
           </TouchableOpacity>
         </View>
-      
+      )}
     </View>
   );
 };
@@ -83,11 +90,11 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 16,
   },
-    inputTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
+  inputTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
   input: {
     height: 40,
     borderColor: 'gray',

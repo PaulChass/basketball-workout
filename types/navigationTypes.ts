@@ -9,7 +9,7 @@ type RootStackParamList = {
   DribblingFundamentalsDrills: undefined;
   DribblingChallenge: undefined;
   ThreePointChallenge: undefined;
-
+  FreeShootingSession: undefined;
   // Add other screens here
 };
 

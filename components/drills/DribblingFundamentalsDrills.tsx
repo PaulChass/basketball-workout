@@ -5,15 +5,17 @@ import { useNavigation } from '@react-navigation/native';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import { drills as allDrills } from './drillsData';
 import DrillsList from './DrillsList';
+import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
   ["Pound Dribble", "Crossover", "Dribble avant/arrière", "Entre les jambes", "Derrière le dos", "Wrap Around", "Figure 8"]
   .includes(drill.title)
 );
+
 export default function DribblingFundamentalsDrills() {
+  const { t } = useTranslation();
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   const [drills, setDrills] = useState(initialDrills);
-  
 
   return (
     <View style={styles.container}>
@@ -23,20 +25,19 @@ export default function DribblingFundamentalsDrills() {
           style={styles.reactLogo}
         />
         <View style={styles.infoContainer}>
-          <ThemedText type="default">~ {drills.length * 0.5} min</ThemedText>
-          <ThemedText type="default">{drills.length} exercices</ThemedText>
+          <ThemedText type="default">~ {drills.length * 0.5} {t('minutes')}</ThemedText>
+          <ThemedText type="default">{drills.length} {t('exercises')}</ThemedText>
         </View>
       </View>
-    <View style={styles.drillsContainer}>
-      <DrillsList
-        drills={drills}
-        setDrills={setDrills}
-      />
-    </View>
-
+      <View style={styles.drillsContainer}>
+        <DrillsList
+          drills={drills}
+          setDrills={setDrills}
+        />
+      </View>
       <View style={styles.startButtonContainer}>
         <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen', { drills })}>
-          <ThemedText style={styles.startButtonText}>Commencer</ThemedText>
+          <ThemedText style={styles.startButtonText}>{t('Start')}</ThemedText>
         </TouchableOpacity>
       </View>
     </View>

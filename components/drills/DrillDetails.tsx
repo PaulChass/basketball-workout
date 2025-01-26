@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { ThemedText } from '../ThemedText';
 import { WebView } from 'react-native-webview';
+import { useTranslation } from 'react-i18next';
 
 interface Drill {
   title: string;
@@ -18,14 +19,14 @@ interface DrillDetailsProps {
 }
 
 const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
+  const { t } = useTranslation();
+
   return (
     <View style={styles.drillContainer}>
       <ThemedText style={styles.drillTitle}>{drill.title}</ThemedText>
       <ThemedText style={styles.drillDuration}>
         {typeof drill.duration !== 'number' ? drill.duration :
-          drill.duration < 1 ? `${drill.duration * 60} sec` : `${Math.floor(drill.duration)} min` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} sec` : '')}
-
-       
+          drill.duration < 1 ? `${drill.duration * 60} ${t('seconds')}` : `${Math.floor(drill.duration)} ${t('minutes')}` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} ${t('seconds')}` : '')}
       </ThemedText>
       {drill.videoUrl ? (
         <View style={styles.animationContainer}>
@@ -39,13 +40,13 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
           />
         </View>
       ) : (
-        <ThemedText style={styles.noVideoText}>Pas de vidéo disponible</ThemedText>
+        <ThemedText style={styles.noVideoText}>{t('No video available')}</ThemedText>
       )}
-      <ThemedText style={styles.sectionTitle}>Instruction</ThemedText>
+      <ThemedText style={styles.sectionTitle}>{t('Instructions')}</ThemedText>
       <ThemedText style={styles.drillInstructions}>{drill.instructions}</ThemedText>
-      <ThemedText style={styles.sectionTitle}>Objectif</ThemedText>
+      <ThemedText style={styles.sectionTitle}>{t('Objective')}</ThemedText>
       <ThemedText style={styles.drillDescription}>{drill.description}</ThemedText>
-      <ThemedText style={styles.sectionTitle}>Conseils</ThemedText>
+      <ThemedText style={styles.sectionTitle}>{t('Tips')}</ThemedText>
       {drill.tips && drill.tips.length > 0 ? (
         <View style={styles.tipsContainer}>
           {drill.tips.map((tip, index) => (
@@ -53,7 +54,7 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
           ))}
         </View>
       ) : (
-        <ThemedText style={styles.noTipsText}>Pas de conseils disponibles</ThemedText>
+        <ThemedText style={styles.noTipsText}>{t('No tips available')}</ThemedText>
       )}
     </View>
   );

@@ -7,6 +7,7 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { drills as allDrills } from './drillsData';
 import DrillsList from './DrillsList';
 import { Drill } from '../../types/Drill';
+import { useTranslation } from 'react-i18next';
 
 const initialDrills: Drill[] = allDrills.filter(drill =>
   [
@@ -18,6 +19,7 @@ const initialDrills: Drill[] = allDrills.filter(drill =>
 ) as Drill[];
 
 const DribblingChallenge = () => {
+  const { t } = useTranslation();
   const { time, isRunning, showSubmit, startStopwatch, stopStopwatch, resetStopwatch } = useStopwatch();
   const [drills, setDrills] = useState(initialDrills);
   
@@ -28,7 +30,7 @@ const DribblingChallenge = () => {
         const dribblingChallengeArray = Array.isArray(savedDribblingChallenge) ? savedDribblingChallenge : [];
         const newDribblingChallenge = [...dribblingChallengeArray, { timeTaken: time, date: new Date().toISOString() }];
         await saveProgress('dribblingChallenge', newDribblingChallenge);
-        alert('Temps envoyé avec succès!');
+        alert(t('Success') + '! ' + t('Time successfully submitted!'));
       } catch (e) {
         console.error('Failed to save the time taken for the dribbling challenge.', e);
       }
@@ -43,7 +45,7 @@ const DribblingChallenge = () => {
           />
           
         <ThemedText style={styles.description}>
-          Fais les exercices de dribble suivant le plus vite possible.
+          {t('Complete the following dribbling exercises as quickly as possible.')}
         </ThemedText>
       </View>
       { !isRunning && !showSubmit && 
@@ -65,27 +67,27 @@ const DribblingChallenge = () => {
         >
           {() => (
             <ThemedText style={styles.timer}>{ 
-              time < 60 ? `${time} sec` : `${Math.floor(time / 60)} min ${time % 60} sec`
+              time < 60 ? `${time} ${t('sec')}` : `${Math.floor(time / 60)} ${t('min')} ${time % 60} ${t('sec')}`
             }</ThemedText>
           )}
         </AnimatedCircularProgress>}
         {!isRunning && !showSubmit && (
           <TouchableOpacity style={styles.button} onPress={startStopwatch}>
-            <Text style={styles.buttonText}>Commencer</Text>
+            <Text style={styles.buttonText}>{t('Start')}</Text>
           </TouchableOpacity>
         )}
         {isRunning && (
           <TouchableOpacity style={styles.button} onPress={stopStopwatch}>
-            <Text style={styles.buttonText}>Arrêter</Text>
+            <Text style={styles.buttonText}>{t('Stop')}</Text>
           </TouchableOpacity>
         )}
         {showSubmit && (
           <View>
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Envoyer</Text>
+              <Text style={styles.buttonText}>{t('Submit')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={resetStopwatch}>
-              <Text style={styles.buttonText}>Réessayer</Text>
+              <Text style={styles.buttonText}>{t('Retry')}</Text>
             </TouchableOpacity>
           </View>
         )}

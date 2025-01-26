@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,6 +7,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
+  const { t } = useTranslation(); // Initialize useTranslation
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -16,29 +19,29 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Bienvenue !
+        <ThemedText type="title">{t('Welcome!')}
         </ThemedText>
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Explore les programmes d’entraînement
+        <ThemedText type="subtitle">{t('Explore training programs')}
         </ThemedText>
         <ThemedText>
-        Découvre une bibliothèque d’exercices et de drills interactifs adaptés à tous les niveaux.
+        {t('Discover a library of exercises and interactive drills suitable for all levels.')}
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Suis ta progression
+        <ThemedText type="subtitle">{t('Track your progress')}
         </ThemedText>
         <ThemedText>
-        Garde un œil sur tes progrès grâce à des indicateurs simples et motivants.
+        {t('Keep an eye on your progress with simple and motivating indicators.')}
         </ThemedText>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Crée des programmes personnalisés
+        <ThemedText type="subtitle">{t('Create personalized programs')}
         </ThemedText>
         <ThemedText>
-        Conçois des sessions d’entraînement sur mesure selon tes objectifs et ton emploi du temps. 
+        {t('Design custom training sessions according to your goals and schedule.')}
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>

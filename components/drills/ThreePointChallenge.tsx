@@ -5,20 +5,51 @@ import * as Speech from 'expo-speech';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { saveProgress, getProgress } from '@/utils/storage';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import CountdownCircle from '../ui/CountdownCircle';
+import MuteButton from '../ui/MuteButton';
+import { useTranslation } from 'react-i18next';
 
 const ThreePointChallenge = () => {
+  const { t, i18n } = useTranslation();
   const [timer, setTimer] = useState(60);
+  const [showCountdownCircle, setShowCountdownCircle] = useState(false);  
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [threesMade, setThreesMade] = useState('');
   const [showInput, setShowInput] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [showRestart, setShowRestart] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const speechLanguage = i18n.language === 'fr' ? 'fr-FR' : 'en-US';
 
   useEffect(() => {
-    if (timer <= 3 && timer > 0 && isTimerRunning) {
-      Speech.speak(`${timer}`, { language: 'fr-FR' });
+    if (timer <= 3 && timer > 0 && isTimerRunning && !isMuted) {
+      Speech.speak(`${timer}`, { language: speechLanguage });
     }
-  }, [timer]);
+  }, [timer, speechLanguage]);
+
+  const readyToGo = () => {
+    let timeRemaining = 5;
+    !isMuted && Speech.speak(t('Ready to go...'), { language: speechLanguage });
+    setInterval(() => {
+      timeRemaining--;
+      if (0 < timeRemaining && timeRemaining < 4 && !isMuted) {
+        let speak = timeRemaining.toString();
+        Speech.speak(speak, { language: speechLanguage });
+      }
+      if (timeRemaining === 0 && !isMuted) {
+        Speech.speak(t('Go!'), { language: speechLanguage });
+        Speech.speak(t('Score as many 3-pointers as possible in one minute.'), { language: speechLanguage });
+      }
+    }, 1000);
+
+    setShowCountdownCircle(true);
+    setTimeout(() => {
+      setShowCountdownCircle(false);
+      startTimer();
+    }, 5000);
+  };
 
   const startTimer = () => {
     setIsTimerRunning(true);
@@ -40,8 +71,9 @@ const ThreePointChallenge = () => {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    setIsTimerRunning(false);
     setShowRestart(true);
+    setIsPaused(true);
+    setIsTimerRunning(false);
   };
 
   const handleSubmit = async () => {
@@ -52,16 +84,14 @@ const ThreePointChallenge = () => {
         const { threesMade: prevThreesMade } = progress;
         const newThreesMade = parseInt(threesMade, 10);
         if (newThreesMade > prevThreesMade) {
-          alert('Nouveau record! Félicitations!');
+          alert(t('Success') + '! ' + t('New record! Congratulations!'));
           saveProgress('threePointChallenge', { threesMade: newThreesMade, date: completionDate });
+        } else {
+          alert(t('No record this time. Try again!'));
         }
-        else {
-          alert('Pas de record cette fois-ci. Essayez encore!');
-        }
-      }
-      else {
+      } else {
         saveProgress('threePointChallenge', { threesMade: parseInt(threesMade, 10), date: completionDate });
-        alert('Nombre de 3 points enregistré avec succès!');
+        alert(t('Number of 3-pointers successfully recorded!'));
       }
     } catch (e) {
       console.error('Failed to save the number of 3-pointers.', e);
@@ -77,12 +107,14 @@ const ThreePointChallenge = () => {
 
   const resumeTimer = () => {
     setShowRestart(false);
+    setIsPaused(false);
+    setIsTimerRunning(true);
     startTimer();
   };
 
   return (
     <View style={styles.container}>
-       <ParallaxScrollView
+      <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={
           <Image
@@ -93,60 +125,74 @@ const ThreePointChallenge = () => {
         {!showInput && (
           <View style={styles.container}>
             <ThemedText style={styles.description}>
-              Marquez autant de 3 points que possible en une minute.
+              {t('Score as many 3-pointers as possible in one minute.')}
             </ThemedText>
-            <AnimatedCircularProgress
-              size={200}
-              width={10}
-              fill={(timer / 60) * 100}
-              tintColor="#00e0ff"
-              backgroundColor="#3d5875"
-              rotation={180}
-              lineCap="round"
-            >
-              {() => (
-                <ThemedText style={styles.timer}>{timer} secondes restantes</ThemedText>
-              )}
-            </AnimatedCircularProgress>
+            <MuteButton isMuted={isMuted} setIsMuted={setIsMuted} />
+            {showCountdownCircle ? (
+              <>
+                <ThemedText style={styles.timer}>{t('Ready?')}</ThemedText>
+                <CountdownCircle totalTime={5} />
+              </>
+            ) : (
+              (isTimerRunning || isPaused) && (
+                <AnimatedCircularProgress
+                  size={200}
+                  width={10}
+                  fill={(timer / 60) * 100}
+                  tintColor="#00e0ff"
+                  backgroundColor="#3d5875"
+                  rotation={180}
+                  lineCap="round"
+                >
+                  {() => (
+                    <ThemedText style={styles.timer}>
+                      {timer} {t('seconds remaining')}
+                    </ThemedText>
+                  )}
+                </AnimatedCircularProgress>
+              )
+            )}
           </View>
         )}
         {!isTimerRunning && !showInput && (
           showRestart ? (
             <View style={styles.containerButtons}>
-            <TouchableOpacity style={styles.button} onPress={() => resumeTimer()}>
-              <Text style={styles.buttonText}>Continuer</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleRestart}>
-              <Text style={styles.buttonText}>Réessayer</Text>
-            </TouchableOpacity>
-            
+              <TouchableOpacity style={styles.button} onPress={() => resumeTimer()}>
+                <Text style={styles.buttonText}>{t('Resume')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, styles.buttonRetry]} onPress={handleRestart}>
+                <Text style={styles.buttonText}>{t('Retry')}</Text>
+              </TouchableOpacity>
             </View>
           ) : (
-            <TouchableOpacity style={styles.button} onPress={startTimer}>
-              <Text style={styles.buttonText}>Commencer</Text>
-            </TouchableOpacity>
+            !showCountdownCircle && (
+              <TouchableOpacity style={styles.button} onPress={readyToGo}>
+                <Text style={styles.buttonText}>{t('Start')}</Text>
+              </TouchableOpacity>
+            )
           )
         )}
         {isTimerRunning && !showInput && (
           <TouchableOpacity style={styles.button} onPress={stopTimer}>
-            <Text style={styles.buttonText}>Arrêter</Text>
+            <Text style={styles.buttonText}>{t('Stop')}</Text>
           </TouchableOpacity>
         )}
         {showInput && (
           <View>
-            <ThemedText style={styles.description}>Nombre de 3pts réussis:</ThemedText>
+            <ThemedText style={styles.description}>{t('Number of 3-pointers made')}:</ThemedText>
             <TextInput
               style={styles.input}
-              placeholder="Entrez le nombre de 3 points"
+              placeholder={t('Enter the number of 3-pointers')}
+              placeholderTextColor="grey"
               keyboardType="numeric"
               value={threesMade}
               onChangeText={setThreesMade}
             />
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Soumettre</Text>
+              <Text style={styles.buttonText}>{t('Submit')}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleRestart}>
-              <Text style={styles.buttonText}>Réessayer</Text>
+            <TouchableOpacity style={[styles.button, styles.buttonRetry]} onPress={handleRestart}>
+              <Text style={styles.buttonText}>{t('Retry')}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -164,7 +210,7 @@ const styles = StyleSheet.create({
   },
   containerButtons: {
     marginTop: -20,
-    },
+  },
   description: {
     fontSize: 18,
     marginBottom: 16,
@@ -177,13 +223,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 40,
+    height: 60,
     color: 'gray',
     borderColor: 'gray',
+    textAlign: 'center',
     borderWidth: 1,
     marginBottom: 16,
-    paddingHorizontal: 8,
-    width: '80%',
+    padding: 0,
+    width: '100%',
+    borderRadius: 25,
   },
   reactLogo: {
     height: 250,
@@ -199,6 +247,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonRetry: {
     marginTop: 16,
   },
   buttonText: {

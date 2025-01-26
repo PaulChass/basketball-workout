@@ -9,8 +9,11 @@ import DrillDetails from './DrillDetails';
 import { useRoute } from '@react-navigation/native';
 import CountdownCircle from '../ui/CountdownCircle';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import MuteButton from '../ui/MuteButton';
+import { useTranslation } from 'react-i18next';
 
 export default function WorkoutScreen() {
+  const { t, i18n } = useTranslation();
   const [currentDrillIndex, setCurrentDrillIndex] = useState(-1);
   const [timeRemaining, setTimeRemaining] = useState(4);
   const [isMuted, setIsMuted] = useState(true);
@@ -18,21 +21,23 @@ export default function WorkoutScreen() {
   const route = useRoute();
   const { drills } = route.params as { drills: { title: string; duration: number; instructions: string; description: string }[] };
 
+  const speechLanguage = i18n.language === 'fr' ? 'fr-FR' : 'en-US';
+
   useEffect(() => {
     if (currentDrillIndex === -1) {
-      if (!isMuted) Speech.speak('Prêt à y aller...', { language: 'fr-FR' });
+      if (!isMuted) Speech.speak(t('Ready to go...'), { language: speechLanguage });
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       if (!isMuted) {
-        Speech.speak(drills[currentDrillIndex].title);
+        Speech.speak(drills[currentDrillIndex].title, { language: speechLanguage });
         if (drills[currentDrillIndex].duration >= 1) {
-          Speech.speak(drills[currentDrillIndex].duration + ' minute', { language: 'fr-FR' });
+          Speech.speak(drills[currentDrillIndex].duration + ' ' + t('minutes'), { language: speechLanguage });
         } else {
           let seconds = drills[currentDrillIndex].duration * 60;
-          Speech.speak(seconds + ' secondes', { language: 'fr-FR' });
+          Speech.speak(seconds + ' ' + t('seconds'), { language: speechLanguage });
         }
       }
     }
-  }, [currentDrillIndex, isMuted]);
+  }, [currentDrillIndex, isMuted, speechLanguage]);
 
   useEffect(() => {
     if (currentDrillIndex === -1) {
@@ -93,7 +98,7 @@ export default function WorkoutScreen() {
     else {
       const completionDate = new Date().toISOString();
       saveProgress('workout', { completed: true, date: completionDate });
-      alert('Entraînement terminé!');
+      alert(t('Workout Completed!'));
     }
   };
 
@@ -109,16 +114,14 @@ export default function WorkoutScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         {currentDrillIndex !== drills.length && (<>
-          <TouchableOpacity onPress={handleMuteToggle} style={styles.iconButton}>
-            <Icon name={isMuted ? "volume-off" : "volume-up"} size={30} color={'gray'} />
-          </TouchableOpacity>
+          <MuteButton isMuted={isMuted} setIsMuted={setIsMuted}/>
           </>
         )}
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {currentDrillIndex === -1 ? (
           <View style={styles.readyContainer}>
-            <ThemedText style={styles.readyText}>Prêt à y aller...</ThemedText>
+            <ThemedText style={styles.readyText}>{t('Ready to go...')}</ThemedText>
             <CountdownCircle totalTime={timeRemaining} />
           </View>
         ) : currentDrillIndex < drills.length ? (
@@ -135,14 +138,14 @@ export default function WorkoutScreen() {
             >
               {() => (
                 <ThemedText style={styles.timerText}>
-                  {timeRemaining < 60 ? `${timeRemaining} sec` : `${Math.floor(timeRemaining / 60)} min ${timeRemaining % 60} sec`}
+                  {timeRemaining < 60 ? `${timeRemaining} ${t('seconds')}` : `${Math.floor(timeRemaining / 60)} ${t('minutes')} ${timeRemaining % 60} ${t('seconds')}`}
                 </ThemedText>
               )}  
             </AnimatedCircularProgress>
 
           </View>
         ) : (
-          <ThemedText style={styles.text}>Ici , mettre un formulaire de reours d'expérience.</ThemedText>
+          <ThemedText style={styles.text}>{t('Experience Feedback Form')}</ThemedText>
         )}
       </ScrollView>
       {currentDrillIndex !== drills.length && currentDrillIndex !== -1 && (
@@ -152,7 +155,7 @@ export default function WorkoutScreen() {
           </TouchableOpacity>
 
         <TouchableOpacity onPress={handleNextDrill} style={styles.nextButton}>
-          <ThemedText style={styles.nextButtonText}>Suivant ( {timeRemaining}s )</ThemedText>
+          <ThemedText style={styles.nextButtonText}>{t('Next')} ( {timeRemaining}s )</ThemedText>
         </TouchableOpacity>
         
         <TouchableOpacity onPress={() => setTimeRemaining((prev) => prev + 15)} style={styles.nextButton}>
