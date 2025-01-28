@@ -8,6 +8,7 @@ import { getProgress, saveProgress } from '@/utils/storage';
 import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function TabTwoScreen() {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -142,8 +143,12 @@ export default function TabTwoScreen() {
         />
       }>
         <ThemedView style={styles.titleContainer}>  
-          <ThemedText type="title">{t('Settings')}</ThemedText>
+          <ThemedText type="title">{t('Settings')}</ThemedText>          
         </ThemedView>
+      <View style={styles.progressContainer}>
+        <ThemedText>{t('Language')}</ThemedText>
+        <LanguageSwitcher />
+      </View>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">{t('Report')}</ThemedText>
       </ThemedView>
@@ -154,9 +159,6 @@ export default function TabTwoScreen() {
         <ThemedText>
           {progress ? new Date(progress.date).toLocaleDateString() : 'N/A'}
         </ThemedText>
-        <TouchableOpacity onPress={() => resetSpecificStat('workout')} style={styles.resetIcon}>
-          <Icon name="refresh" size={24} color="gray" />
-        </TouchableOpacity>
       </View>
       <View style={styles.progressContainer}>
         <ThemedText>{t('Record in the 3 Point Challenge:')}</ThemedText>

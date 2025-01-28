@@ -8,12 +8,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import DribblingFundamentalsDrills from '../../components/drills/DribblingFundamentalsDrills';
+import LayupsFundamentalsDrills from '../../components/drills/LayupsFundamentalsDrills';
 import DribblingChallenge from '@/components/drills/DribblingChallenge';  
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import FreeShootingSession from '@/components/drills/FreeShootingSession';
+import ShootingFundamentalsDrills from '@/components/drills/ShootingFundamentalsDrills';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -23,7 +26,6 @@ function DribbleWorkoutsList() {
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   return (
     <View style={styles.tabContainer}>
-      <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
       <TouchableOpacity onPress={() => navigation.navigate('DribblingFundamentalsDrills')}>
         <ImageBackground
           source={require('@/assets/images/fundamentals.png')}
@@ -51,12 +53,13 @@ function DribbleWorkoutsList() {
 }
 
 function ShootWorkoutsList() {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation(); 
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
 
   return (
-    <View style={styles.tabContainer}>
-      <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
+    <ScrollView>
+      <View
+    style={styles.tabContainer}>
       <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
         <ImageBackground
           source={require('@/assets/images/shooting-free.png')}
@@ -66,8 +69,14 @@ function ShootWorkoutsList() {
           <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
-        <Text style={styles.buttonText}>{t('Training Program')}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(ShootingFundamentalsDrills)}>
+      <ImageBackground
+          source={require('@/assets/images/shooting-workout.png')}
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage}
+        >
+        <Text style={styles.buttonText}>{t('Shooting Drills')}</Text>
+      </ImageBackground>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
         <ImageBackground
@@ -79,18 +88,19 @@ function ShootWorkoutsList() {
           <ThemedText style={styles.default} type="default">{t('1 minute')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
 function LayupsWorkoutsList() {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation();
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
  
   return (
     <View style={styles.tabContainer}>
       <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
-      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
+      <TouchableOpacity onPress={() =>navigation.navigate('LayupsFundamentalsDrills')}>
         <ImageBackground
           source={require('@/assets/images/layups.png')}
           style={styles.buttonBackground}
@@ -116,6 +126,8 @@ export default function DrillsScreen() {
       <Stack.Navigator>
         <Stack.Screen name="DrillsTabs" component={DrillsTabs} options={{ headerShown: false }} />
         <Stack.Screen name="DribblingFundamentalsDrills" component={DribblingFundamentalsDrills} />
+        <Stack.Screen name="LayupsFundamentalsDrills" component={LayupsFundamentalsDrills} />
+        <Stack.Screen name="ShootingFundamentalsDrills" component={ShootingFundamentalsDrills} />
         <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} />
         <Stack.Screen name="DrillDetailsScreen" component={DrillDetailsScreen} />
         <Stack.Screen name="ThreePointChallenge" component={ThreePointChallenge} />

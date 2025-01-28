@@ -26,8 +26,8 @@ export default function MuteButton({ isMuted, setIsMuted }: MuteButtonProps) {
 const styles = StyleSheet.create({
     iconButton: {
         position: 'absolute',
-        top: -20,
-        right: -20,
+        top: 0,
+        right: 0,
         padding: 0,
     },
 });

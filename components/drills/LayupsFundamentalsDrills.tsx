@@ -8,11 +8,11 @@ import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
-  ["Pound Dribble", "Crossover", "Front/Back Dribble", "Between the Legs", "Behind the Back"]
+  ["Double pas - main droite", "Double pas - main gauche","Reverse layup - main droite","Reverse layup - main gauche","Floaters"]
   .includes(drill.title)
 );
 
-export default function DribblingFundamentalsDrills() {
+export default function LayupsFundamentalsDrills() {
   const { t } = useTranslation();
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   const [drills, setDrills] = useState(initialDrills);
@@ -21,7 +21,7 @@ export default function DribblingFundamentalsDrills() {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Image
-          source={require('@/assets/images/fundamentals.png')}
+          source={require('@/assets/images/layups.png')}
           style={styles.reactLogo}
         />
         <View style={styles.infoContainer}>

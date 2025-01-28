@@ -23,9 +23,9 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
 
   return (
     <View style={styles.drillContainer}>
-      <ThemedText style={styles.drillTitle}>{drill.title}</ThemedText>
+      <ThemedText style={styles.drillTitle}>{t(drill.title)}</ThemedText>
       <ThemedText style={styles.drillDuration}>
-        {typeof drill.duration !== 'number' ? drill.duration :
+        {typeof drill.duration !== 'number' ? t(drill.duration) :
           drill.duration < 1 ? `${drill.duration * 60} ${t('seconds')}` : `${Math.floor(drill.duration)} ${t('minutes')}` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} ${t('seconds')}` : '')}
       </ThemedText>
       {drill.videoUrl ? (
@@ -43,14 +43,14 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
         <ThemedText style={styles.noVideoText}>{t('No video available')}</ThemedText>
       )}
       <ThemedText style={styles.sectionTitle}>{t('Instructions')}</ThemedText>
-      <ThemedText style={styles.drillInstructions}>{drill.instructions}</ThemedText>
+      <ThemedText style={styles.drillInstructions}>{t(drill.instructions)}</ThemedText>
       <ThemedText style={styles.sectionTitle}>{t('Objective')}</ThemedText>
-      <ThemedText style={styles.drillDescription}>{drill.description}</ThemedText>
+      <ThemedText style={styles.drillDescription}>{t(drill.description)}</ThemedText>
       <ThemedText style={styles.sectionTitle}>{t('Tips')}</ThemedText>
       {drill.tips && drill.tips.length > 0 ? (
         <View style={styles.tipsContainer}>
           {drill.tips.map((tip, index) => (
-            <ThemedText key={index} style={styles.tipItem}>{tip}</ThemedText>
+            <ThemedText key={index} style={styles.tipItem}>{t(tip)}</ThemedText>
           ))}
         </View>
       ) : (

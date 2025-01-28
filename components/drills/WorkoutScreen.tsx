@@ -28,7 +28,7 @@ export default function WorkoutScreen() {
       if (!isMuted) Speech.speak(t('Ready to go...'), { language: speechLanguage });
     } else if (currentDrillIndex >= 0 && currentDrillIndex < drills.length) {
       if (!isMuted) {
-        Speech.speak(drills[currentDrillIndex].title, { language: speechLanguage });
+        Speech.speak(t(drills[currentDrillIndex].title), { language: speechLanguage });
         if (drills[currentDrillIndex].duration >= 1) {
           Speech.speak(drills[currentDrillIndex].duration + ' ' + t('minutes'), { language: speechLanguage });
         } else {
@@ -102,13 +102,38 @@ export default function WorkoutScreen() {
     }
   };
 
-  const videoHtml = (uri: string) => `
-    <html>
-      <body style="margin: 0; padding: 0; background-color: black;">
-        <video src="${uri}" autoplay muted loop style="width: 100%; height: 100%;"></video>
-      </body>
-    </html>
-  `;
+  const videoHtml = (uri: string) => {
+    const isYouTubeUrl = uri.includes('youtube.com') || uri.includes('youtu.be');
+    if (isYouTubeUrl) {
+      let videoId = '';
+      try {
+        if (uri.includes('youtube.com')) {
+          const urlParams = new URLSearchParams(new URL(uri).search);
+          videoId = urlParams.get('v') || '';
+        } else if (uri.includes('youtu.be')) {
+          videoId = uri.split('/').pop() || '';
+        }
+      } catch (error) {
+        console.error('Failed to extract YouTube video ID:', error);
+      }
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      return `
+        <html>
+          <body style="margin: 0; padding: 0; background-color: black;">
+            <iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </body>
+        </html>
+      `;
+    } else {
+      return `
+        <html>
+          <body style="margin: 0; padding: 0; background-color: black;">
+            <video src="${uri}" muted loop style="width: 100%; height: 100%;"></video>
+          </body>
+        </html>
+      `;
+    }
+  };
 
   return (
     <View style={styles.container}>

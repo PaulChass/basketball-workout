@@ -8,11 +8,11 @@ import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
-  ["Pound Dribble", "Crossover", "Front/Back Dribble", "Between the Legs", "Behind the Back"]
+  ["Form Shots","Pound Shots","One Dribble Pull-ups","Free throws"]
   .includes(drill.title)
 );
 
-export default function DribblingFundamentalsDrills() {
+export default function ShootingFundamentalsDrills() {
   const { t } = useTranslation();
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   const [drills, setDrills] = useState(initialDrills);
@@ -21,11 +21,11 @@ export default function DribblingFundamentalsDrills() {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Image
-          source={require('@/assets/images/fundamentals.png')}
+          source={require('@/assets/images/shooting-workout.png')}
           style={styles.reactLogo}
         />
         <View style={styles.infoContainer}>
-          <ThemedText type="default">~ {drills.length * 0.5} {t('minutes')}</ThemedText>
+          <ThemedText type="default">~ {drills.length * 5} {t('minutes')}</ThemedText>
           <ThemedText type="default">{drills.length} {t('exercises')}</ThemedText>
         </View>
       </View>

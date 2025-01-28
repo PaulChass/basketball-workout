@@ -17,15 +17,34 @@ const FreeShootingSession: React.FC = () => {
     setShotsMade('');
   };
 
-  const handleSave = async () => {
+  const askIfSure = () => {
     if (!selectedZone || !shotsAttempted || !shotsMade) {
       Alert.alert(t('Error'), t('Please fill in all fields.'));
       return;
     }
+
     if (parseInt(shotsMade, 10) > parseInt(shotsAttempted, 10)) {
       Alert.alert(t('Error'), t('The number of shots made cannot be greater than the number of shots attempted.'));
       return;
     }
+
+    Alert.alert(
+      t('Confirmation'),
+      t('You are going to save ' + shotsMade + ' shots made out of ' + shotsAttempted + ' shots attempted in the ' + selectedZone + ' zone. Are you sure you want to save this progress?'),
+      [
+        {
+          text: t('Cancel'),
+          style: 'cancel',
+        },
+        {
+          text: t('Save'),
+          onPress: handleSave,
+        }
+      ]
+    );
+  }
+
+  const handleSave = async () => {
 
     const progress = {
       zone: selectedZone,
@@ -71,7 +90,7 @@ const FreeShootingSession: React.FC = () => {
             value={shotsAttempted}
             onChangeText={setShotsAttempted}
           />
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <TouchableOpacity style={styles.saveButton} onPress={askIfSure}>
             <Text style={styles.saveButtonText}>{t('Save')}</Text>
           </TouchableOpacity>
         </View>
@@ -102,7 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 8,
     width: '80%',
-    color: 'white',
+    color: 'gray',
   },
   saveButton: {
     backgroundColor: '#1E90FF',

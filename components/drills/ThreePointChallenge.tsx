@@ -21,7 +21,8 @@ const ThreePointChallenge = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
 
-  const speechLanguage = i18n.language === 'fr' ? 'fr-FR' : 'en-US';
+  const speechLanguage = i18n.language === 'fr' ? 
+  'fr-FR' : i18n.language ==='es' ? 'es-ES' : 'en-US';
 
   useEffect(() => {
     if (timer <= 3 && timer > 0 && isTimerRunning && !isMuted) {

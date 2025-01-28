@@ -37,7 +37,6 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
-        <LanguageSwitcher />
       </ThemeProvider>
     </LanguageProvider>
   );

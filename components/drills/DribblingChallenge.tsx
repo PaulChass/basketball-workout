@@ -11,10 +11,10 @@ import { useTranslation } from 'react-i18next';
 
 const initialDrills: Drill[] = allDrills.filter(drill =>
   [
-    "Wrap Around (sans dribble)", 
-    "Figure 8 (sans dribble)",
-    "Wrap Around (avec dribble)", 
-    "Figure 8 (avec dribble)"
+    "Wrap Around (no dribble)", 
+    "Figure 8 (no dribble)",
+    "Wrap Around (with dribble)", 
+    "Figure 8 (with dribble)"
   ].includes(drill.title)
 ) as Drill[];
 

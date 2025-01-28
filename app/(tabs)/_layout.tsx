@@ -20,8 +20,7 @@ export default function TabLayout() {
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({
           ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+            backgroundColor:'transparent',
           },
           default: {},
         }),
@@ -47,7 +46,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="assessment" color={color} />,
         }}
       />
-      {/* Ensure DribblingFundamentalsDrills is not included in the Tabs */}
     </Tabs>
   );
 }
