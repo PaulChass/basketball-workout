@@ -23,7 +23,7 @@ const DrillsList: React.FC<DrillsListProps> = ({ drills, setDrills }) => {
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
     const { t, i18n } = useTranslation();
   
-    const getYouTubeThumbnail = (url) => {
+    const getYouTubeThumbnail = (url: string) => {
     const videoId = url.split('v=')[1] || url.split('/').pop();
     return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
   };

@@ -8,7 +8,7 @@ import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
-  ["Form Shots","Pound Shots","One Dribble Pull-ups","Free throws"]
+  ["Form Shots","Pound Shots","One Dribble Pull-ups","Free throws","Curry\'s Fast Shot release"]
   .includes(drill.title)
 );
 

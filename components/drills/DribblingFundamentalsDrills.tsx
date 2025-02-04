@@ -4,11 +4,12 @@ import { ThemedText } from '@/components/ThemedText';
 import { useNavigation } from '@react-navigation/native';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import { drills as allDrills } from './drillsData';
+import { Drill } from '../../types/Drill';
 import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
-  ["Pound Dribble", "Crossover", "Front/Back Dribble", "Between the Legs", "Behind the Back"]
+  ["5 minute workout", "Killer Crossover"]
   .includes(drill.title)
 );
 

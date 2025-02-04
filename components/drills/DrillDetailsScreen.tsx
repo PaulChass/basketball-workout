@@ -1,13 +1,13 @@
 import React from 'react';
-import Animated from 'react-native-reanimated';
 import { View, StyleSheet } from 'react-native';
 import DrillDetails from '../../components/drills/DrillDetails';
 import {  useRoute } from '@react-navigation/native';
-import { ThemedText } from '../ThemedText';
+import { useTranslation } from 'react-i18next';
 
 export default function DrillDetailsScreen() {
   const route = useRoute<{ key: string; name: string; params: { drill: any } }>();
   const { drill } = route.params;
+  const { i18n } = useTranslation();
 
   const videoHtml = (uri: string) => {
     const isYouTubeUrl = uri.includes('youtube.com') || uri.includes('youtu.be');
@@ -23,11 +23,11 @@ export default function DrillDetailsScreen() {
       } catch (error) {
         console.error('Failed to extract YouTube video ID:', error);
       }
-      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&cc_load_policy=1&cc_lang_pref=${i18n.language}`;
       return `
         <html>
           <body style="margin: 0; padding: 0; background-color: black;">
-            <iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <iframe width="100%" height="100%" src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </body>
         </html>
       `;
@@ -43,14 +43,12 @@ export default function DrillDetailsScreen() {
   };
 
   return (
-    <Animated.ScrollView>
       <View style={styles.container}>
         <DrillDetails
           drill={drill}
           videoHtml={videoHtml}
         />
       </View>
-    </Animated.ScrollView>
   );
 }
 

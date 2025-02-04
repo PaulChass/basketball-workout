@@ -69,7 +69,7 @@ function ShootWorkoutsList() {
           <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate(ShootingFundamentalsDrills)}>
+      <TouchableOpacity onPress={() => navigation.navigate('ShootingFundamentalsDrills')}>
       <ImageBackground
           source={require('@/assets/images/shooting-workout.png')}
           style={styles.buttonBackground}

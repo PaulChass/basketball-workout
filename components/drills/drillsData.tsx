@@ -1,4 +1,6 @@
-export const drills = [
+import {Drill} from '../../types/Drill';
+
+export const drills: Drill[] = [
   {
     title: 'Pound Dribble',
     duration: 0.5,
@@ -12,15 +14,33 @@ export const drills = [
     ]
   },
   {
-    title: 'Crossover',
-    duration: 0.5,
-    description: 'Improves your ability to change direction quickly.',
-    videoUrl: 'https://balldontlie.fr/crossover.mp4?v=1.5',
-    instructions: 'Dribble the ball from one hand to the other in front of your body. Change diagonals every 10 dribbles.',
+    title: '5 minute workout',
+    duration: 5,
+    description: 'Improves your dribbling skills',
+    videoUrl: 'https://youtu.be/CLoWxOvlHkk',
+    instructions: 'Get in a good stance, keep your head up, and make sure you also work on your weak hand.',
     tips: [
-      'Keep your center of gravity low for better balance.',
-      'Use a quick and smooth motion for the crossover.',
-      'Dribble higher or lower to change the rhythm.'
+      '1) Start with a pound dribble, 20 at ankle height, 20 at knee height, 20 at waist height, 20 at shoulder height',
+      '2) Figure 8 dribble, keep the ball low and pass it around your legs',
+      '3) : V-dribble, with one hand dribble right and left like a windshield wiper',
+      '4) : In and out dribble, fake the crossover then bring the ball back to the same hand',
+      '5) : Between the legs, dribble the ball between your legs, once you are comfortable, try to do it continuously',
+      '6) : Behind the back, dribble the ball behind your back, once you are comfortable, try to do it continuously',
+      'Bonus: Walk back and forth while doing between the legs and behind the back dribbles'
+    ]
+  },
+  {
+    title: 'Killer Crossover',
+    duration: 2,
+    description: 'Beat defenders with a quick change of direction.',
+    videoUrl: 'https://www.youtube.com/watch?v=CfuqG37Fd2Y',
+    instructions: 'Learn Tim Hardaway\'s signature move.',
+    tips: [
+      'First you need to be able to make a left hand layup, read the defender if he\'s not shifting, go for the left hand layup.',
+      'Dribble between the leg, if the defender shifts crossover back to your right hand .',
+      'The secret is getting low and staying low during the dribble.',
+      'This allows you to maintain control of the ball and change direction quickly.'
+
     ]
   },
   {
@@ -108,28 +128,17 @@ export const drills = [
     ]
   },
   {
-    title: 'Right Hand Layup',
-    duration: 0.5,
-    description: 'Improves your ability to finish at the rim with a high success rate.',
-    videoUrl: 'https://balldontlie.fr/doublePas.mp4?v=1.0',
+    title: 'Layups',
+    duration: 3,
+    description: 'Learn overhand layups and underhand layups.',
+    videoUrl: 'https://youtu.be/r7OGMVmkNb0',
     instructions: 'Dribble towards the rim, grab the ball with both hands, step with your right foot, then left foot, and finish with your right hand.',
     tips: [
-      'Use the backboard, aim for the corner of the rectangle above the rim.',
-      'Hold the ball with both hands as long as possible to protect it from defenders.',
-      'Focus on the success rate, not speed.'
-    ]
-  },
-  {
-    title: 'Left Hand Layup',
-    duration: 0.5,
-    description: 'Improves your ability to finish at the rim with a high success rate.',
-    videoUrl: 'https://balldontlie.fr/doublePas.mp4?v=1.0',
-    instructions: 'Dribble towards the rim, grab the ball with both hands, step with your left foot, then right foot, and finish with your left hand.',
-    tips: [
-      'Focus on your footwork, left foot then explode on your right foot.',
-      'If you struggle with left-right footwork, try a jump before placing the first step.',
-      'Hold the ball with both hands as long as possible to protect it from defenders.'
-    ]
+      'Overhand: Keep basketball in front, Keep it high enough',
+      'Take on dribble from the 3 point line, make two steps take off from the block and finish using square off the backboard.',
+      'Underhand: Extend your arm and finish with a scoop to the basket.',
+      'Useful when you have a defender on your back.',
+    ] 
   },
   {
     title: 'Right Hand Reverse Layup',
@@ -156,7 +165,7 @@ export const drills = [
   },
   {
     title: 'Floaters',
-    duration: 0.5,
+    duration: 2,
     description: 'Improves your ability to finish over defenders.',
     instructions: 'Dribble towards the rim, jump off one foot and finish with a floating shot.',
     tips: [
@@ -164,11 +173,24 @@ export const drills = [
       'Focus on balance, it is the key to a good floater.',
       'Start with small floaters and gradually increase the distance.'
     ],
-    videoUrl: 'https://balldontlie.fr/floaters.mp4?v=1.0',
+    videoUrl: 'https://youtu.be/m2XrJ2aUnSw',
+  },
+  {
+    title: 'Euro Step',
+    duration: 3,
+    description: 'Improves your ability to go to the basket especially for smaller guards.',
+    videoUrl: 'https://www.youtube.com/watch?v=MDbS4QF71Iw',
+    instructions: 'Dribble towards the rim, grab the ball with both hands, step with your left foot, then right foot, and finish with either hand.',
+    tips: [
+      'Step away from the defender.',
+      'Step and turn shoulders.',
+      'Take off from the opposite foot.',
+      'Practice finishing with both hands.'
+    ]
   },
   {
     title: 'Form Shots',
-    duration: 5,
+    duration: 5 ,
     description: 'Improves your shooting form.',
     instructions: 'Shoot the ball with one hand from 5 spots. Add the second hand to guide the shot and take 5 more shots. Step into the shot and take 5 more shots.',
     tips: [
@@ -181,7 +203,7 @@ export const drills = [
   },
   {
     title: 'Pound Shots',
-    duration: 5,
+    duration: 3,
     description: 'Improves the transition to shooting.',
     instructions: 'Stand 3-4m from the basket, pound the ball hard with your weak hand before shooting.',
     tips: [
@@ -193,7 +215,7 @@ export const drills = [
   },
   {
     title: 'One Dribble Pull-ups',
-    duration: 0.5,
+    duration: 2,
     description: 'Improves your shot after a dribble.',
     instructions: 'Dribble towards the basket, take one dribble, then shoot.',
     tips: [
@@ -203,5 +225,17 @@ export const drills = [
       'Step 4: Dribble quickly, pause, dribble again, stop and shoot.'
     ],
     videoUrl: 'https://youtu.be/nVG_1LYgPAY',
+  },
+  {
+    title: 'Curry\'s Fast Shot release',
+    duration: 2,
+    description: 'Improve how fast you can shoot off the catch.',
+    instructions: 'Catch the ball and shoot with a fast release',
+    tips: [
+      'Avoid any extra movement before shooting.',
+      'Catch the ball in a shooting stance.',
+      'Shoot in on fluid motion.'
+    ],
+    videoUrl: 'https://www.youtube.com/watch?v=m0Tvpyjae_E',
   },
 ];

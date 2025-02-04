@@ -8,7 +8,7 @@ import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
-  ["Double pas - main droite", "Double pas - main gauche","Reverse layup - main droite","Reverse layup - main gauche","Floaters"]
+  ["Layups","Floaters","Euro Step"]
   .includes(drill.title)
 );
 
