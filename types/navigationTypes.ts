@@ -1,17 +1,21 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { Drill } from './Drill';
+import { useTranslation } from 'react-i18next';
+
+const {t} = useTranslation();
+
 
 type RootStackParamList = {
   DrillsList: undefined;
   DrillDetailsScreen: { drill: Drill };
   WorkoutScreen: { drills: Drill[] };
   DribblingFundamentalsDrills: undefined;
-  DribblingChallenge: undefined;
   ThreePointChallenge: undefined;
   FreeShootingSession: undefined;
   ShootingFundamentalsDrills: undefined;
   LayupsFundamentalsDrills: undefined;
+  AllDrillsList: undefined;
   // Add other screens here
 };
 

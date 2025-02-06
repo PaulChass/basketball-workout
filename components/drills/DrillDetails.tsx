@@ -47,9 +47,6 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
             }}
           />
          
-          <TouchableOpacity style={styles.refreshIcon} onPress={() => setRefreshKey(refreshKey + 1)}>
-                  <Icon name="refresh" size={24} color="gray" />
-            </TouchableOpacity>
         
         </View>
         { i18n.language !== 'en' &&
@@ -61,13 +58,13 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, videoHtml }) => {
         <ThemedText style={styles.noVideoText}>{t('No video available')}</ThemedText>
       )}
       <ScrollView>
-      <ThemedText style={styles.sectionTitle}>{t('Instructions')}</ThemedText>
-      <ThemedText style={styles.drillInstructions}>{t(drill.instructions)}</ThemedText>
       <ThemedText style={styles.sectionTitle}>{t('Objective')}</ThemedText>
       <ThemedText style={styles.drillDescription}>{t(drill.description)}</ThemedText>
+      <ThemedText style={styles.sectionTitle}>{t('Instructions')}</ThemedText>
+      <ThemedText style={styles.drillInstructions}>{t(drill.instructions)}</ThemedText>
+     
       {drill.tips && drill.tips.length > 0 && 
         <View style={styles.tipsContainer}>
-            <ThemedText style={styles.sectionTitle}>{t('Tips')}</ThemedText>
           {drill.tips.map((tip, index) => (
             <ThemedText key={index} style={styles.tipItem}>{t(tip)}</ThemedText>
           ))}
@@ -84,7 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     marginHorizontal: 6,
-    marginVertical: 50,
+    marginVertical: 10,
   },
   drillTitle: {
     marginTop: 0,
@@ -100,10 +97,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   drillInstructions: {
+    textAlign: 'center',
     fontSize: 16,
     marginVertical: 10,
   },
   drillDescription: {
+    textAlign: 'center',
     fontSize: 16,
     marginVertical: 10,
   },
@@ -118,15 +117,10 @@ const styles = StyleSheet.create({
   },
   animationContainer: {
     flexDirection: 'row',
-    width: 300,
-    height: 150,
+    width: '100%',
+    height: 200,
     marginTop: 10,
     marginBottom: 0,
-  },
-  refreshIcon: {
-    position: 'absolute',
-    top: 50,
-    right: -30,
   },
   noVideoText: {
     fontSize: 16,
@@ -137,9 +131,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'flex-start',
   },
-  tipItem: {
-    fontSize: 16,
-    marginVertical: 5,
+  tipItem: {    
+    fontSize: 14,
+    marginVertical: 10,
+    justifyContent: 'flex-start',
   },
   noTipsText: {
     fontSize: 16,

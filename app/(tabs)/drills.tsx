@@ -8,8 +8,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import DribblingFundamentalsDrills from '../../components/drills/DribblingFundamentalsDrills';
-import LayupsFundamentalsDrills from '../../components/drills/LayupsFundamentalsDrills';
-import DribblingChallenge from '@/components/drills/DribblingChallenge';  
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
@@ -26,28 +24,24 @@ function DribbleWorkoutsList() {
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
   return (
     <View style={styles.tabContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('DribblingFundamentalsDrills')}>
-        <ImageBackground
-          source={require('@/assets/images/fundamentals.png')}
+      <TouchableOpacity onPress={() => navigation.navigate('ShootingFundamentalsDrills')}>
+      <ImageBackground
+          source={require('@/assets/images/shooting-workout.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
-          <Text style={styles.buttonText}>{t('Fundamentals')}</Text>
-          <ThemedText style={styles.default} type="default">{t('5 min - 5 exercises')}</ThemedText>
-        </ImageBackground>
+        <Text style={styles.buttonText}>{t('Shooting Drills')}</Text>
+      </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('DribblingChallenge')}>
-        <ImageBackground
-          source={require('@/assets/images/dribble-challenge.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage}
-        >
-          <ThemedText style={styles.buttonText}>{t('Dribble Challenge')}</ThemedText>
-        </ImageBackground>
+
+      <TouchableOpacity onPress={() => navigation.navigate('AllDrillsList')} style={styles.buttonAllDrills}>
+          <Text style={styles.buttonText}>{t('List of all drills')} </Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
-        <Text style={styles.buttonText}>{t('Combos / Moves')}</Text>
+
+      <TouchableOpacity onPress={() => alert('Coming soon')} style={styles.buttonAllDrills}>
+      <Text style={styles.buttonText}> Créer un programme d'entrainement personnalisé</Text>
       </TouchableOpacity>
+  
     </View>
   );
 }
@@ -58,27 +52,8 @@ function ShootWorkoutsList() {
 
   return (
     <ScrollView>
-      <View
-    style={styles.tabContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
-        <ImageBackground
-          source={require('@/assets/images/shooting-free.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage} 
-        >
-          <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
-        </ImageBackground>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ShootingFundamentalsDrills')}>
-      <ImageBackground
-          source={require('@/assets/images/shooting-workout.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage}
-        >
-        <Text style={styles.buttonText}>{t('Shooting Drills')}</Text>
-      </ImageBackground>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
+      <View style={styles.tabContainer}>     
+        <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
         <ImageBackground
           source={require('@/assets/images/shooting-challenge.png')}
           style={styles.buttonBackground}
@@ -88,50 +63,35 @@ function ShootWorkoutsList() {
           <ThemedText style={styles.default} type="default">{t('1 minute')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
+      
+      <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
+        <ImageBackground
+          source={require('@/assets/images/shooting-free.png')}
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage} 
+        >
+          <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
+        </ImageBackground>
+      </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
 
-function LayupsWorkoutsList() {
-  const { t } = useTranslation();
-  const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
- 
-  return (
-    <View style={styles.tabContainer}>
-      <ThemedText style={styles.subtitle}>{t('Select a workout:')}</ThemedText>
-      <TouchableOpacity onPress={() =>navigation.navigate('LayupsFundamentalsDrills')}>
-        <ImageBackground
-          source={require('@/assets/images/layups.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage}
-        >
-          <Text style={styles.buttonText}>{t('Fundamentals')}</Text>
-          <ThemedText style={styles.default} type="default">{t('5 x 5 Layups')}</ThemedText>
-        </ImageBackground>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
-        <Text style={styles.buttonText}>{t('Advanced Layups')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => alert(t('Coming soon!'))}>
-        <Text style={styles.buttonText}>{t('Counter - Layups')}</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
 
 export default function DrillsScreen() {
+  const { t } = useTranslation();
   return (
     <NavigationIndependentTree>
       <Stack.Navigator>
         <Stack.Screen name="DrillsTabs" component={DrillsTabs} options={{ headerShown: false }} />
-        <Stack.Screen name="DribblingFundamentalsDrills" component={DribblingFundamentalsDrills} />
-        <Stack.Screen name="LayupsFundamentalsDrills" component={LayupsFundamentalsDrills} />
+        <Stack.Screen name="AllDrillsList"         
+                      options={{ title: t('Dribbling Fundamentals') }}
+                      component={DribblingFundamentalsDrills} />
         <Stack.Screen name="ShootingFundamentalsDrills" component={ShootingFundamentalsDrills} />
         <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} />
         <Stack.Screen name="DrillDetailsScreen" component={DrillDetailsScreen} />
         <Stack.Screen name="ThreePointChallenge" component={ThreePointChallenge} />
-        <Stack.Screen name="DribblingChallenge" component={DribblingChallenge} />
         <Stack.Screen name="FreeShootingSession" component={FreeShootingSession} />
       </Stack.Navigator>
     </NavigationIndependentTree>
@@ -153,9 +113,8 @@ function DrillsTabs() {
       </ParallaxScrollView>
       <View style={styles.tabNavigatorContainer}>
         <Tab.Navigator>
-          <Tab.Screen name="Dribble" component={DribbleWorkoutsList} />
-          <Tab.Screen name="Shoot" component={ShootWorkoutsList} />
-          <Tab.Screen name="Layups" component={LayupsWorkoutsList} />
+          <Tab.Screen name="Drills" component={DribbleWorkoutsList} />
+          <Tab.Screen name="Challenges" component={ShootWorkoutsList} />
         </Tab.Navigator>
       </View>
     </View>
@@ -176,6 +135,12 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 16,
   },
+  buttonAllDrills: {
+    backgroundColor: '#1E90FF',
+    padding: 16,
+    borderRadius: 25,
+    marginBottom: 16,
+  },
   default: {
     fontSize: 16,
     color: 'white',
@@ -192,7 +157,7 @@ const styles = StyleSheet.create({
   },
   tabNavigatorContainer: {
     flex: 1,
-    marginTop: -220, // Adjust this value to reduce the space between the header and the Tab.Navigator
+    marginTop: -300,
   },
   buttonBackground: {
     height: 200,

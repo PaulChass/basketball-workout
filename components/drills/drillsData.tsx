@@ -2,16 +2,16 @@ import {Drill} from '../../types/Drill';
 
 export const drills: Drill[] = [
   {
-    title: 'Pound Dribble',
-    duration: 0.5,
-    description: 'Improves ball control and strength by dribbling the ball hard and fast.',
-    videoUrl: 'https://balldontlie.fr/Dribble.mp4?v=1.0',
-    instructions: 'Dribble the ball as hard as possible, alternating hands every 10 dribbles.',
+    title: 'Warming up without a Ball',
+    description:'Simple routine to warm up your body before a game or practice.',
+    duration: 3,
+    instructions: 'First run slowly, secondly warmup your joints, and finally exercices with increasing intensity.',
+    videoUrl: 'https://youtu.be/kI72juFRuEI',
     tips: [
-      'Keep your back straight and knees slightly bent.',
-      'Use your fingers to control the ball, not your palm.',
-      'Look straight ahead, not at the ball.'
-    ]
+      'Step 1: Start with a slow jog to warm up your muscles. Touch the half-court line and go back.',
+      'Step 2: Warm up your ankles, knees hips shoulders and wrists.',
+      'Step 3: Do some dynamic exercices to increase your heart rate (high knees, butt kicks, etc.)',
+      ]
   },
   {
     title: '5 minute workout',
@@ -43,90 +43,7 @@ export const drills: Drill[] = [
 
     ]
   },
-  {
-    title: 'Front/Back Dribble',
-    duration: 0.5,
-    description: 'Improves ball control under defensive pressure.',
-    videoUrl: 'https://balldontlie.fr/avantArriere.mp4?v=1.0',
-    instructions: 'Stand in front of a line. Dribble the ball once in front of the line, then once behind the line. Change hands every 10 dribbles.',
-    tips: [
-      'Keep your feet moving to stay balanced.',
-      'Use your wrists for better ball control.',
-      'Practice at different speeds to improve your responsiveness.'
-    ]
-  },
-  {
-    title: 'Between the Legs',
-    duration: 0.5,
-    description: 'Improves your ability to protect the ball from defenders and change direction.',
-    videoUrl: 'https://balldontlie.fr/entreLesJambes.mp4?v=1.1',
-    instructions: 'Dribble the ball between your legs. Change diagonals every 10 dribbles.',
-    tips: [
-      'Keep your knees bent to facilitate the movement.',
-      'Use a quick and smooth motion to pass the ball between your legs.',
-      'Focus on ball control to avoid turnovers, not speed.'
-    ]
-  },
-  {
-    title: 'Behind the Back',
-    duration: 0.5,
-    description: 'Improves your ability to protect the ball from defenders and change direction.',
-    videoUrl: 'https://balldontlie.fr/derriereLeDos.mp4?v=1.0',
-    instructions: 'Dribble the ball behind your back, changing hands each time. Change diagonals every 10 dribbles.',
-    tips: [
-      'Keep your back straight and knees slightly bent.',
-      'Use a quick and smooth motion to pass the ball behind your back.',
-      'Stay low when dribbling for better ball protection and easier direction changes.'
-    ]
-  },
-  {
-    title: 'Wrap Around (no dribble)',
-    duration: '10x in each direction',
-    description: 'Improves your ability to perform behind-the-back dribbles quickly.',
-    videoUrl: 'https://balldontlie.fr/wrapAround.mp4?v=1.0',
-    instructions: 'Pass the ball around your legs as quickly as possible.',
-    tips: [
-      'If you struggle to dribble around your legs, start at the waist and progress to the legs.',
-      'Try to keep the ball as close to your body as possible.',
-      'Maintain a steady rhythm to improve your coordination and control.'
-    ]
-  },
-  {
-    title: 'Figure 8 (no dribble)',
-    duration: '10x in each direction',
-    description: 'Improves your ability to perform behind-the-back dribbles quickly.',
-    videoUrl: 'https://balldontlie.fr/figure8.mp4?v=1.0',
-    instructions: 'Dribble the ball in a figure 8 between your legs.',
-    tips: [
-      'Keep your knees bent to facilitate the movement.',
-      'Use a quick and smooth motion to dribble in a figure 8.',
-      'Focus on ball control to avoid turnovers.'
-    ]
-  },
-  {
-    title: 'Wrap Around (with dribble)',
-    duration: '10x in each direction',
-    description: 'Improves your ability to dribble around your body.',
-    videoUrl: 'https://balldontlie.fr/wrapAround.mp4?v=1.0',
-    instructions: 'Dribble the ball around your waist, changing hands each turn. Change direction every 10 dribbles.',
-    tips: [
-      'Keep your knees slightly bent to facilitate the movement.',
-      'Use a quick and smooth motion to dribble around your waist.',
-      'Focus on ball control to avoid turnovers.'
-    ]
-  },
-  {
-    title: 'Figure 8 (with dribble)',
-    duration: '10x in each direction',
-    description: 'Improves your ability to dribble between your legs in a figure 8.',
-    videoUrl: 'https://balldontlie.fr/figure8.mp4?v=1.0',
-    instructions: 'Dribble the ball in a figure 8 between your legs. Change direction every 10 dribbles.',
-    tips: [
-      'Keep your knees bent to facilitate the movement.',
-      'Use a quick and smooth motion to dribble in a figure 8.',
-      'Focus on ball control to avoid turnovers.'
-    ]
-  },
+ 
   {
     title: 'Layups',
     duration: 3,
@@ -139,29 +56,6 @@ export const drills: Drill[] = [
       'Underhand: Extend your arm and finish with a scoop to the basket.',
       'Useful when you have a defender on your back.',
     ] 
-  },
-  {
-    title: 'Right Hand Reverse Layup',
-    duration: 0.5,
-    description: 'Improves your ability to finish at the rim while avoiding defenders.',
-    instructions: 'Dribble towards the rim from the left side, go under the rim and finish with your right hand using the backboard.',
-    tips: [
-      'Use the backboard, aim for the corner of the rectangle above the rim.',
-      'Put a slight spin on the ball to help with the finish.',
-      'Focus on the success rate, not speed.'
-    ],
-    videoUrl: 'https://balldontlie.fr/reverseLayup.mp4?v=1.0',
-  },
-  {
-    title: 'Left Hand Reverse Layup',
-    duration: 0.5,
-    description: 'Improves your ability to finish at the rim while avoiding defenders.',
-    instructions: 'Dribble towards the rim from the right side, go under the rim and finish with your left hand using the backboard.',
-    tips: [
-      'Use the backboard, aim for the corner of the rectangle above the rim.',
-      'Put a slight spin on the ball to help with the finish.',
-      'Focus on your footwork, left foot then explode on your right foot.'
-    ]
   },
   {
     title: 'Floaters',

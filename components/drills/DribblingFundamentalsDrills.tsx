@@ -8,10 +8,12 @@ import { Drill } from '../../types/Drill';
 import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
-const initialDrills = allDrills.filter(drill =>
-  ["5 minute workout", "Killer Crossover"]
+const initialDrills = allDrills;
+/**.filter(drill =>
+  [titlesOfDrills]
   .includes(drill.title)
-);
+); 
+To include only the drills you want to show in the list, replace titlesOfDrills with an array of the titles of the drills you want to include. */
 
 export default function DribblingFundamentalsDrills() {
   const { t } = useTranslation();
@@ -20,28 +22,15 @@ export default function DribblingFundamentalsDrills() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Image
-          source={require('@/assets/images/fundamentals.png')}
-          style={styles.reactLogo}
-        />
-        <View style={styles.infoContainer}>
-          <ThemedText type="default">~ {drills.length * 0.5} {t('minutes')}</ThemedText>
-          <ThemedText type="default">{drills.length} {t('exercises')}</ThemedText>
-        </View>
-      </View>
-      <View style={styles.drillsContainer}>
+      {/** Header with possibility to filter drills */}
+
         <DrillsList
           drills={drills}
           setDrills={setDrills}
         />
       </View>
-      <View style={styles.startButtonContainer}>
-        <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen', { drills })}>
-          <ThemedText style={styles.startButtonText}>{t('Start')}</ThemedText>
-        </TouchableOpacity>
-      </View>
-    </View>
+     
+    
   );
 }
 
@@ -52,7 +41,9 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
+    padding: 25,
+    width: '100%',
+    height: 200,
   },
   drillsContainer: {
     paddingBottom: 250,
