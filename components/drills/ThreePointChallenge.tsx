@@ -18,7 +18,7 @@ const ThreePointChallenge = () => {
   const [showInput, setShowInput] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [showRestart, setShowRestart] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
 
   const speechLanguage = i18n.language === 'fr' ? 

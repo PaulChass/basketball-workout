@@ -5,4 +5,5 @@ export interface Drill {
   instructions?: string;
   description?: string;
   tips?: string[];
+  tags?: string[];
 }

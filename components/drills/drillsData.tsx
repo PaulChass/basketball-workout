@@ -11,10 +11,11 @@ export const drills: Drill[] = [
       'Step 1: Start with a slow jog to warm up your muscles. Touch the half-court line and go back.',
       'Step 2: Warm up your ankles, knees hips shoulders and wrists.',
       'Step 3: Do some dynamic exercices to increase your heart rate (high knees, butt kicks, etc.)',
-      ]
+      ],
+    tags: ['warm-up', 'beginner']
   },
   {
-    title: '5 minute workout',
+    title: 'Dribble routine',
     duration: 5,
     description: 'Improves your dribbling skills',
     videoUrl: 'https://youtu.be/CLoWxOvlHkk',
@@ -27,7 +28,8 @@ export const drills: Drill[] = [
       '5) : Between the legs, dribble the ball between your legs, once you are comfortable, try to do it continuously',
       '6) : Behind the back, dribble the ball behind your back, once you are comfortable, try to do it continuously',
       'Bonus: Walk back and forth while doing between the legs and behind the back dribbles'
-    ]
+    ],
+    tags: ['dribbling', 'beginner','intermediate']
   },
   {
     title: 'Killer Crossover',
@@ -40,8 +42,8 @@ export const drills: Drill[] = [
       'Dribble between the leg, if the defender shifts crossover back to your right hand .',
       'The secret is getting low and staying low during the dribble.',
       'This allows you to maintain control of the ball and change direction quickly.'
-
-    ]
+    ],
+    tags: ['dribbling', 'advanced']
   },
  
   {
@@ -55,7 +57,8 @@ export const drills: Drill[] = [
       'Take on dribble from the 3 point line, make two steps take off from the block and finish using square off the backboard.',
       'Underhand: Extend your arm and finish with a scoop to the basket.',
       'Useful when you have a defender on your back.',
-    ] 
+    ],
+    tags: ['layups', 'beginner']
   },
   {
     title: 'Floaters',
@@ -68,6 +71,7 @@ export const drills: Drill[] = [
       'Start with small floaters and gradually increase the distance.'
     ],
     videoUrl: 'https://youtu.be/m2XrJ2aUnSw',
+    tags: ['layups', 'intermediate']
   },
   {
     title: 'Euro Step',
@@ -80,7 +84,8 @@ export const drills: Drill[] = [
       'Step and turn shoulders.',
       'Take off from the opposite foot.',
       'Practice finishing with both hands.'
-    ]
+    ],
+    tags: ['layups', 'advanced']
   },
   {
     title: 'Form Shots',
@@ -94,6 +99,7 @@ export const drills: Drill[] = [
       'Focus on the form, not the result.'
     ],
     videoUrl: 'https://youtu.be/wzY4SVCzF7Y',
+    tags: ['shooting', 'beginner']
   },
   {
     title: 'Pound Shots',
@@ -106,6 +112,7 @@ export const drills: Drill[] = [
       'Step 3: Place the ball in your "shooting pocket" and shoot.'
     ],
     videoUrl: 'https://youtu.be/FF8i7_cEABY',
+    tags: ['shooting', 'intermediate']
   },
   {
     title: 'One Dribble Pull-ups',
@@ -119,6 +126,7 @@ export const drills: Drill[] = [
       'Step 4: Dribble quickly, pause, dribble again, stop and shoot.'
     ],
     videoUrl: 'https://youtu.be/nVG_1LYgPAY',
+    tags: ['shooting', 'intermediate']
   },
   {
     title: 'Curry\'s Fast Shot release',
@@ -131,5 +139,41 @@ export const drills: Drill[] = [
       'Shoot in on fluid motion.'
     ],
     videoUrl: 'https://www.youtube.com/watch?v=m0Tvpyjae_E',
+    tags: ['shooting', 'advanced']
   },
+  {
+    'title': 'Defensive Stance drill',
+    'duration': 3,
+    'description': 'Improves your defensive stance.',
+    'instructions': 'Get in a low stance, get low, keep your chest up and your butt down.',
+    'tips': [
+      'Step 1: Start low put the basketball on the ground',
+      'Step 2: Slide from side to side while staying attached to the ball',
+      'Step 3: Keep your other hand up and active',
+    ],
+    'videoUrl': 'https://youtu.be/0UasgLL2raY',
+    'tags': ['defense', 'beginner']
+  },
+  {
+    'title':'Behind the back pass',
+    'duration': 3,
+    'description': 'Improves your passing skills.',
+    'instructions': 'Make direct and bounce passes behind your back.',
+    'tips': [
+      'To practice alone, get close to a wall and make behind the back passes to yourself.',
+      'Make sure the pass is accurate, it should be easy to catch.',
+      'As you improve you can increase the distance and speed of the pass.'
+    ],
+    'videoUrl': 'https://youtu.be/CvGyckNQo0o',
+    'tags': ['passing', 'beginner'] 
+  },
+  {
+    'title': 'Find YOUR shooting pocket',
+    'duration': 5,
+    'description': 'Tutorial on how to find your shooting pocket.',
+    'instructions': 'The shooting pocket is the area where you feel most comfortable starting your shot. This video shows how to find the best position for you.',
+    'videoUrl': 'https://youtu.be/1PMN23U_lXs',
+    'tags'  : ['shooting', 'intermediate']
+  }
+  
 ];

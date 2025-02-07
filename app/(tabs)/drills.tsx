@@ -86,7 +86,7 @@ export default function DrillsScreen() {
       <Stack.Navigator>
         <Stack.Screen name="DrillsTabs" component={DrillsTabs} options={{ headerShown: false }} />
         <Stack.Screen name="AllDrillsList"         
-                      options={{ title: t('Dribbling Fundamentals') }}
+                      options={{ title: t('All drills') }}
                       component={DribblingFundamentalsDrills} />
         <Stack.Screen name="ShootingFundamentalsDrills" component={ShootingFundamentalsDrills} />
         <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} />

@@ -28,6 +28,7 @@
     "minutes": "minutos",
     "seconds": "segundos",
     "exercises": "ejercicios",
+    "All drills": "Todos los ejercicios / tutoriales",
     "Select a workout:": "Seleccionar un entrenamiento:",
     "Progress saved successfully.": "Progreso guardado con éxito.",
     "Failed to save progress.": "Error al guardar el progreso.",
@@ -125,7 +126,7 @@
     "Step 1: Dribble hard.": "Paso 1: Dribla fuerte.",
     "Step 2: Catch the ball with your weak hand and stuff it into your strong hand.": "Paso 2: Atrapa la pelota con tu mano débil y pásala a tu mano fuerte.",
     "Step 3: Place the ball in your \"shooting pocket\" and shoot.": "Paso 3: Coloca la pelota en tu \"bolsillo de tiro\" y tira.",
-    "One Dribble Pull-ups": "Tiros después de un drible",
+    "One Dribble Pull-ups": "Un drible pullups",
     "Improves your shot after a dribble.": "Mejora tu tiro después de un drible.",
     "Dribble towards the basket, take one dribble, then shoot.": "Dribla hacia el aro, haz un drible y luego tira.",
     "Step 1: Work on your footwork: Take one dribble then quickly place one foot then the other.": "Paso 1: Trabaja en tu juego de pies: Haz un drible y luego coloca rápidamente un pie y luego el otro.",
@@ -138,5 +139,8 @@
     "Use the guide hand to stabilize the ball.": "Usa la mano guía para estabilizar la pelota.",
     "Finish your shot on your toes to give it momentum.": "Termina tu tiro en las puntas",
     "Click on the CC button in the video player to enable captions.": "Haz clic en el botón en el reproductor de video para activar los subtítulos.",
-    "List of all drills": "Lista de todos los ejercicios"
+    "List of all drills": "Lista de todos los ejercicios",
+    "Warming up without a Ball": "Calentamiento sin balón",
+    "dribble routine": "Rutina de dribbling",
+    "Curry's Fast Shot release": "Lanzamiento rápido de Curry"
 }

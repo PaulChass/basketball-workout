@@ -8,8 +8,7 @@ import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 
 const initialDrills = allDrills.filter(drill =>
-  ["Form Shots","Pound Shots","One Dribble Pull-ups","Free throws","Curry\'s Fast Shot release"]
-  .includes(drill.title)
+  drill.tags && ["shooting"].includes(drill.tags[0])
 );
 
 export default function ShootingFundamentalsDrills() {
@@ -25,7 +24,6 @@ export default function ShootingFundamentalsDrills() {
           style={styles.reactLogo}
         />
         <View style={styles.infoContainer}>
-          <ThemedText type="default">~ {drills.length * 5} {t('minutes')}</ThemedText>
           <ThemedText type="default">{drills.length} {t('exercises')}</ThemedText>
         </View>
       </View>
