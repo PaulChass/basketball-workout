@@ -7,7 +7,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
-import DribblingFundamentalsDrills from '../../components/drills/DribblingFundamentalsDrills';
+import AllDrills from '../../components/drills/AllDrills';
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
@@ -19,30 +19,51 @@ import { ScrollView } from 'react-native-gesture-handler';
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
 
-function DribbleWorkoutsList() {
-  const { t } = useTranslation(); // Initialize useTranslation
+function DrillsCategories() {
+  const { t } = useTranslation();
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
+
+  const categories = [
+    'Masterclass',
+    'Workouts',
+    'Learning moves',
+    'Ball handling',
+    'Shooting',
+    'Finishing',
+    'Strength & conditionning',
+  ];
+
+  const categoriesBackground: { [key: string]: any } = {
+    'Masterclass': require('@/assets/images/jordan.png'),
+    'Workouts': require('@/assets/images/workouts.png'),
+    'Learning moves': require('@/assets/images/kyrie.png'),
+    'Ball handling': require('@/assets/images/fundamentals.png'),
+    Shooting: require('@/assets/images/shooting-workout.png'),
+    Finishing: require('@/assets/images/layups.png'),
+    'Strength & conditionning': require('@/assets/images/stamina.png'),
+  };
+
   return (
-    <View style={styles.tabContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('ShootingFundamentalsDrills')}>
-      <ImageBackground
-          source={require('@/assets/images/shooting-workout.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage}
+    <ScrollView >
+      <View style={styles.tabContainer}>
+      {categories.map(category => (
+        <TouchableOpacity
+          key={category}
+          style={styles.categoryButton}
+          onPress={() => navigation.navigate('AllDrillsList', { category })}
         >
-        <Text style={styles.buttonText}>{t('Shooting Drills')}</Text>
-      </ImageBackground>
-      </TouchableOpacity>
+          <ImageBackground
+          source={categoriesBackground[category] }
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage} 
+        >
+                    <ThemedText style={styles.categoryButtonText}>{t(category)}</ThemedText>
 
-      <TouchableOpacity onPress={() => navigation.navigate('AllDrillsList')} style={styles.buttonAllDrills}>
-          <Text style={styles.buttonText}>{t('List of all drills')} </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => alert('Coming soon')} style={styles.buttonAllDrills}>
-      <Text style={styles.buttonText}> Créer un programme d'entrainement personnalisé</Text>
-      </TouchableOpacity>
-  
-    </View>
+        </ImageBackground>
+        </TouchableOpacity>
+      ))}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -53,17 +74,6 @@ function ShootWorkoutsList() {
   return (
     <ScrollView>
       <View style={styles.tabContainer}>     
-        <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
-        <ImageBackground
-          source={require('@/assets/images/shooting-challenge.png')}
-          style={styles.buttonBackground}
-          imageStyle={styles.buttonImage}
-        >
-          <Text style={styles.buttonText}>{t('3pt Challenge')}</Text>
-          <ThemedText style={styles.default} type="default">{t('1 minute')}</ThemedText>
-        </ImageBackground>
-      </TouchableOpacity>
-      
       <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
         <ImageBackground
           source={require('@/assets/images/shooting-free.png')}
@@ -71,6 +81,16 @@ function ShootWorkoutsList() {
           imageStyle={styles.buttonImage} 
         >
           <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
+        </ImageBackground>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
+        <ImageBackground
+          source={require('@/assets/images/shooting-challenge.png')}
+          style={styles.buttonBackground}
+          imageStyle={styles.buttonImage}
+        >
+          <Text style={styles.buttonText}>{t('3pt Challenge')}</Text>
+          <ThemedText style={styles.default} type="default">{t('1 minute')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
       </View>
@@ -86,11 +106,17 @@ export default function DrillsScreen() {
       <Stack.Navigator>
         <Stack.Screen name="DrillsTabs" component={DrillsTabs} options={{ headerShown: false }} />
         <Stack.Screen name="AllDrillsList"         
-                      options={{ title: t('All drills') }}
-                      component={DribblingFundamentalsDrills} />
+                      options={({ route }) => ({ title: (route.params as { category?: string }).category ?? 'All' })}
+                      component={AllDrills}
+                      initialParams={{ category: 'All' }} />
         <Stack.Screen name="ShootingFundamentalsDrills" component={ShootingFundamentalsDrills} />
-        <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} />
-        <Stack.Screen name="DrillDetailsScreen" component={DrillDetailsScreen} />
+      
+        <Stack.Screen name="DrillDetailsScreen"
+        component={DrillDetailsScreen}
+        options={({ route }) => {
+          const params = route.params as { drill: { title: string } };
+          return { title: params ? params.drill.title : 'Drill Details' };
+        }}         />
         <Stack.Screen name="ThreePointChallenge" component={ThreePointChallenge} />
         <Stack.Screen name="FreeShootingSession" component={FreeShootingSession} />
       </Stack.Navigator>
@@ -106,14 +132,14 @@ function DrillsTabs() {
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={
           <Image
-            source={require('@/assets/images/image.png')}
+            source={require('@/assets/images/image2.png')}
             style={styles.reactLogo}
           />
         }>
       </ParallaxScrollView>
       <View style={styles.tabNavigatorContainer}>
         <Tab.Navigator>
-          <Tab.Screen name="Drills" component={DribbleWorkoutsList} />
+          <Tab.Screen name="Drills" component={DrillsCategories} />
           <Tab.Screen name="Challenges" component={ShootWorkoutsList} />
         </Tab.Navigator>
       </View>
@@ -174,5 +200,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   
+  },
+  categoryButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    margin: 5,
+  },
+  categoryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { ThemedText } from '@/components/ThemedText';
 
@@ -8,15 +8,18 @@ interface CountdownCircleProps {
 }
 
 const CountdownCircle: React.FC<CountdownCircleProps> = ({  totalTime }) => {
+    const [isStarted, setIsStarted] = useState(false);
+    const [isRunning, setIsRunning] = useState(false);
     const [timeRemaining, setTimeRemaining] = useState(totalTime);
     
     useEffect(() => {
+      if(isStarted){
       const interval = setInterval(() => {
         setTimeRemaining((prev) => prev - 1);
       }, 1000);
-  
       return () => clearInterval(interval);
-    }, []);
+      }
+    }, [isStarted]);
     const fill = (timeRemaining / totalTime) * 100;
   
 
@@ -31,9 +34,14 @@ const CountdownCircle: React.FC<CountdownCircleProps> = ({  totalTime }) => {
         rotation={180}
         lineCap="round"
       >
+        
         {() => (
+          
           <ThemedText style={styles.timerText}>
-            {timeRemaining < 60 ? `${timeRemaining} sec` : `${Math.floor(timeRemaining / 60)} min ${timeRemaining % 60} sec`}
+            {isStarted ? `${timeRemaining} sec` : <TouchableOpacity onPress={() => setIsStarted(true)}>
+              <ThemedText>Start</ThemedText>
+            </TouchableOpacity>}
+           
           </ThemedText>
         )}
       </AnimatedCircularProgress>

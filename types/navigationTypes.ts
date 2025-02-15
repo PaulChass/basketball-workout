@@ -1,10 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { Drill } from './Drill';
-import { useTranslation } from 'react-i18next';
-
-const {t} = useTranslation();
-
 
 type RootStackParamList = {
   DrillsList: undefined;
@@ -15,7 +11,8 @@ type RootStackParamList = {
   FreeShootingSession: undefined;
   ShootingFundamentalsDrills: undefined;
   LayupsFundamentalsDrills: undefined;
-  AllDrillsList: undefined;
+  AllDrillsList: { category: string };
+  DrillsTabs: undefined;
   // Add other screens here
 };
 
@@ -33,3 +30,35 @@ export type DrillDetailsScreenProps = {
   navigation: DrillDetailsScreenNavigationProp;
   route: DrillDetailsScreenRouteProp;
 };
+
+type DrillsListNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'DrillsList'
+>;
+
+type DrillsListRouteProp = RouteProp<
+  RootStackParamList,
+  'DrillsList'
+>;
+
+export type DrillsListProps = {
+  navigation: DrillsListNavigationProp;
+  route: DrillsListRouteProp;
+};
+
+type WorkoutScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'WorkoutScreen'
+>;
+
+type WorkoutScreenRouteProp = RouteProp<
+  RootStackParamList,
+  'WorkoutScreen'
+>;
+
+export type WorkoutScreenProps = {
+  navigation: WorkoutScreenNavigationProp;
+  route: WorkoutScreenRouteProp;
+};
+
+// Add other screen props here as needed

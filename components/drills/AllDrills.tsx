@@ -1,36 +1,28 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
-import { useNavigation } from '@react-navigation/native';
-import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import { drills as allDrills } from './drillsData';
-import { Drill } from '../../types/Drill';
 import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
+import { useRoute } from '@react-navigation/native';
 
-const initialDrills = allDrills;
-/**.filter(drill =>
-  [titlesOfDrills]
-  .includes(drill.title)
-); 
-To include only the drills you want to show in the list, replace titlesOfDrills with an array of the titles of the drills you want to include. */
 
-export default function DribblingFundamentalsDrills() {
+
+export default function AllDrills() {
   const { t } = useTranslation();
-  const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
+  const route = useRoute();
+  const params = route.params as { category?: string } | undefined;
+  const category = params?.category;
+  const initialDrills = category ? allDrills.filter(drill => drill.tags && drill.tags.includes(category)) : allDrills;
   const [drills, setDrills] = useState(initialDrills);
 
   return (
     <View style={styles.container}>
       {/** Header with possibility to filter drills */}
-
         <DrillsList
           drills={drills}
           setDrills={setDrills}
         />
       </View>
-     
-    
   );
 }
 

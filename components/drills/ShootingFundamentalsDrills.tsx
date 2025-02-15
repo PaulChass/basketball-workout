@@ -33,11 +33,7 @@ export default function ShootingFundamentalsDrills() {
           setDrills={setDrills}
         />
       </View>
-      <View style={styles.startButtonContainer}>
-        <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('WorkoutScreen', { drills })}>
-          <ThemedText style={styles.startButtonText}>{t('Start')}</ThemedText>
-        </TouchableOpacity>
-      </View>
+      
     </View>
   );
 }
@@ -66,25 +62,5 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 16,
     marginTop: 16,
-  },
-  startButtonContainer: {
-    position: 'absolute',
-    bottom: 10,
-    left: 40,
-    right: 40,
-    paddingHorizontal: 16,
-  },
-  startButton: {
-    backgroundColor: '#1E90FF',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  startButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+  }
 });
