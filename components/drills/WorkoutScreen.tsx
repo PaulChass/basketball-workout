@@ -29,21 +29,20 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
 
   useEffect(() => {
     if(timeToComplete === 0) {
-      // Start the timer
       const interval = setInterval(() => {
         setTimeToComplete((timeToComplete) => timeToComplete + 1);
       }
       , 1000);
     }
     const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;
+    // Reset all the stats when the drill changes
     seekToTime(drill.workoutSteps[drillIndex].time);
-    //reset all records states when drill changes
     setBestTime('N/A');
     setAverageTime('N/A');
     setNumberOfReps('N/A');
     setMaxReps('N/A');
     setAverageReps('N/A');
-
+    // Get the stats for the current drill
     if (drill.workoutSteps[drillIndex].type === 'time') {
       getProgress(subDrillTitle).then((times) => {
         if (times.length === 0) {
@@ -79,6 +78,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       );  
     }
   }, [drillIndex]);
+
   const resetSubDrillStats = async () => {
     Alert.alert(
       'Reset Stats',
@@ -122,66 +122,42 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
     }
   };
   const saveDrill = async () => {
-    const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;
-    // Add this time to the list of times in local storage
-    if(drill.workoutSteps[drillIndex].type === 'reps')
-    {
-      try{
-      const savedSubDrill = await getProgress(subDrillTitle);
-      let subDrillArray = Array.isArray(savedSubDrill) ? savedSubDrill : [];
-      subDrillArray = [...subDrillArray, numberOfReps];
-      await saveProgress(subDrillTitle, subDrillArray);
-      } catch (error) {
-        console.error('Error saving sub drill reps:', error);
-      }
-    } else if(drill.workoutSteps[drillIndex].type === 'time'){
+    const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;    
     try {
       const savedSubDrill = await getProgress(subDrillTitle);
       let subDrillArray = Array.isArray(savedSubDrill) ? savedSubDrill : [];
-
       if (drill.workoutSteps[drillIndex].type === 'reps') {
         subDrillArray = [...subDrillArray, numberOfReps];
       }
       if (drill.workoutSteps[drillIndex].type === 'time') {
         subDrillArray = [...subDrillArray, textToSeconds(minutes, seconds)];
       }
+      if(drill.workoutSteps[drillIndex].type === 'weights') {
+        subDrillArray = [...subDrillArray, numberOfReps];
+      }
       await saveProgress(subDrillTitle, subDrillArray);
-
     } catch (error) {
-      console.error('Error saving sub drill time:', error);
-    }
+      console.error('Error saving drill results:', error);
     }
     nextDrill();
   };
-
-
   const textToSeconds = (minutes: string, seconds: string) => {
     const minutesNum = parseInt(minutes, 10) || 0;
     const secondsNum = parseInt(seconds, 10) || 0;
     return minutesNum * 60 + secondsNum;
   };
-
   const onStop = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     setMinutes(minutes.toString());
     setSeconds(seconds.toString().padStart(2, '0'));
   };
-
   const toMinutesAndSeconds = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     return { minutes: minutes.toString(), seconds: seconds.toString().padStart(2, '0') };
   };
-
-  useEffect(() => {
-    const { minutes, seconds } = toMinutesAndSeconds(timer);
-    setMinutes(minutes);
-    setSeconds(seconds);
-  }, [timer]);
-
   const timeToString = (time: number | string) => {
-
     const { minutes, seconds } = toMinutesAndSeconds(parseInt(time.toString(), 10));
 
     if (minutes === '0' && seconds === '0') {
@@ -191,8 +167,12 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       return 'N/A';
     }
     return `${minutes}:${seconds}`;
-
   };
+  useEffect(() => {
+    const { minutes, seconds } = toMinutesAndSeconds(timer);
+    setMinutes(minutes);
+    setSeconds(seconds);
+  }, [timer]);
 
   return (
     <ScrollView style={styles.container}>
@@ -213,9 +193,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
             <ThemedText style={styles.nextButtonText}>Next</ThemedText>
           </TouchableOpacity>
         </View>
-      ) 
-      }
-      
+      )}
       {drill.workoutSteps[drillIndex].type === 'time' && (
         <>
           <View style={styles.recordsContainer}>

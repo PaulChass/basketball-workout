@@ -14,7 +14,6 @@ export default function TabTwoScreen() {
   const { t } = useTranslation(); // Initialize useTranslation
   const [progress, setProgress] = useState<{ date: string } | null>(null);
   const [threePointChallenge, setThreePointChallenge] = useState<{ threesMade: number } | null>(null);
-  const [dribblingChallenge, setDribblingChallenge] = useState<{ timeTaken: number }[]>([]);
   const [zoneStats, setZoneStats] = useState<{ [key: string]: { shotsAttempted: number, shotsMade: number } }>({});
   const [updated, setUpdated] = useState(false);
 
@@ -27,10 +26,6 @@ export default function TabTwoScreen() {
       const fetchThreePointChallenge = async () => {
         const savedThreePointChallenge = await getProgress('threePointChallenge');
         setThreePointChallenge(savedThreePointChallenge);
-      };
-      const fetchDribblingChallenge = async () => {
-        const savedDribblingChallenge = await getProgress('dribblingChallenge');
-        setDribblingChallenge(savedDribblingChallenge || []);
       };
       const fetchZoneStats = async () => {
         const zones = [
@@ -50,7 +45,6 @@ export default function TabTwoScreen() {
       };
       fetchProgress();
       fetchThreePointChallenge();
-      fetchDribblingChallenge();
       fetchZoneStats(); 
     }, [updated])
   );
@@ -59,7 +53,6 @@ export default function TabTwoScreen() {
     try {
       await saveProgress('workout', null);
       await saveProgress('threePointChallenge', null);
-      await saveProgress('dribblingChallenge', null);
       const zones = [
         '3pt-left-corner', '3pt-left-wing', '3pt-top', '3pt-right-wing', '3pt-right-corner',
         'mid-left', 'mid-left-center', 'mid-center', 'mid-right-center', 'mid-right',
@@ -69,7 +62,6 @@ export default function TabTwoScreen() {
       }
       setProgress(null);
       setThreePointChallenge(null);
-      setDribblingChallenge([]);
       setZoneStats({});
       alert(t('Stats have been reset.'));
       setUpdated(!updated);
@@ -85,8 +77,6 @@ export default function TabTwoScreen() {
         setProgress(null);
       } else if (key === 'threePointChallenge') {
         setThreePointChallenge(null);
-      } else if (key === 'dribblingChallenge') {
-        setDribblingChallenge([]);
       } else {
         const newZoneStats = { ...zoneStats };
         newZoneStats[key] = { shotsAttempted: 0, shotsMade: 0 };
@@ -128,9 +118,6 @@ export default function TabTwoScreen() {
     return ((shotsMade / shotsAttempted) * 100).toFixed(2) + '%';
   };
 
-  const bestTime = calculateBestTime(dribblingChallenge);
-  const averageTime = calculateAverageTime(dribblingChallenge);
-
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
@@ -166,28 +153,6 @@ export default function TabTwoScreen() {
           {threePointChallenge ? threePointChallenge.threesMade : 'N/A'}
         </ThemedText>
         <TouchableOpacity onPress={() => resetSpecificStat('threePointChallenge')} style={styles.resetIcon}>
-          <Icon name="refresh" size={24} color="gray" />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.progressContainer}>
-        <View style={styles.fullWidth}> 
-        <ThemedText style={styles.fullWidth}>{t('Dribble Challenge:')}</ThemedText>
-        <ThemedText>{t('Best time:')}  
-          {bestTime !== null ? (
-            bestTime < 60 
-              ? `${bestTime} sec` 
-              : `${Math.floor(bestTime / 60)} min ${ bestTime % 60} sec`
-          ) : ' N/A'}
-        </ThemedText>
-        <ThemedText>{t('Average time:')}
-          {averageTime !== null ? (
-            averageTime < 60 
-              ? `${averageTime.toFixed(2)} sec` 
-              : `${Math.floor(averageTime / 60)} min ${(averageTime % 60).toFixed(2)} sec`
-          ) : ' N/A'}
-        </ThemedText>
-        </View>
-        <TouchableOpacity onPress={() => resetSpecificStat('dribblingChallenge')} style={styles.resetIcon}>
           <Icon name="refresh" size={24} color="gray" />
         </TouchableOpacity>
       </View>
