@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import {Drill} from '../../types/Drill';
 
 export const drills: Drill[] = [
@@ -17,6 +16,14 @@ export const drills: Drill[] = [
       { time:'4:52' , title: 'Behind the back',description:'Dribble the ball behind your back',type:'none'}
     ],
     tags: ['dribbling' ,'Workouts','beginner','intermediate', 'Ball handling']
+  },
+  {
+    title: 'Find YOUR shooting pocket',
+    duration: 5,
+    description: 'Tutorial on how to find your shooting pocket.',
+    instructions: 'The shooting pocket is the area where you feel most comfortable starting your shot. This video shows how to find the best position for you.',
+    videoUrl: 'https://youtu.be/1PMN23U_lXs',
+    tags  : ['Shooting', 'intermediate']
   },
   {
     title: 'Tim hardaway teaches his Killer Crossover',
@@ -112,7 +119,7 @@ export const drills: Drill[] = [
       { time:'2:16' , title: 'Load,load shot',description:'Dribble quickly, pause, dribble again, stop',type:'none'}
     ],
     videoUrl: 'https://youtu.be/nVG_1LYgPAY',
-    tags: ['Shooting', 'intermediate','Workouts']
+    tags: ['Shooting', 'intermediate','Learning moves']
   },
   {
     title: 'Curry\'s Fast Shot release',
@@ -152,14 +159,6 @@ export const drills: Drill[] = [
     ],
     videoUrl: 'https://youtu.be/CvGyckNQo0o',
     tags: ['passing', 'beginner', 'Ball handling'] 
-  },
-  {
-    title: 'Find YOUR shooting pocket',
-    duration: 5,
-    description: 'Tutorial on how to find your shooting pocket.',
-    instructions: 'The shooting pocket is the area where you feel most comfortable starting your shot. This video shows how to find the best position for you.',
-    videoUrl: 'https://youtu.be/1PMN23U_lXs',
-    tags  : ['Shooting', 'intermediate']
   },
   {
     title: 'Michael Jordan masterclass',
@@ -280,21 +279,6 @@ export const drills: Drill[] = [
     ],
     videoUrl: 'https://youtu.be/tY0jpDHY_oE',
     tags: ['Ball handling', 'advanced','signature move', 'Learning moves']
-  },
-  {
-    title:'A look into a Jimmy Butler workout',
-    duration: 10,
-    description: 'Discover an energetic workout session in Istanbul with Jimmy Butler, showcasing various drills and exercises aimed at enhancing athletic performance. The focus is on reaction training, agility drills, and strength exercises',
-    timestamps: [
-      { time: '00:02', label: 'Introduction' },
-      { time: '01:28', label: 'Progress Check' },
-      { time: '02:57', label: 'Strength Training' },
-      { time: '04:52', label: 'Pull-Ups' },
-      { time: '05:48', label: 'RDL Exercise' },
-      { time: '06:16', label: 'Interaction with Training Partner' },
-    ],
-    videoUrl: 'https://youtu.be/rY8IqzakXEA',
-    tags: ['workout', 'advanced','nba', 'Workouts']
   },
   {
     title: 'Steph Curry explains where to aim when shooting',

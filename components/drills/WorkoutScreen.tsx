@@ -26,6 +26,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
   const [minutes, setMinutes] = useState('');
   const [seconds, setSeconds] = useState('');
   const [numberOfReps, setNumberOfReps] = useState('');
+  const [refreshDrillData, setRefreshDrillData] = useState(false);
 
   useEffect(() => {
     if(timeToComplete === 0) {
@@ -36,12 +37,14 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
     }
     const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;
     // Reset all the stats when the drill changes
-    seekToTime(drill.workoutSteps[drillIndex].time);
+    if(drill.workoutSteps[drillIndex].time){
+    seekToTime(drill.workoutSteps[drillIndex].time);}
     setBestTime('N/A');
     setAverageTime('N/A');
     setNumberOfReps('N/A');
     setMaxReps('N/A');
     setAverageReps('N/A');
+    
     // Get the stats for the current drill
     if (drill.workoutSteps[drillIndex].type === 'time') {
       getProgress(subDrillTitle).then((times) => {
@@ -67,9 +70,12 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       }
       );  
     }
-    else if (drill.workoutSteps[drillIndex].type === 'weigths')
+    else if (drill.workoutSteps[drillIndex].type === 'weights')
     {
       getProgress(subDrillTitle).then((weigths) => {
+        if (weigths.length === 0) {
+          return;
+        }
         const maxWeigth = Math.max(...weigths);
         const averageWeigth = Math.floor(weigths.reduce((a: number, b: number) => a + b, 0) / weigths.length);
         setMaxReps(maxWeigth.toString());
@@ -77,7 +83,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       }
       );  
     }
-  }, [drillIndex]);
+  }, [drillIndex, refreshDrillData]);
 
   const resetSubDrillStats = async () => {
     Alert.alert(
@@ -100,6 +106,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       ],
       { cancelable: false }
     );
+    setRefreshDrillData(!refreshDrillData);
   };
   const seekToTime = (time: string) => {
     const [minutes, seconds] = time.split(':').map(Number);
@@ -121,25 +128,35 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       navigation.navigate('DrillsTabs');      
     }
   };
+  const previousDrill = () => {
+    if (drillIndex > 0) {
+      setDrillIndex(drillIndex - 1);
+    }
+  };
   const saveDrill = async () => {
     const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;    
     try {
+      
       const savedSubDrill = await getProgress(subDrillTitle);
       let subDrillArray = Array.isArray(savedSubDrill) ? savedSubDrill : [];
-      if (drill.workoutSteps[drillIndex].type === 'reps') {
-        subDrillArray = [...subDrillArray, numberOfReps];
-      }
+      
       if (drill.workoutSteps[drillIndex].type === 'time') {
         subDrillArray = [...subDrillArray, textToSeconds(minutes, seconds)];
       }
-      if(drill.workoutSteps[drillIndex].type === 'weights') {
-        subDrillArray = [...subDrillArray, numberOfReps];
+      if(drill.workoutSteps[drillIndex].type === 'weights' || drill.workoutSteps[drillIndex].type === 'reps') {
+        if(isNaN(Number(numberOfReps))) {
+          alert('Please enter a valid number');
+          return;
+        }
+        subDrillArray = [...subDrillArray, Number(numberOfReps)];
       }
       await saveProgress(subDrillTitle, subDrillArray);
     } catch (error) {
       console.error('Error saving drill results:', error);
     }
-    nextDrill();
+    alert('Your results have been saved.');
+    setRefreshDrillData(!refreshDrillData);
+
   };
   const textToSeconds = (minutes: string, seconds: string) => {
     const minutesNum = parseInt(minutes, 10) || 0;
@@ -159,7 +176,6 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
   };
   const timeToString = (time: number | string) => {
     const { minutes, seconds } = toMinutesAndSeconds(parseInt(time.toString(), 10));
-
     if (minutes === '0' && seconds === '0') {
       return 'N/A';
     }
@@ -182,14 +198,23 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       </ThemedText>
       <TouchableOpacity style={styles.stepTitle} onPress={() => seekToTime(drill.workoutSteps[drillIndex].time)}>
         <ThemedText>
-          <ThemedText style={styles.link}>{drill.workoutSteps[drillIndex].time}</ThemedText> {drill.workoutSteps[drillIndex].title}:
+          <ThemedText style={styles.link}>{drill.workoutSteps[drillIndex].time && drill.workoutSteps[drillIndex].time+':' }</ThemedText> 
+          {drill.workoutSteps[drillIndex].title}
         </ThemedText>
       </TouchableOpacity>
 
       <ThemedText style={styles.timerText}>{drill.workoutSteps[drillIndex].description}</ThemedText>
+      {drill.workoutSteps[drillIndex].countdown>0 && <CountdownCircle totalTime={drill.workoutSteps[drillIndex].countdown} />}
+
       {drill.workoutSteps[drillIndex].type === 'none' && (
+        
         <View style={styles.nextButtonContainer}>
-          <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButtonPrimary}>
+          {drillIndex > 0 && (
+            <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
+              <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
             <ThemedText style={styles.nextButtonText}>Next</ThemedText>
           </TouchableOpacity>
         </View>
@@ -203,12 +228,12 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
               <Icon name="refresh" size={24} color="grey" />
             </TouchableOpacity>
           </View>
-          <View style={styles.timeContainer}>
             <TimerCircle onStop={onStop} />
+          <View style={styles.timeContainer}>
             <View style={styles.inputContainer}>
               <View style={styles.timeInputContainer}>
                 <TextInput
-                  style={styles.timeInput}
+                  style={styles.smallerTimeInput}
                   placeholder="MM"
                   value={minutes}
                   keyboardType="numeric"
@@ -216,20 +241,27 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
                 />
                 <ThemedText>:</ThemedText>
                 <TextInput
-                  style={styles.timeInput}
+                  style={styles.smallerTimeInput}
                   placeholder="Enter your time"
                   value={seconds}
                   keyboardType="numeric"
                   onChangeText={(text) => setSeconds(text)}
                 />
-              </View>
               <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
                 <ThemedText style={styles.nextButtonText}>Save</ThemedText>
               </TouchableOpacity>
+              </View>
+
+              </View>
+
+              {drillIndex > 0 && (
+                <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
+                  <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-                <ThemedText style={styles.nextButtonText}>Skip</ThemedText>
+                <ThemedText style={styles.nextButtonText}>Next</ThemedText>
               </TouchableOpacity>
-            </View>
           </View>
         </>
       )}
@@ -238,38 +270,56 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
           <ThemedText>
             Best amount of reps {isNaN(Number(maxReps)) ? 'N/A' : maxReps}</ThemedText>
           <ThemedText >Average amount of reps :{isNaN(Number(averageReps)) ? 'N/A' : averageReps}</ThemedText>
-          {drill.workoutSteps[drillIndex].countdown && 
-            <CountdownCircle totalTime={drill.workoutSteps[drillIndex].countdown} />}
+          <TouchableOpacity onPress={() => resetSubDrillStats()}>
+              <Icon name="refresh" size={24} color="grey" />
+            </TouchableOpacity>
+       
+          <View style={styles.timeInputContainer}>
           <TextInput
             style={styles.timeInput}
             placeholder="Enter your total of reps"
             keyboardType="numeric"
-            onChangeText={(text) => (text)}
+            onChangeText={(text) => (setNumberOfReps(text))}
           />
           <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
             <ThemedText style={styles.nextButtonText}>Save</ThemedText>
           </TouchableOpacity>
+          </View>
+          {drillIndex > 0 && (
+            <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
+              <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Skip</ThemedText>
+            <ThemedText style={styles.nextButtonText}>Next</ThemedText>
           </TouchableOpacity>
         </View>
       )}
       {drill.workoutSteps[drillIndex].type === 'weights' && (
         <View style={styles.readyContainer}>
-          <ThemedText>Best weight: N/A</ThemedText>
-          <ThemedText>Average weight: N/A</ThemedText>
-          {drill.workoutSteps[drillIndex].countdown && <CountdownCircle totalTime={drill.workoutSteps[drillIndex].countdown} />}
+          <ThemedText>Best weight: {isNaN(Number(maxReps))?'N/A':maxReps} kg</ThemedText>
+          <ThemedText>Average weight: {isNaN(Number(averageReps))?'N/A':averageReps} kg</ThemedText>
+          <TouchableOpacity onPress={() => resetSubDrillStats()}>
+              <Icon name="refresh" size={24} color="grey" />
+            </TouchableOpacity>
+          <View style={styles.timeInputContainer}>
           <TextInput
             style={styles.timeInput}
             placeholder="Enter the weight you used"
             keyboardType="numeric"
-            onChangeText={(text) => (text)}
+            onChangeText={(text) => (setNumberOfReps(text))}
           />
           <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
             <ThemedText style={styles.nextButtonText}>Save</ThemedText>
           </TouchableOpacity>
+          </View>
+          {drillIndex > 0 && (
+            <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
+              <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Skip</ThemedText>
+            <ThemedText style={styles.nextButtonText}>Next</ThemedText>
           </TouchableOpacity>
         </View>
       )}  
@@ -361,36 +411,40 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveButton: {
-    backgroundColor: '#1E90FF',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#32CD32',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 15,
+    marginHorizontal: 25,
+    borderRadius: 20,
+    
   },
   nextButton: {
-    backgroundColor: 'grey',
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16,
-  },
-  nextButtonPrimary: {
     backgroundColor: '#1E90FF',
-    position: 'fixed',
-    top: 200,
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'absolute',
+    top: 140,
+    right: 50,
+ 
   },
   nextButtonText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  previousButton: {
+    left: 40,
+    backgroundColor: '#FFA500',
+    position: 'absolute',
+    top: 140,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    alignItems: 'center',
   },
   readyContainer: {
     alignItems: 'center',
@@ -406,7 +460,7 @@ const styles = StyleSheet.create({
   },
   timeInput: {
     height: 40,
-    width: 60,
+    width: 150,
     borderColor: 'gray',
     borderWidth: 1,
     marginHorizontal: 5,
@@ -415,4 +469,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
   },
+  smallerTimeInput: {
+    height: 40,
+    width: 120,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginHorizontal: 5,
+    marginVertical: 15,
+    borderRadius: 5,
+    textAlign: 'center',
+    color: 'gray',
+  },
+  countdownContainer: {
+    marginTop: 20,
+  },
+
 });

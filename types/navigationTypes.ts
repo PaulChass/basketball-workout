@@ -7,7 +7,8 @@ type RootStackParamList = {
   DrillDetailsScreen: { drill: Drill };
   WorkoutScreen: { drills: Drill[] };
   DribblingFundamentalsDrills: undefined;
-  ThreePointChallenge: undefined;
+  CreateDrill: undefined;
+  CustomWorkouts: undefined;
   FreeShootingSession: undefined;
   ShootingFundamentalsDrills: undefined;
   LayupsFundamentalsDrills: undefined;

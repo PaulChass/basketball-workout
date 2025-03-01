@@ -8,13 +8,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import AllDrills from '../../components/drills/AllDrills';
-import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
-import ThreePointChallenge from '@/components/drills/ThreePointChallenge';
+import CustomWorkouts from '@/components/drills/CustomWorkouts';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import FreeShootingSession from '@/components/drills/FreeShootingSession';
 import ShootingFundamentalsDrills from '@/components/drills/ShootingFundamentalsDrills';
 import { ScrollView } from 'react-native-gesture-handler';
+import CreateDrill from '@/components/drills/CreateDrill';
+import EditDrill from '@/components/drills/EditDrill';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -83,14 +84,14 @@ function ShootWorkoutsList() {
           <Text style={styles.buttonText}>{t('Free Shooting Session')}</Text>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('ThreePointChallenge')}>
+      <TouchableOpacity onPress={() => navigation.navigate('CustomWorkouts')}>
         <ImageBackground
           source={require('@/assets/images/shooting-challenge.png')}
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage}
         >
-          <Text style={styles.buttonText}>{t('3pt Challenge')}</Text>
-          <ThemedText style={styles.default} type="default">{t('1 minute')}</ThemedText>
+          <Text style={styles.buttonText}>{t('Custom workouts')}</Text>
+          <ThemedText style={styles.default} type="default">{t('Create custom workouts and track your progression')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
       </View>
@@ -117,7 +118,8 @@ export default function DrillsScreen() {
           const params = route.params as { drill: { title: string } };
           return { title: params ? params.drill.title : 'Drill Details' };
         }}         />
-        <Stack.Screen name="ThreePointChallenge" component={ThreePointChallenge} />
+        <Stack.Screen name="CustomWorkouts" component={CustomWorkouts} />
+        <Stack.Screen name="CreateDrill" component={CreateDrill} />
         <Stack.Screen name="FreeShootingSession" component={FreeShootingSession} />
       </Stack.Navigator>
     </NavigationIndependentTree>
@@ -139,8 +141,8 @@ function DrillsTabs() {
       </ParallaxScrollView>
       <View style={styles.tabNavigatorContainer}>
         <Tab.Navigator>
-          <Tab.Screen name="Drills" component={DrillsCategories} />
-          <Tab.Screen name="Challenges" component={ShootWorkoutsList} />
+          <Tab.Screen name="Youtube" component={DrillsCategories} />
+          <Tab.Screen name="Custom" component={ShootWorkoutsList} />
         </Tab.Navigator>
       </View>
     </View>

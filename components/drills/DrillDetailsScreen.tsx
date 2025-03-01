@@ -115,7 +115,7 @@ export default function DrillDetailsScreen() {
                 {typeof drill.duration !== 'number' ? t(drill.duration) :
                   drill.duration < 1 ? `${drill.duration * 60} ${t('seconds')}` : `${Math.floor(drill.duration)} ${t('minutes')}` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} ${t('seconds')}` : '')}
               </ThemedText>
-              {drill.videoUrl ? (
+              {drill.videoUrl && (
                 <View style={styles.animationContainer}>
                   <WebView
                     key={drill.videoUrl}
@@ -130,10 +130,8 @@ export default function DrillDetailsScreen() {
                   />
                   
                 </View>
-              ) : (
-                <ThemedText style={styles.noVideoText}>{t('No video available')}</ThemedText>
               )}
-              {i18n.language !== 'en' && (
+              {i18n.language !== 'en' && drill.videoUrl && (
                 <ThemedText style={styles.captionsInfo}>{t('Click on the CC button in the video player to enable captions')}</ThemedText>
               )}
         {isWorkoutScreen ? (

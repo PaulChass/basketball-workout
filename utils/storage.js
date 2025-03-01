@@ -5,7 +5,7 @@ export const saveProgress = async (key, value) => {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
-    console.error('Failed to save progress.', e);
+    alert('Failed to save progress.', e);
   }
 };
 

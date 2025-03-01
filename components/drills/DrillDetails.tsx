@@ -26,8 +26,12 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, webViewRef }) => {
 
   return ( 
       <ScrollView>
+        {drill.description &&
+        <>
         <ThemedText style={styles.sectionTitle}>{t('Objective')}</ThemedText>
         <ThemedText style={styles.drillDescription}>{t(drill.description || '')}</ThemedText>
+        </>
+        }
         <ThemedText style={styles.sectionTitle}>{drill.instructions && t('Instructions')}</ThemedText>
         <ThemedText style={styles.drillInstructions}>{t(drill.instructions || '')}</ThemedText>
         {drill.timestamps && drill.timestamps.length > 0 && (
@@ -48,9 +52,11 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, webViewRef }) => {
           {drill.workoutSteps && drill.workoutSteps.length > 0 && (
             drill.workoutSteps.map((step, index) => (
               <View key={index} style={styles.timestampsContainer}>
+              
               <TouchableOpacity onPress={() => seekToTime(step.time)}>
-                <ThemedText style={styles.timestampItem}>{step.time} : {t(step.title)}</ThemedText>
+                <ThemedText style={styles.timestampItem}>{step.time && step.time + ':' }{t(step.title)}</ThemedText>
               </TouchableOpacity>
+            
               </View>
             ))
           )}
