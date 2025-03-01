@@ -25,12 +25,12 @@ function DrillsCategories() {
   const navigation = useNavigation<DrillDetailsScreenProps['navigation']>();
 
   const categories = [
-    'Masterclass',
     'Workouts',
-    'Learning moves',
+    'Masterclass',
     'Ball handling',
     'Shooting',
     'Finishing',
+    'Learning moves',
     'Strength & conditionning',
   ];
 
@@ -58,8 +58,7 @@ function DrillsCategories() {
           style={styles.buttonBackground}
           imageStyle={styles.buttonImage} 
         >
-                    <ThemedText style={styles.categoryButtonText}>{t(category)}</ThemedText>
-
+        <ThemedText style={styles.categoryButtonText}>{t(category)}</ThemedText>
         </ImageBackground>
         </TouchableOpacity>
       ))}
@@ -91,7 +90,6 @@ function ShootWorkoutsList() {
           imageStyle={styles.buttonImage}
         >
           <Text style={styles.buttonText}>{t('Custom workouts')}</Text>
-          <ThemedText style={styles.default} type="default">{t('Create custom workouts and track your progression')}</ThemedText>
         </ImageBackground>
       </TouchableOpacity>
       </View>
@@ -154,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
+    padding: 0,
   },
   subtitle: {
     fontSize: 18,
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     width: 360,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 1,
   },
   buttonImage: {
     borderRadius: 25,

@@ -11,9 +11,10 @@ import { useNavigation } from '@react-navigation/native';
 interface WorkoutScreenProps {
   drill: any;
   webViewRef: any;
+  currentTime: number;
 }
 
-const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
+const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, currentTime }) => {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation<any>();
   const [timer, setTimer] = useState(0);
@@ -32,19 +33,20 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
     if(timeToComplete === 0) {
       const interval = setInterval(() => {
         setTimeToComplete((timeToComplete) => timeToComplete + 1);
+        getCurrentTime();
       }
       , 1000);
     }
     const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;
     // Reset all the stats when the drill changes
     if(drill.workoutSteps[drillIndex].time){
-    seekToTime(drill.workoutSteps[drillIndex].time);}
+    seekToTime(drill.workoutSteps[drillIndex].time);
+  }
     setBestTime('N/A');
     setAverageTime('N/A');
     setNumberOfReps('N/A');
     setMaxReps('N/A');
     setAverageReps('N/A');
-    
     // Get the stats for the current drill
     if (drill.workoutSteps[drillIndex].type === 'time') {
       getProgress(subDrillTitle).then((times) => {
@@ -114,6 +116,15 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
     const script = `document.querySelector('iframe').contentWindow.postMessage('{"event":"command","func":"seekTo","args":[${totalSeconds}, true]}', '*');`;
     webViewRef.current?.injectJavaScript(script);
   };
+  const playVideo = () => {
+    const script = `document.querySelector('iframe').contentWindow.postMessage('{"event":"command","func":"playVideo","args":[]}', '*');`;
+    webViewRef.current?.injectJavaScript(script);
+  };
+  const pauseVideoAndRewind = (time: string) => {
+    const script = `document.querySelector('iframe').contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":[]}', '*');`;
+    webViewRef.current?.injectJavaScript(script);
+    seekToTime(time);
+  };
   const nextDrill = () => {
     setBestTime('N/A');
     setAverageTime('N/A');
@@ -123,8 +134,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       clearInterval(timeToComplete); 
       setDrillIndex(drillIndex + 1);
     } else {
-
-      alert('Workout completed in : ' + timeToComplete + ' seconds');
+      alert('Congratulations! Workout completed ');
       navigation.navigate('DrillsTabs');      
     }
   };
@@ -133,6 +143,35 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
       setDrillIndex(drillIndex - 1);
     }
   };
+
+  const getCurrentTime = () => {
+    const script = `
+      (function() {
+        const currentTime = player.getCurrentTime();
+        window.ReactNativeWebView.postMessage(currentTime.toString());
+      })();
+    `;
+    webViewRef.current?.injectJavaScript(script); 
+  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getCurrentTime();
+      
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // if the next drill exists and has a time, compare the current time to the next drill's time
+  useEffect(() => {
+    if (drill.workoutSteps[drillIndex + 1] && drill.workoutSteps[drillIndex + 1].time) {
+      const nextDrillTime = drill.workoutSteps[drillIndex + 1].time.split(':').reduce((acc: number, time: string) => acc * 60 + parseInt(time, 10), 0);
+      if (currentTime >= nextDrillTime) {
+        pauseVideoAndRewind(drill.workoutSteps[drillIndex].time);
+      }
+    }
+  }
+  , [currentTime , drillIndex]);
+  
   const saveDrill = async () => {
     const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;    
     try {
@@ -190,9 +229,10 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
     setSeconds(seconds);
   }, [timer]);
 
+
   return (
+    <>
     <ScrollView style={styles.container}>
-      <ThemedText style={styles.text}>{drill.title}</ThemedText>
       <ThemedText style={styles.subText}>
         Drill {drillIndex + 1} of {drill.workoutSteps.length}:
       </ThemedText>
@@ -202,24 +242,9 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
           {drill.workoutSteps[drillIndex].title}
         </ThemedText>
       </TouchableOpacity>
-
       <ThemedText style={styles.timerText}>{drill.workoutSteps[drillIndex].description}</ThemedText>
       {drill.workoutSteps[drillIndex].countdown>0 && <CountdownCircle totalTime={drill.workoutSteps[drillIndex].countdown} />}
-
-      {drill.workoutSteps[drillIndex].type === 'none' && (
-        
-        <View style={styles.nextButtonContainer}>
-          {drillIndex > 0 && (
-            <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
-              <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Next</ThemedText>
-          </TouchableOpacity>
-        </View>
-      )}
-      {drill.workoutSteps[drillIndex].type === 'time' && (
+        {drill.workoutSteps[drillIndex].type === 'time' && (
         <>
           <View style={styles.recordsContainer}>
             <ThemedText>Best time: {timeToString(bestTime)}</ThemedText>
@@ -232,40 +257,31 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
           <View style={styles.timeContainer}>
             <View style={styles.inputContainer}>
               <View style={styles.timeInputContainer}>
-                <TextInput
-                  style={styles.smallerTimeInput}
-                  placeholder="MM"
-                  value={minutes}
-                  keyboardType="numeric"
-                  onChangeText={(text) => setMinutes(text)}
-                />
-                <ThemedText>:</ThemedText>
-                <TextInput
-                  style={styles.smallerTimeInput}
-                  placeholder="Enter your time"
-                  value={seconds}
-                  keyboardType="numeric"
-                  onChangeText={(text) => setSeconds(text)}
-                />
-              <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
-                <ThemedText style={styles.nextButtonText}>Save</ThemedText>
-              </TouchableOpacity>
-              </View>
-
-              </View>
-
-              {drillIndex > 0 && (
-                <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
-                  <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
+                  <TextInput
+                    style={styles.smallerTimeInput}
+                    placeholder="MM"
+                    value={minutes}
+                    keyboardType="numeric"
+                    onChangeText={(text) => setMinutes(text)}
+                  />
+                  <ThemedText>:</ThemedText>
+                  <TextInput
+                    style={styles.smallerTimeInput}
+                    placeholder="Enter your time"
+                    value={seconds}
+                    keyboardType="numeric"
+                    onChangeText={(text) => setSeconds(text)}
+                  />
+                <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
+                  <ThemedText style={styles.nextButtonText}>Save</ThemedText>
                 </TouchableOpacity>
-              )}
-              <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-                <ThemedText style={styles.nextButtonText}>Next</ThemedText>
-              </TouchableOpacity>
+              </View>
+            </View>
+            
           </View>
         </>
-      )}
-      {drill.workoutSteps[drillIndex].type === 'reps' && (
+        )}
+        {drill.workoutSteps[drillIndex].type === 'reps' && (
         <View style={styles.readyContainer}>
           <ThemedText>
             Best amount of reps {isNaN(Number(maxReps)) ? 'N/A' : maxReps}</ThemedText>
@@ -273,7 +289,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
           <TouchableOpacity onPress={() => resetSubDrillStats()}>
               <Icon name="refresh" size={24} color="grey" />
             </TouchableOpacity>
-       
+          
           <View style={styles.timeInputContainer}>
           <TextInput
             style={styles.timeInput}
@@ -285,17 +301,9 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
             <ThemedText style={styles.nextButtonText}>Save</ThemedText>
           </TouchableOpacity>
           </View>
-          {drillIndex > 0 && (
-            <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
-              <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Next</ThemedText>
-          </TouchableOpacity>
         </View>
-      )}
-      {drill.workoutSteps[drillIndex].type === 'weights' && (
+        )}
+        {drill.workoutSteps[drillIndex].type === 'weights' && (
         <View style={styles.readyContainer}>
           <ThemedText>Best weight: {isNaN(Number(maxReps))?'N/A':maxReps} kg</ThemedText>
           <ThemedText>Average weight: {isNaN(Number(averageReps))?'N/A':averageReps} kg</ThemedText>
@@ -313,6 +321,10 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
             <ThemedText style={styles.nextButtonText}>Save</ThemedText>
           </TouchableOpacity>
           </View>
+        </View>
+      )}  
+    </ScrollView>
+    <View style={styles.nextButtonContainer}>
           {drillIndex > 0 && (
             <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
               <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
@@ -322,8 +334,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef }) => {
             <ThemedText style={styles.nextButtonText}>Next</ThemedText>
           </TouchableOpacity>
         </View>
-      )}  
-    </ScrollView>
+    </>
   );
 };
 
@@ -334,6 +345,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     textAlign: 'center',
+    flexDirection: 'column',
+    alignContent: 'space-between',
   },
   header: {
     width: '100%',
@@ -391,8 +404,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   recordsContainer: {
+    backgroundColor: 'rgba(128,128,128,0.2)',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    borderRadius: 10,
     paddingBottom: 10,
     paddingTop: 10,
   },
@@ -402,13 +417,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   nextButtonContainer: {
-    position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    bottom: 20,
+    alignItems: 'center',
+    position: 'sticky',
+    bottom: 0,
     left: 0,
     right: 0,
-    alignItems: 'center',
+    width: '100%',
   },
   saveButton: {
     backgroundColor: '#32CD32',
@@ -426,10 +442,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#1E90FF',
-    position: 'absolute',
-    top: 140,
-    right: 50,
- 
+    width: '40%',
   },
   nextButtonText: {
     color: '#FFFFFF',
@@ -437,10 +450,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   previousButton: {
-    left: 40,
     backgroundColor: '#FFA500',
-    position: 'absolute',
-    top: 140,
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 25,
@@ -449,6 +459,8 @@ const styles = StyleSheet.create({
   readyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 100,
+    
   },
   inputContainer: {
     marginTop: 10,

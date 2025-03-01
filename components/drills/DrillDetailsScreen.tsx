@@ -19,7 +19,8 @@ export default function DrillDetailsScreen() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWorkoutScreen, setIsWorkoutScreen] = useState(false);
   const webViewRef = useRef<WebView>(null);
-
+  const [currentTime, setCurrentTime] = useState(0);
+  
 
   useEffect(() => {
     const checkFavorite = async () => {
@@ -115,7 +116,7 @@ export default function DrillDetailsScreen() {
                 {typeof drill.duration !== 'number' ? t(drill.duration) :
                   drill.duration < 1 ? `${drill.duration * 60} ${t('seconds')}` : `${Math.floor(drill.duration)} ${t('minutes')}` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} ${t('seconds')}` : '')}
               </ThemedText>
-              {drill.videoUrl && (
+              {drill.videoUrl ? (
                 <View style={styles.animationContainer}>
                   <WebView
                     key={drill.videoUrl}
@@ -127,15 +128,22 @@ export default function DrillDetailsScreen() {
                     onError={() => {
                       console.error('Error loading video');
                     }}
+                    onMessage={(event) => {
+                      const eventTime = event.nativeEvent.data;
+                      setCurrentTime(Number(eventTime));
+                    }}
                   />
                   
                 </View>
+              ) : (
+                <View style={styles.animationContainer}>
+                  </View>
               )}
               {i18n.language !== 'en' && drill.videoUrl && (
                 <ThemedText style={styles.captionsInfo}>{t('Click on the CC button in the video player to enable captions')}</ThemedText>
               )}
         {isWorkoutScreen ? (
-          <WorkoutScreen drill={drill} webViewRef={webViewRef} />
+          <WorkoutScreen drill={drill} webViewRef={webViewRef} currentTime = {currentTime}/>
         ) : (
           <><DrillDetails
             drill={drill}

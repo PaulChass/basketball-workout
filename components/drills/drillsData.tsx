@@ -253,7 +253,7 @@ export const drills: Drill[] = [
       { time:'1:21' , title: 'Later raises',description:'3x10',type:'weights'},
       { time:'1:40' , title: 'Pullups',description:'until failure',type:'reps'},
       { time:'1:48' , title: 'Single leg RDL',description:'3x5',type:'weights'},
-      { time:'1:56' , title: 'Curls',description:'3 till failure',type:'reps'},
+      { time:'1:56' , title: 'Curls',description:'3 sets till failure',type:'reps'},
       { time:'2:56' , title: '5 min ball handling warmup',description:'',type:'none',countdown:300},
       { time:'3:15' , title: 'Combos to the the basket',description:'',type:'reps'},
       { time:'3:41' , title: 'Combos to pullup, counter moves',description:'',type:'reps'},

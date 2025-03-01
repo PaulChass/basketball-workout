@@ -19,7 +19,7 @@ const CreateDrill = () => {
   const [stepTitle, setStepTitle] = useState('');
   const [stepDescription, setStepDescription] = useState('');
   const [stepType, setStepType] = useState('none');
-  const [countdown, setCountdown] = useState('none');
+  const [countdown, setCountdown] = useState('');
   const [showWorkoutStepForm, setShowWorkoutStepForm] = useState(false);
   const navigation = useNavigation<any>();
   
@@ -65,7 +65,7 @@ const CreateDrill = () => {
       />
       <TextInput
         style={styles.input}
-        placeholder="Description"
+        placeholder="Description (optional)"
         placeholderTextColor="gray"
         value={description}
         onChangeText={setDescription}
@@ -87,7 +87,7 @@ const CreateDrill = () => {
           />
           <TextInput
             style={styles.input}
-            placeholder="Step Description"
+            placeholder="Step Description (optional)"
             placeholderTextColor="gray"
             value={stepDescription}
             onChangeText={setStepDescription}
@@ -108,7 +108,7 @@ const CreateDrill = () => {
           <View style={styles.checkboxContainer}>
           <TextInput
               style={styles.input}
-              placeholder="Countdown"
+              placeholder="Countdown in seconds"
               placeholderTextColor="gray"
               value={countdown.toString()}
               keyboardType="numeric"
@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'gray',
     borderColor: 'gray',
+    
   },
   checkboxContainer: {
     flexDirection: 'row',

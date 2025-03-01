@@ -21,6 +21,12 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, webViewRef }) => {
     webViewRef.current?.injectJavaScript(script);
   };
 
+  const pauseVideoAndRewind = (time: string) => {
+    const script = `document.querySelector('iframe').contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":[]}', '*');`;
+    webViewRef.current?.injectJavaScript(script);
+    seekToTime(time);
+  }
+
     
   
 
