@@ -89,15 +89,15 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
 
   const resetSubDrillStats = async () => {
     Alert.alert(
-      'Reset Stats',
-      'Are you sure you want to reset your stats for this drill?',
+      t('resetStatsTitle'),
+      t('resetStatsMessage'),
       [
         {
-          text: 'Cancel',
+          text: t('cancel'),
           style: 'cancel',
         },
         {
-          text: 'OK',
+          text: t('ok'),
           onPress: async () => {
             const subDrillTitle = drill.title + '-' + drill.workoutSteps[drillIndex].title;
             await saveProgress(subDrillTitle, []);
@@ -134,10 +134,10 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
       clearInterval(timeToComplete); 
       setDrillIndex(drillIndex + 1);
     } else {
-      alert('Congratulations! Workout completed ');
-      navigation.navigate('DrillsTabs');      
+      navigation.navigate('Feedback');      
     }
   };
+  
   const previousDrill = () => {
     if (drillIndex > 0) {
       setDrillIndex(drillIndex - 1);
@@ -153,6 +153,8 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
     `;
     webViewRef.current?.injectJavaScript(script); 
   };
+
+  // Get the current time every second
   useEffect(() => {
     const interval = setInterval(() => {
       getCurrentTime();
@@ -193,7 +195,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
     } catch (error) {
       console.error('Error saving drill results:', error);
     }
-    alert('Your results have been saved.');
+    alert(t('resultsSaved'));
     setRefreshDrillData(!refreshDrillData);
 
   };
@@ -233,13 +235,11 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
   return (
     <>
     <ScrollView style={styles.container}>
-      <ThemedText style={styles.subText}>
-        Drill {drillIndex + 1} of {drill.workoutSteps.length}:
-      </ThemedText>
+    
       <TouchableOpacity style={styles.stepTitle} onPress={() => seekToTime(drill.workoutSteps[drillIndex].time)}>
         <ThemedText>
           <ThemedText style={styles.link}>{drill.workoutSteps[drillIndex].time && drill.workoutSteps[drillIndex].time+':' }</ThemedText> 
-          {drill.workoutSteps[drillIndex].title}
+          {drill.workoutSteps[drillIndex].title} -         {drillIndex + 1}  ({drill.workoutSteps.length})
         </ThemedText>
       </TouchableOpacity>
       <ThemedText style={styles.timerText}>{drill.workoutSteps[drillIndex].description}</ThemedText>
@@ -247,8 +247,8 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
         {drill.workoutSteps[drillIndex].type === 'time' && (
         <>
           <View style={styles.recordsContainer}>
-            <ThemedText>Best time: {timeToString(bestTime)}</ThemedText>
-            <ThemedText>Average time: {timeToString(averageTime)}</ThemedText>
+            <ThemedText>{t('bestTime')}: {timeToString(bestTime)}</ThemedText>
+            <ThemedText>{t('averageTime')}: {timeToString(averageTime)}</ThemedText>
             <TouchableOpacity onPress={() => resetSubDrillStats()}>
               <Icon name="refresh" size={24} color="grey" />
             </TouchableOpacity>
@@ -259,7 +259,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
               <View style={styles.timeInputContainer}>
                   <TextInput
                     style={styles.smallerTimeInput}
-                    placeholder="MM"
+                    placeholder={t('minutesPlaceholder')}
                     value={minutes}
                     keyboardType="numeric"
                     onChangeText={(text) => setMinutes(text)}
@@ -267,13 +267,13 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
                   <ThemedText>:</ThemedText>
                   <TextInput
                     style={styles.smallerTimeInput}
-                    placeholder="Enter your time"
+                    placeholder={t('secondsPlaceholder')}
                     value={seconds}
                     keyboardType="numeric"
                     onChangeText={(text) => setSeconds(text)}
                   />
                 <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
-                  <ThemedText style={styles.nextButtonText}>Save</ThemedText>
+                  <ThemedText style={styles.nextButtonText}>{t('save')}</ThemedText>
                 </TouchableOpacity>
               </View>
             </View>
@@ -283,9 +283,8 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
         )}
         {drill.workoutSteps[drillIndex].type === 'reps' && (
         <View style={styles.readyContainer}>
-          <ThemedText>
-            Best amount of reps {isNaN(Number(maxReps)) ? 'N/A' : maxReps}</ThemedText>
-          <ThemedText >Average amount of reps :{isNaN(Number(averageReps)) ? 'N/A' : averageReps}</ThemedText>
+          <ThemedText>{t('bestReps')}: {isNaN(Number(maxReps)) ? 'N/A' : maxReps}</ThemedText>
+          <ThemedText >{t('averageReps')}: {isNaN(Number(averageReps)) ? 'N/A' : averageReps}</ThemedText>
           <TouchableOpacity onPress={() => resetSubDrillStats()}>
               <Icon name="refresh" size={24} color="grey" />
             </TouchableOpacity>
@@ -293,32 +292,32 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
           <View style={styles.timeInputContainer}>
           <TextInput
             style={styles.timeInput}
-            placeholder="Enter your total of reps"
+            placeholder={t('repsPlaceholder')}
             keyboardType="numeric"
             onChangeText={(text) => (setNumberOfReps(text))}
           />
           <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
-            <ThemedText style={styles.nextButtonText}>Save</ThemedText>
+            <ThemedText style={styles.nextButtonText}>{t('save')}</ThemedText>
           </TouchableOpacity>
           </View>
         </View>
         )}
         {drill.workoutSteps[drillIndex].type === 'weights' && (
         <View style={styles.readyContainer}>
-          <ThemedText>Best weight: {isNaN(Number(maxReps))?'N/A':maxReps} kg</ThemedText>
-          <ThemedText>Average weight: {isNaN(Number(averageReps))?'N/A':averageReps} kg</ThemedText>
+          <ThemedText>{t('bestWeight')}: {isNaN(Number(maxReps))?'N/A':maxReps} kg</ThemedText>
+          <ThemedText>{t('averageWeight')}: {isNaN(Number(averageReps))?'N/A':averageReps} kg</ThemedText>
           <TouchableOpacity onPress={() => resetSubDrillStats()}>
               <Icon name="refresh" size={24} color="grey" />
             </TouchableOpacity>
           <View style={styles.timeInputContainer}>
           <TextInput
             style={styles.timeInput}
-            placeholder="Enter the weight you used"
+            placeholder={t('weightPlaceholder')}
             keyboardType="numeric"
             onChangeText={(text) => (setNumberOfReps(text))}
           />
           <TouchableOpacity onPress={() => saveDrill()} style={styles.saveButton}>
-            <ThemedText style={styles.nextButtonText}>Save</ThemedText>
+            <ThemedText style={styles.nextButtonText}>{t('save')}</ThemedText>
           </TouchableOpacity>
           </View>
         </View>
@@ -327,11 +326,11 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
     <View style={styles.nextButtonContainer}>
           {drillIndex > 0 && (
             <TouchableOpacity onPress={() => previousDrill()} style={styles.previousButton}>
-              <ThemedText style={styles.nextButtonText}>Previous</ThemedText>
+              <ThemedText style={styles.nextButtonText}>{t('previous')}</ThemedText>
             </TouchableOpacity>
           )}
           <TouchableOpacity onPress={() => nextDrill()} style={styles.nextButton}>
-            <ThemedText style={styles.nextButtonText}>Next</ThemedText>
+            <ThemedText style={styles.nextButtonText}>{t('next')}</ThemedText>
           </TouchableOpacity>
         </View>
     </>

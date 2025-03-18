@@ -13,21 +13,29 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <View style={styles.container}>
-
-      <Button  title="English" onPress={() => changeLanguage('en')} />
-      <Button title="Français" onPress={() => changeLanguage('fr')} />
-      <Button title="Español" onPress={() => changeLanguage('es')} />
+     <View style={styles.buttonContainer}>
+        <Button title="English" onPress={() => changeLanguage('en')} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Français" onPress={() => changeLanguage('fr')} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Español" onPress={() => changeLanguage('es')} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    width:'90%',   
+    width:'100%',   
     flexDirection: 'row',
     justifyContent: 'space-around',
-    margin: 16,
+    margin: 10,
   },
+  buttonContainer: { 
+    borderRadius: 2,
+   }
 });
 
 export default LanguageSwitcher;

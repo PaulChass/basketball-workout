@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { ThemedText } from '@/components/ThemedText';
+import { useTranslation } from 'react-i18next';
+import * as Speech from 'expo-speech';
 
 interface CountdownCircleProps {
   totalTime: number;
@@ -13,6 +15,8 @@ const CountdownCircle: React.FC<CountdownCircleProps> = ({ totalTime }) => {
   const [timeRemaining, setTimeRemaining] = useState(totalTime);
   const [countdown, setCountdown] = useState(5);
   const [isPaused, setIsPaused] = useState(false);
+  const { t, i18n } = useTranslation();
+  
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -20,6 +24,10 @@ const CountdownCircle: React.FC<CountdownCircleProps> = ({ totalTime }) => {
       interval = setInterval(() => {
         setCountdown((prev) => prev - 1);
       }, 1000);
+      const speechLanguage = i18n.language === 'fr' ? 'fr-FR' : i18n.language ==='es' ? 'es-ES' : 'en-US';
+      if (countdown > 0 && !isPaused) {
+        Speech.speak(`${countdown}`, { language: speechLanguage });
+      }
     } else if (isStarted && countdown === 0 && isRunning && !isPaused) {
       interval = setInterval(() => {
         setTimeRemaining((prev) => prev - 1);
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginVertical: 20,
   },
   resumeButton: {
     backgroundColor: '#32CD32',

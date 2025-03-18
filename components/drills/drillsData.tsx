@@ -330,5 +330,56 @@ export const drills: Drill[] = [
       { time:'1:38' , title: 'Rebounding tap drill',description:'Tap the ball two times on the backboard with one hand then catch the ball ,as soon as you land explode to the basket',type:'none'},
       { time:'3:03' , title: 'Double time',description:'Same as before , but switch side/hands after each rep',type:'none'}
     ],
+  },
+  {
+    title:'Shooting coaching with Sean Sweeney',
+    duration: 20,
+    description: 'Learn how to shoot and coach shooting from Sean Sweeney.',
+    videoUrl: 'https://youtu.be/3wvW1bwxcAc',
+    timestamps: [
+      { time: '0:12', label: 'Introduction' },
+      { time: '2:25', label: 'Lower body' },
+      { time: '4:37', label: 'Upper body' },
+      { time:'6:00', label: 'The shooting pocket'},
+      { time:'8:24', label: 'Bringing the ball straigth up to the shooting window' },
+      { time:'10:00', label: 'Form Shooting' },
+      { time:'13:35', label: 'Alignment' },
+      { time:'15:43', label: 'Using the legs to generate power' },
+      { time:'19:33', label: 'Stepping inot a catch and shoot' },
+      { time:'22:14', label: 'Conclusion - Q&A' }  
+    ],
+    tags: ['Shooting', 'advanced','lessons','Masterclass']
+  },
+  {
+    title: 'Home vertical training workout (no equipment)',
+    duration: 10,
+    description: 'Leg workout to do at home',
+    workoutSteps: [
+      { time:'0:50', title: 'Warmup ankles',description:'1 min in each direction',type:'none',countdown:60},
+      { time:'1:06', title: '3 exercices withouth break',description:'-Scap pull backs / Open shoulders / Lat pull downs 3x15 for each',type:'none'},
+      { time:'1:53', title:'Jefferson curls 3x8',description:'Let the weight slowly pull you down, then come back up',type:'none'},
+      { time:'2:39', title:'Hip flexor raises 3x5 (5 sec hold)',description:'Hold your knee and try to raise your hip',type:'none'},
+      { time: '2:56', title:'VMO reverse extensions 3x12',description:'Bring your knee back',type:'none'},
+      { time:'3:23', title:'Groin activation 3x10',description:'Go slowly to make sure to activate your groin',type:'none'},
+      {  time: '4:07', title:'Glute bridges / VMO abduction - 3x8' ,description:'Alternate between the two exercices',type:'none'},
+      { time: '4:36', title: 'Rocking chair - 3x30sec hold',description:'Hold the position for 30 sec',type:'none',countdown:30},
+      { time:'5:17', title: 'Superman 5x5',description:'Make sure to squeez and conrtact at each rep',type:'none'}, 
+      { time: '5:59', title: 'Good mornings 3x8',description:'Start with light weight and increase as you go',type:'none'},
+      {time:'6:02', title: '1/4 squats 3x30',description:'Go down to a quarter of the squat and come back up',type:'none'},
+      {time:'6:32', title: 'Single leg deadlift 5x5',description:'Put a towel under your front foot pull it as strong as you can',type:'none'},
+      {time:'6:53', title:'Deadlift 5x5 ', description:'Put a towel under both feet and pull as strong as you can',type:'none'},
+      {time:'7:21', title:'Elevated lunges 3x8',description:'Put your front foot on a chair and lunge',type:'none'},
+      {time:'7:30', title:'Single leg tuck 3x5',description:'Put your back foor on a chair and pull your front knee to your chest',type:'none'},
+      {time:'7:52', title:'Single leg balance', description: 'Get creative and try to balance on one leg',type:'none'},  
+      {time:'8:24', title:'Quad extensions 3x8', description:'Put a towel under a sofa and pull it as hard as possible',type:'none'},
+      {time:'9:52', title:'Stretching : Elevated glute 3x12', description:'Put your foot on a chair and stretch your glute',type:'none'},
+      {time:'10:13',title:'Stretching : Shin raises 3x12', description:'Put your foot on a chair and stretch your shin',type:'none'},
+      {time:'10:35' ,title: 'Stretching : Couch quad 3x5x5sec', description:'Put your foot on a chair and stretch your quad',type:'none'},
+      {time:'11:15', title: 'Stretching : Butterfly 3x5x8sec', description:'Loosen up your hips',type:'none'},
+      {time:'12:03', title:'Stretching : Low back stretch 3x3x10sec', description:'Stretch yoour low back by turning your hips',type:'none'},
+      {time:'12:44', title:'Stretching : Lizard stretch 3x5', description:'Loosens your low back',type:'none'}
+    ],
+    videoUrl: 'https://youtu.be/lDrebo7qweY',
+    tags: ['Workouts', 'Strength & conditionning', 'Strength&stamina']
   }
 ];

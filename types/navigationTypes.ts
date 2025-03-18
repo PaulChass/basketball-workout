@@ -2,7 +2,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { Drill } from './Drill';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   DrillsList: undefined;
   DrillDetailsScreen: { drill: Drill };
   WorkoutScreen: { drills: Drill[] };

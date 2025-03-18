@@ -6,7 +6,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationIndependentTree, useNavigation } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next'; 
 import AllDrills from '../../components/drills/AllDrills';
 import DrillDetailsScreen from '../../components/drills/DrillDetailsScreen';
 import CustomWorkouts from '@/components/drills/CustomWorkouts';
@@ -15,7 +15,7 @@ import FreeShootingSession from '@/components/drills/FreeShootingSession';
 import ShootingFundamentalsDrills from '@/components/drills/ShootingFundamentalsDrills';
 import { ScrollView } from 'react-native-gesture-handler';
 import CreateDrill from '@/components/drills/CreateDrill';
-import EditDrill from '@/components/drills/EditDrill';
+import FeedbackForm from '@/components/forms/FeedbackForm';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -119,6 +119,7 @@ export default function DrillsScreen() {
         <Stack.Screen name="CustomWorkouts" component={CustomWorkouts} />
         <Stack.Screen name="CreateDrill" component={CreateDrill} />
         <Stack.Screen name="FreeShootingSession" component={FreeShootingSession} />
+        <Stack.Screen name="Feedback" component={FeedbackForm} />
       </Stack.Navigator>
     </NavigationIndependentTree>
   );
@@ -139,7 +140,7 @@ function DrillsTabs() {
       </ParallaxScrollView>
       <View style={styles.tabNavigatorContainer}>
         <Tab.Navigator>
-          <Tab.Screen name="Youtube" component={DrillsCategories} />
+          <Tab.Screen name="Videos" component={DrillsCategories} />
           <Tab.Screen name="Custom" component={ShootWorkoutsList} />
         </Tab.Navigator>
       </View>

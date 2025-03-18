@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getProgress, saveProgress } from '@/utils/storage';
 import BasketballCourt from '../ui/BasketballCourt';
 import { ThemedText } from '@/components/ThemedText';
 import { useTranslation } from 'react-i18next';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { Icon } from 'react-native-vector-icons/Icon';
 
 const FreeShootingSession: React.FC = () => {
   const { t } = useTranslation();
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
   const [shotsAttempted, setShotsAttempted] = useState<string>('');
   const [shotsMade, setShotsMade] = useState<string>('');
+  const [progress, setProgress] = useState<any>(0);
 
-  const handleZoneSelect = (zone: string) => {
+  const handleZoneSelect = async (zone: string) => {
     setSelectedZone(zone);
     setShotsAttempted('');
     setShotsMade('');
+    const shots = await getProgress(zone);
+    setProgress(shots ? ((shots[0] / shots[1]) * 100).toFixed(2) : 0);
   };
 
   const askIfSure = () => {
@@ -45,26 +51,20 @@ const FreeShootingSession: React.FC = () => {
   }
 
   const handleSave = async () => {
-
-    const progress = {
-      zone: selectedZone,
-      shotsAttempted: parseInt(shotsAttempted, 10),
-      shotsMade: parseInt(shotsMade, 10),
-      date: new Date().toISOString(),
-    };
-
-    try {
-      await AsyncStorage.setItem(`progress_${selectedZone}`, JSON.stringify(progress));
-      Alert.alert(t('Success'), t('Progress saved successfully.'));
-      setSelectedZone(null);
-      setShotsAttempted('');
-      setShotsMade('');
-    } catch (e) {
-      console.error('Failed to save progress.', e);
-      Alert.alert(t('Error'), t('Failed to save progress.'));
+    const currentProgress = await getProgress(selectedZone);
+    if (!currentProgress) {
+      saveProgress(selectedZone, [shotsMade, shotsAttempted]);
+    } else {
+      saveProgress(selectedZone, [parseInt(currentProgress[0]) + parseInt(shotsMade, 10), parseInt(currentProgress[1]) + parseInt(shotsAttempted, 10)]);
     }
+    setShotsAttempted('');
+    setShotsMade('');
+    const newProgress =  [parseInt(currentProgress[0] + shotsMade),parseInt(currentProgress[1] + shotsAttempted)];
+    setProgress(((newProgress[0]/newProgress[1]) * 100).toFixed(2));
   };
 
+   
+    
   return (
     <View style={styles.container}>
       <ThemedText style={styles.inputLabel}>{t('Select a zone')}</ThemedText>
@@ -74,6 +74,7 @@ const FreeShootingSession: React.FC = () => {
       {selectedZone && (
         <View style={styles.inputContainer}>
           <ThemedText style={styles.inputTitle}>{t('Selected zone')}: {selectedZone}</ThemedText>
+          <ThemedText style={styles.inputLabel}>{t('Average')}:  {progress} % </ThemedText>
           <ThemedText style={styles.inputLabel}>{t('Shots Made')}</ThemedText>
           <TextInput
             style={styles.input}

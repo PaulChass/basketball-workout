@@ -102,8 +102,10 @@ const CreateDrill = () => {
             <Picker.Item label="Time" value="time" color='grey' />
             <Picker.Item label="Weights" value="weights" color='grey'/>
             <Picker.Item label="Total Reps" value="reps" color='grey'/>
-            <Picker.Item label="Makes per Total Attempts" value="makes" color='grey' />
-          </Picker>
+          {//  <Picker.Item label="Makes per Total Attempts" value="makes" color='grey' />
+          //not available yet
+          }
+</Picker>
           <ThemedText style={styles.subHeader}>Countdown (optional)</ThemedText>
           <View style={styles.checkboxContainer}>
           <TextInput
