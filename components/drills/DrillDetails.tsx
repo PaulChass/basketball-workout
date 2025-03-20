@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { ThemedText } from '../ThemedText';
+import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { ThemedText } from '../ThemedText'; // Import ThemedView
 import { WebView } from 'react-native-webview';
 import { useTranslation } from 'react-i18next';
 import { Drill } from '@/types/Drill';
-
+import { ThemedView } from '../ThemedView';
 
 interface DrillDetailsProps {
   drill: Drill;
@@ -27,9 +27,6 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, webViewRef }) => {
     seekToTime(time);
   }
 
-    
-  
-
   return ( 
       <ScrollView>
         {drill.description &&
@@ -41,15 +38,15 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, webViewRef }) => {
         <ThemedText style={styles.sectionTitle}>{drill.instructions && t('Instructions')}</ThemedText>
         <ThemedText style={styles.drillInstructions}>{t(drill.instructions || '')}</ThemedText>
         {drill.timestamps && drill.timestamps.length > 0 && (
-          <View style={styles.timestampsContainer}>
+          <ThemedView style={styles.timestampsContainer}>
             {drill.timestamps.map((timestamp, index) => (
               <TouchableOpacity key={index} onPress={() => seekToTime(timestamp.time)}>
                 <ThemedText style={styles.timestampItem}>{`${timestamp.time} - ${t(timestamp.label)}`}</ThemedText>
               </TouchableOpacity>
             ))}
-          </View>
+          </ThemedView>
         )}
-        <View style={styles.tipsContainer}>
+        <ThemedView style={styles.tipsContainer}>
           {drill.tips && drill.tips.length > 0 && (
             drill.tips.map((tip: string, index: number) => (
               <ThemedText key={index} style={styles.tipItem}>{t(tip)}</ThemedText>
@@ -57,18 +54,17 @@ const DrillDetails: React.FC<DrillDetailsProps> = ({ drill, webViewRef }) => {
           )}
           {drill.workoutSteps && drill.workoutSteps.length > 0 && (
             drill.workoutSteps.map((step, index) => (
-              <View key={index} style={styles.timestampsContainer}>
+              <ThemedView key={index} style={styles.timestampsContainer}>
               
               <TouchableOpacity onPress={() => seekToTime(step.time)}>
                 <ThemedText style={styles.timestampItem}>{step.time && step.time + ':' }{t(step.title)}</ThemedText>
               </TouchableOpacity>
             
-              </View>
+              </ThemedView>
             ))
           )}
-        </View>
+        </ThemedView>
       </ScrollView>
-      
   );
 };
 
@@ -93,7 +89,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   tipsContainer: {
-
     marginTop: 0,
     alignItems: 'flex-start',
     paddingBottom: 120,
@@ -117,8 +112,6 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginTop: 10,
   },
-  
-  
 });
 
 export default DrillDetails;

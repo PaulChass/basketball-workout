@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import DraggableFlatList, { RenderItemParams, RenderItem } from 'react-native-draggable-flatlist';
 import { DrillDetailsScreenProps } from '../../types/navigationTypes';
 import { useTranslation } from 'react-i18next';
+import { ThemedView } from '../ThemedView';
 
 interface Drill {
   title: string;
@@ -71,16 +72,16 @@ const DrillsList: React.FC<DrillsListProps> = ({ drills, setDrills }) => {
   };
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<Drill>) => (
-    <View key={item.title} style={[styles.drillContainer, isActive && styles.activeDrillContainer]}>
+    <ThemedView key={item.title} style={[styles.drillContainer, isActive && styles.activeDrillContainer]}>
       <TouchableOpacity onPress={() => navigation.navigate('DrillDetailsScreen', { drill: item })}>
-        <View style={styles.infoBar}>
+        <ThemedView style={styles.infoBar}>
           <ThemedText type="subtitle">{t(item.title)}</ThemedText>
           <ThemedText type="default">
             {typeof item.duration !== 'number' ? t(item.duration) :
               item.duration < 1 ? `${item.duration * 60} sec` : `${item.duration} min`}
           </ThemedText>
-        </View>
-        <View style={styles.animationBar}>
+        </ThemedView>
+        <ThemedView style={styles.animationBar}>
           <TouchableOpacity onLongPress={drag} style={styles.dragHandle}>
             <Icon name="drag-handle" size={24} color="gray" />
           </TouchableOpacity>
@@ -94,9 +95,9 @@ const DrillsList: React.FC<DrillsListProps> = ({ drills, setDrills }) => {
           <TouchableOpacity onPress={() => handleDeleteDrill(item.title)} style={styles.deleteButton}>
             <Icon name="delete" size={24} color="gray" />
           </TouchableOpacity>
-        </View>
+        </ThemedView>
       </TouchableOpacity>
-    </View>
+    </ThemedView>
   );
 
   return (

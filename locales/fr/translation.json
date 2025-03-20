@@ -182,5 +182,6 @@
         "thankYou": "Merci pour votre retour !",
         "failed": "Échec de l'envoi du retour. Veuillez réessayer plus tard.",
         "error": "Une erreur s'est produite. Veuillez réessayer plus tard."
-    }
+    },
+    "Congratulations! Workout completed!"   : "Félicitations! Entraînement terminé!"
 }

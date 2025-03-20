@@ -16,6 +16,7 @@ import ShootingFundamentalsDrills from '@/components/drills/ShootingFundamentals
 import { ScrollView } from 'react-native-gesture-handler';
 import CreateDrill from '@/components/drills/CreateDrill';
 import FeedbackForm from '@/components/forms/FeedbackForm';
+import { ThemedView } from '@/components/ThemedView';
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -46,7 +47,7 @@ function DrillsCategories() {
 
   return (
     <ScrollView >
-      <View style={styles.tabContainer}>
+      <ThemedView style={styles.tabContainer}>
       {categories.map(category => (
         <TouchableOpacity
           key={category}
@@ -62,7 +63,7 @@ function DrillsCategories() {
         </ImageBackground>
         </TouchableOpacity>
       ))}
-      </View>
+      </ThemedView>
     </ScrollView>
   );
 }
@@ -73,8 +74,8 @@ function ShootWorkoutsList() {
 
   return (
     <ScrollView>
-      <View style={styles.tabContainer}>     
-      <TouchableOpacity onPress={() => navigation.navigate('FreeShootingSession')}>
+      <ThemedView style={styles.tabContainer}>     
+      <TouchableOpacity style={styles.categoryButton} onPress={() => navigation.navigate('FreeShootingSession')}>
         <ImageBackground
           source={require('@/assets/images/shooting-free.png')}
           style={styles.buttonBackground}
@@ -92,7 +93,7 @@ function ShootWorkoutsList() {
           <Text style={styles.buttonText}>{t('Custom workouts')}</Text>
         </ImageBackground>
       </TouchableOpacity>
-      </View>
+      </ThemedView>
     </ScrollView>
   );
 }
@@ -128,7 +129,7 @@ export default function DrillsScreen() {
 function DrillsTabs() {
   return (
 
-    <View style={{ flex: 1 }} >
+    <ThemedView style={{ flex: 1 }} >
       <ParallaxScrollView
         headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
         headerImage={
@@ -138,13 +139,18 @@ function DrillsTabs() {
           />
         }>
       </ParallaxScrollView>
-      <View style={styles.tabNavigatorContainer}>
-        <Tab.Navigator>
+      <ThemedView style={styles.tabNavigatorContainer}>
+        <Tab.Navigator
+         screenOptions={{
+          tabBarStyle: { backgroundColor: 'black' },
+          tabBarLabelStyle: { color: 'white' },
+          tabBarIndicatorStyle: { backgroundColor: 'white' },
+        }}>
           <Tab.Screen name="Videos" component={DrillsCategories} />
           <Tab.Screen name="Custom" component={ShootWorkoutsList} />
         </Tab.Navigator>
-      </View>
-    </View>
+      </ThemedView> 
+    </ThemedView>
   );
 }
 
@@ -152,8 +158,9 @@ const styles = StyleSheet.create({
   tabContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     padding: 0,
+    minHeight: 500,
   },
   subtitle: {
     fontSize: 18,
@@ -184,7 +191,7 @@ const styles = StyleSheet.create({
   },
   tabNavigatorContainer: {
     flex: 1,
-    marginTop: -300,
+    marginTop: -320,
   },
   buttonBackground: {
     height: 200,

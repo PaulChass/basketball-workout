@@ -4,6 +4,7 @@ import { drills as allDrills } from './drillsData';
 import DrillsList from './DrillsList';
 import { useTranslation } from 'react-i18next';
 import { useRoute } from '@react-navigation/native';
+import { ThemedView } from '../ThemedView';
 
 
 
@@ -16,13 +17,13 @@ export default function AllDrills() {
   const [drills, setDrills] = useState(initialDrills);
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       {/** Header with possibility to filter drills */}
         <DrillsList
           drills={drills}
           setDrills={setDrills}
         />
-      </View>
+    </ThemedView>
   );
 }
 

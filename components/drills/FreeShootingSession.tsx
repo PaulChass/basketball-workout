@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useTranslation } from 'react-i18next';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { Icon } from 'react-native-vector-icons/Icon';
+import { ThemedView } from '../ThemedView';
 
 const FreeShootingSession: React.FC = () => {
   const { t } = useTranslation();
@@ -66,13 +67,13 @@ const FreeShootingSession: React.FC = () => {
    
     
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       <ThemedText style={styles.inputLabel}>{t('Select a zone')}</ThemedText>
-      <View style={styles.inputZone}>
+      <ThemedView style={styles.inputZone}>
         <BasketballCourt onZoneSelect={handleZoneSelect} />
-      </View>
+      </ThemedView>
       {selectedZone && (
-        <View style={styles.inputContainer}>
+        <ThemedView style={styles.inputContainer}>
           <ThemedText style={styles.inputTitle}>{t('Selected zone')}: {selectedZone}</ThemedText>
           <ThemedText style={styles.inputLabel}>{t('Average')}:  {progress} % </ThemedText>
           <ThemedText style={styles.inputLabel}>{t('Shots Made')}</ThemedText>
@@ -94,15 +95,16 @@ const FreeShootingSession: React.FC = () => {
           <TouchableOpacity style={styles.saveButton} onPress={askIfSure}>
             <Text style={styles.saveButtonText}>{t('Save')}</Text>
           </TouchableOpacity>
-        </View>
+        </ThemedView>
       )}
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    height: '100%',
   },
   inputContainer: {
     marginTop: 16,

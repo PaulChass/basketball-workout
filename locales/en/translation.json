@@ -177,5 +177,6 @@
         "thankYou": "Thank you for your feedback!",
         "failed": "Failed to submit feedback. Please try again later.",
         "error": "An error occurred. Please try again later."
-    }
+    },
+    "Congratulations! Workout completed!" : "Congratulations! Workout completed!"
 }

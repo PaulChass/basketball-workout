@@ -134,6 +134,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
       clearInterval(timeToComplete); 
       setDrillIndex(drillIndex + 1);
     } else {
+      alert(t('Congratulations! Workout completed!'));
       navigation.navigate('Feedback');      
     }
   };
@@ -409,6 +410,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingBottom: 10,
     paddingTop: 10,
+    marginVertical: 25,
+    
   },
   stepTitle: {
     flexDirection: 'row',

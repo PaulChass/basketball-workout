@@ -1,10 +1,11 @@
 import React , {useEffect, useState, useRef} from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import DrillDetails from '../../components/drills/DrillDetails';
-import {  useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
+import { useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ThemedText } from '@/components/ThemedText';
+import { ThemedText } from '@/components/ThemedText'; // Import ThemedView
+import { ThemedView } from '@/components/ThemedView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { navigate } from 'expo-router/build/global-state/routing';
@@ -20,7 +21,6 @@ export default function DrillDetailsScreen() {
   const [isWorkoutScreen, setIsWorkoutScreen] = useState(false);
   const webViewRef = useRef<WebView>(null);
   const [currentTime, setCurrentTime] = useState(0);
-  
 
   useEffect(() => {
     const checkFavorite = async () => {
@@ -34,8 +34,6 @@ export default function DrillDetailsScreen() {
     };
     checkFavorite();
   }, [drill.title]);
-
- 
 
   const toggleFavorite = async () => {
     try {
@@ -110,14 +108,14 @@ export default function DrillDetailsScreen() {
   };
 
   return (
-      <View style={styles.container}>
+      <ThemedView style={styles.container}>
         <ThemedText style={styles.drillTitle}>{t(drill.title)}</ThemedText>
               <ThemedText style={styles.drillDuration}>
                 {typeof drill.duration !== 'number' ? t(drill.duration) :
                   drill.duration < 1 ? `${drill.duration * 60} ${t('seconds')}` : `${Math.floor(drill.duration)} ${t('minutes')}` + (drill.duration % 1 !== 0 ? ` ${drill.duration % 1 * 60} ${t('seconds')}` : '')}
               </ThemedText>
               {drill.videoUrl ? (
-                <View style={styles.animationContainer}>
+                <ThemedView style={styles.animationContainer}>
                   <WebView
                     key={drill.videoUrl}
                     originWhitelist={['*']}
@@ -133,11 +131,10 @@ export default function DrillDetailsScreen() {
                       setCurrentTime(Number(eventTime));
                     }}
                   />
-                  
-                </View>
+                </ThemedView>
               ) : (
-                <View style={styles.animationContainer}>
-                  </View>
+                <ThemedView style={styles.animationContainer}>
+                </ThemedView>
               )}
               {i18n.language !== 'en' && drill.videoUrl && (
                 <ThemedText style={styles.captionsInfo}>{t('Click on the CC button in the video player to enable captions')}</ThemedText>
@@ -150,7 +147,7 @@ export default function DrillDetailsScreen() {
             webViewRef={webViewRef}
           />
        
-        <View style={styles.doneButtonContainer}>
+        <ThemedView style={styles.doneButtonContainer}>
         {drill.workoutSteps?.length > 0 ? (
           <TouchableOpacity style={styles.doneButton} onPress={() => setIsWorkoutScreen(true)}>
             <ThemedText style={styles.doneButtonText}>{t('Start Workout')}</ThemedText>
@@ -163,11 +160,11 @@ export default function DrillDetailsScreen() {
         <TouchableOpacity style={styles.favoriteIcon} onPress={toggleFavorite}>
                 <Icon name="favorite" size={24} color={isFavorite ? 'red' : 'gray'} />
               </TouchableOpacity>
-        </View>
+        </ThemedView>
       
         </>
             )}          
-      </View>
+      </ThemedView>
   );
 }
 

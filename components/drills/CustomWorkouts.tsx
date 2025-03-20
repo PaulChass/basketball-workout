@@ -4,6 +4,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { useNavigation } from '@react-navigation/native';
 import { getProgress, saveProgress } from '@/utils/storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { ThemedView } from '../ThemedView';
 
 interface Drill {
   title: string;
@@ -46,24 +47,26 @@ const CustomWorkouts = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ThemedView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+     
       <ThemedText style={styles.header}>Custom Workouts</ThemedText>
       {customDrills.length > 0 ? (
         customDrills.map((drill, index) => (
-          <View key={index} style={styles.drillContainer}>
+          <ThemedView key={index} style={styles.drillContainer}>
             <TouchableOpacity style={styles.drillContent} onPress={() => navigation.navigate('DrillDetailsScreen', { drill })}>
               <ThemedText style={styles.drillTitle}>{drill.title}</ThemedText>
               <ThemedText style={styles.drillDescription}>{drill.description}</ThemedText>
             </TouchableOpacity>
-            <View style={styles.iconContainer}>
+            <ThemedView style={styles.iconContainer}>
               <TouchableOpacity onPress={() => navigation.navigate('EditDrill', { drill, index })}>
                 <Icon name="edit" size={24} color="gray" />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => deleteDrill(index)}>
                 <Icon name="delete" size={24} color="red" />
               </TouchableOpacity>
-            </View>
-          </View>
+            </ThemedView>
+          </ThemedView>
         ))
       ) : (
         <ThemedText style={styles.noDrillsText}>No custom workouts available.</ThemedText>
@@ -72,11 +75,16 @@ const CustomWorkouts = () => {
         <ThemedText style={styles.createButtonText}>Create New Workout</ThemedText>
       </TouchableOpacity>
     </ScrollView>
+    </ThemedView>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
+  },
+  scrollContainer: {
     padding: 20,
     alignItems: 'center',
   },
