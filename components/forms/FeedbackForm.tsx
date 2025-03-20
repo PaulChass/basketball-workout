@@ -32,7 +32,7 @@ const FeedbackForm = () => {
       });
 
       if (response.ok) {
-        alert(t('Thank you for your feedback!'));
+        alert(t('feedback.thankYou'));
         // Clear the form
         setDrillFeedback('');
         setNewDrills('');
@@ -44,11 +44,11 @@ const FeedbackForm = () => {
         }
 
       } else {
-        alert(t('Failed to submit feedback. Please try again later.'));
+        alert(t('feedback.failed'));
       }
     } catch (error) {
       console.error('Error submitting feedback:', error);
-      alert(t('An error occurred. Please try again later.'));
+      alert(t('feedback.error'));
     }
   };
 

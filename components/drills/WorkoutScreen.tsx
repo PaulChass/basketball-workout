@@ -239,7 +239,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
       <TouchableOpacity style={styles.stepTitle} onPress={() => seekToTime(drill.workoutSteps[drillIndex].time)}>
         <ThemedText>
           <ThemedText style={styles.link}>{drill.workoutSteps[drillIndex].time && drill.workoutSteps[drillIndex].time+':' }</ThemedText> 
-          {drill.workoutSteps[drillIndex].title} -         {drillIndex + 1}  ({drill.workoutSteps.length})
+          {drill.workoutSteps[drillIndex].title} - ({drillIndex + 1} / {drill.workoutSteps.length})
         </ThemedText>
       </TouchableOpacity>
       <ThemedText style={styles.timerText}>{drill.workoutSteps[drillIndex].description}</ThemedText>

@@ -1,50 +1,94 @@
-# Welcome to your Expo app 👋
+# Basketball Workout App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This project is a React Native application designed to help users improve their basketball skills through various drills and workouts. The app tracks progress, provides timers, and allows users to save their results.
 
-## Get started
+## Features
 
-1. Install dependencies
+- Multiple workout drills with step-by-step instructions
+- Timer and countdown functionality
+- Progress tracking for time, reps, and weights
+- Localization support with translations
+
+## Setup
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- React Native CLI
+- Android Studio or Xcode (for Android or iOS development)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/bball-workout.git
+   cd bball-workout
+   ```
+
+2. Install dependencies:
 
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
-2. Start the app
+3. Set up the environment:
 
-   ```bash
-    npx expo start
-   ```
+   - For iOS:
 
-In the output, you'll find options to open the app in a
+     ```bash
+     cd ios
+     pod install
+     cd ..
+     ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   - For Android, ensure you have an Android emulator or device set up.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Running the App
 
-## Get a fresh project
+- For iOS:
 
-When you're ready, run:
+  ```bash
+  npx react-native run-ios
+  ```
 
-```bash
-npm run reset-project
-```
+- For Android:
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+  ```bash
+  npx react-native run-android
+  ```
 
-## Learn more
+## Usage
 
-To learn more about developing your project with Expo, look at the following resources:
+1. Open the app on your device or emulator.
+2. Select a workout drill from the list.
+3. Follow the instructions and use the timer or input fields to track your progress.
+4. Save your results and view your best and average times, reps, or weights.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Localization
 
-## Join the community
+The app supports multiple languages using the `react-i18next` library. To add or update translations, modify the translation files located in the `src/locales` directory.
 
-Join our community of developers creating universal apps.
+## Contributing
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Commit your changes and push the branch to your fork.
+4. Open a pull request with a detailed description of your changes.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- React Native
+- react-i18next
+- react-native-vector-icons
+
+Feel free to reach out if you have any questions or need further assistance.

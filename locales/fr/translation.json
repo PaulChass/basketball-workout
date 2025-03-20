@@ -177,5 +177,10 @@
     "Shooting coaching with Sean Sweeney": "Coaching de tir avec Sean Sweeney",
     "Thank you for your feedback!": "Merci pour vos commentaires!",
     "Failed to submit feedback. Please try again later.": "Échec de l'envoi des commentaires. Veuillez réessayer plus tard.",
-    "An error occurred. Please try again later.": "Une erreur s'est produite. Veuillez réessayer plus tard."
+    "An error occurred. Please try again later.": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+    "feedback": {
+        "thankYou": "Merci pour votre retour !",
+        "failed": "Échec de l'envoi du retour. Veuillez réessayer plus tard.",
+        "error": "Une erreur s'est produite. Veuillez réessayer plus tard."
+    }
 }

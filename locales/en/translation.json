@@ -172,5 +172,10 @@
     "Shooting coaching with Sean Sweeney": "Shooting coaching with Sean Sweeney",
     "Thank you for your feedback!": "Thank you for your feedback!",
     "Failed to submit feedback. Please try again later.": "Failed to submit feedback. Please try again later.",
-    "An error occurred. Please try again later.": "An error occurred. Please try again later."
+    "An error occurred. Please try again later.": "An error occurred. Please try again later.",
+    "feedback": {
+        "thankYou": "Thank you for your feedback!",
+        "failed": "Failed to submit feedback. Please try again later.",
+        "error": "An error occurred. Please try again later."
+    }
 }
