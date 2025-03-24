@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, ScrollView, Button } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,40 +7,10 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import FeedbackForm from '@/components/forms/FeedbackForm';
-import { navigate } from 'expo-router/build/global-state/routing';
 
-export default function TabTwoScreen() {
+export default function Stats() {
   const { t } = useTranslation(); // Initialize useTranslation
-  const [feedback, setFeedback] = useState('');
-  const [email, setEmail] = useState('');
 
-
-  const handleSubmitFeedback = async () => {
-    try {
-      const response = await fetch('http://api.balldontlie.fr/feedback.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          feedback,
-          email,
-        }),
-      });
-  
-      if (response.ok) {
-        alert(t('Thank you for your feedback!'));
-        // Clear the form
-        setFeedback('');
-        setEmail('');
-      } else {
-        alert(t('Failed to submit feedback. Please try again later.'));
-      }
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-      alert(t('An error occurred. Please try again later.'));
-    }
-  };
 
 
   return (
@@ -57,10 +27,10 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>  
         <ThemedText type="title">{t('Settings')}</ThemedText>          
       </ThemedView>
-      <View style={styles.progressContainer}>
+      <ThemedView style={styles.progressContainer}>
         <ThemedText>{t('Language')}</ThemedText>
         <LanguageSwitcher />
-      </View>
+      </ThemedView>
       <FeedbackForm />
     </ParallaxScrollView>
   );

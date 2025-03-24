@@ -14,6 +14,7 @@ export type RootStackParamList = {
   LayupsFundamentalsDrills: undefined;
   AllDrillsList: { category: string };
   DrillsTabs: undefined;
+  DrillsCategories: undefined;
   // Add other screens here
 };
 

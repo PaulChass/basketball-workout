@@ -7,6 +7,7 @@ import TimerCircle from '../ui/TimerCircle';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CountdownCircle from '../ui/CountdownCircle';
 import { useNavigation } from '@react-navigation/native';
+import { ThemedView } from '../ThemedView';
 
 interface WorkoutScreenProps {
   drill: any;
@@ -135,7 +136,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
       setDrillIndex(drillIndex + 1);
     } else {
       alert(t('Congratulations! Workout completed!'));
-      navigation.navigate('Feedback');      
+      navigation.navigate('Home');      
     }
   };
   
@@ -244,7 +245,12 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
         </ThemedText>
       </TouchableOpacity>
       <ThemedText style={styles.timerText}>{drill.workoutSteps[drillIndex].description}</ThemedText>
-      {drill.workoutSteps[drillIndex].countdown>0 && <CountdownCircle totalTime={drill.workoutSteps[drillIndex].countdown} />}
+        {drill.workoutSteps[drillIndex].countdown>0 && 
+          <ThemedView style={styles.countdownContainer}>
+          <CountdownCircle totalTime={drill.workoutSteps[drillIndex].countdown} />
+          </ThemedView>
+        }
+
         {drill.workoutSteps[drillIndex].type === 'time' && (
         <>
           <View style={styles.recordsContainer}>
@@ -261,6 +267,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
                   <TextInput
                     style={styles.smallerTimeInput}
                     placeholder={t('minutesPlaceholder')}
+                    placeholderTextColor={'gray'}
                     value={minutes}
                     keyboardType="numeric"
                     onChangeText={(text) => setMinutes(text)}
@@ -269,6 +276,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
                   <TextInput
                     style={styles.smallerTimeInput}
                     placeholder={t('secondsPlaceholder')}
+                    placeholderTextColor={'gray'}
                     value={seconds}
                     keyboardType="numeric"
                     onChangeText={(text) => setSeconds(text)}
@@ -294,6 +302,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
           <TextInput
             style={styles.timeInput}
             placeholder={t('repsPlaceholder')}
+            placeholderTextColor={'gray'}
             keyboardType="numeric"
             onChangeText={(text) => (setNumberOfReps(text))}
           />
@@ -314,6 +323,7 @@ const WorkoutScreen: React.FC<WorkoutScreenProps> = ({ drill, webViewRef, curren
           <TextInput
             style={styles.timeInput}
             placeholder={t('weightPlaceholder')}
+            placeholderTextColor={'gray'}
             keyboardType="numeric"
             onChangeText={(text) => (setNumberOfReps(text))}
           />
@@ -423,7 +433,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     position: 'sticky',
-    bottom: 0,
+    bottom: 10,
     left: 0,
     right: 0,
     width: '100%',
@@ -433,9 +443,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginVertical: 15,
-    marginHorizontal: 25,
+    marginHorizontal: 15,
     borderRadius: 20,
-    
   },
   nextButton: {
     paddingVertical: 15,
@@ -485,7 +494,7 @@ const styles = StyleSheet.create({
   },
   smallerTimeInput: {
     height: 40,
-    width: 120,
+    width: 100,
     borderColor: 'gray',
     borderWidth: 1,
     marginHorizontal: 5,
@@ -496,6 +505,7 @@ const styles = StyleSheet.create({
   },
   countdownContainer: {
     marginTop: 20,
+    marginBottom:20,
   },
 
 });

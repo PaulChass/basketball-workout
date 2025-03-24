@@ -103,7 +103,7 @@ const DrillsList: React.FC<DrillsListProps> = ({ drills, setDrills }) => {
   return (
     <DraggableFlatList
       data={drills}
-      onDragEnd={({ data }) => setDrills([...data])} // Ensure state update is immutable
+      onDragEnd={({ data }) => setDrills([...data])} 
       keyExtractor={(_, index) => `drill-${index}`}
       renderItem={renderItem}
       contentContainerStyle={styles.listContentContainer}

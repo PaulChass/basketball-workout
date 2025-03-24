@@ -3,12 +3,11 @@ import { StyleSheet } from 'react-native';
 import DrillDetails from '../../components/drills/DrillDetails';
 import { useRoute, useNavigation, NavigationProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ThemedText } from '@/components/ThemedText'; // Import ThemedView
+import { TouchableOpacity } from 'react-native';
+import { ThemedText } from '@/components/ThemedText'; 
 import { ThemedView } from '@/components/ThemedView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { navigate } from 'expo-router/build/global-state/routing';
 import WorkoutScreen from '../../components/drills/WorkoutScreen';
 import WebView from 'react-native-webview';
 

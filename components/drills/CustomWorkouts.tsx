@@ -20,7 +20,6 @@ const CustomWorkouts = () => {
       const drills = await getProgress('customDrills');
       setCustomDrills(drills || []);
     };
-
     fetchCustomDrills();
   }, []);
 
@@ -49,7 +48,6 @@ const CustomWorkouts = () => {
   return (
     <ThemedView style={styles.container}>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-     
       <ThemedText style={styles.header}>Custom Workouts</ThemedText>
       {customDrills.length > 0 ? (
         customDrills.map((drill, index) => (
@@ -76,7 +74,6 @@ const CustomWorkouts = () => {
       </TouchableOpacity>
     </ScrollView>
     </ThemedView>
-
   );
 };
 

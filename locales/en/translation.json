@@ -178,5 +178,9 @@
         "failed": "Failed to submit feedback. Please try again later.",
         "error": "An error occurred. Please try again later."
     },
-    "Congratulations! Workout completed!" : "Congratulations! Workout completed!"
+    "Congratulations! Workout completed!" : "Congratulations! Workout completed!",
+    "All Drills, Videos and Workouts": "All Drills",
+    "What did you think of the drills?": "What did you think of the drills?",
+    "What are your general thoughts on the app?": "What are your general thoughts on the app?",
+    "What changes / upgrades would you like to see?": "What changes / upgrades would you like to see?"
 }

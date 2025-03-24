@@ -18,6 +18,25 @@ export const drills: Drill[] = [
     tags: ['dribbling' ,'Workouts','beginner','intermediate', 'Ball handling']
   },
   {
+    title:'Shooting coaching with Sean Sweeney',
+    duration: 20,
+    description: 'Learn how to shoot and coach shooting from Sean Sweeney.',
+    videoUrl: 'https://youtu.be/3wvW1bwxcAc',
+    timestamps: [
+      { time: '0:12', label: 'Introduction' },
+      { time: '2:25', label: 'Lower body' },
+      { time: '4:37', label: 'Upper body' },
+      { time:'6:00', label: 'The shooting pocket'},
+      { time:'8:24', label: 'Bringing the ball straigth up to the shooting window' },
+      { time:'10:00', label: 'Form Shooting' },
+      { time:'13:35', label: 'Alignment' },
+      { time:'15:43', label: 'Using the legs to generate power' },
+      { time:'19:33', label: 'Stepping inot a catch and shoot' },
+      { time:'22:14', label: 'Conclusion - Q&A' }  
+    ],
+    tags: ['Shooting', 'advanced','lessons','Masterclass']
+  },
+  {
     title: 'Find YOUR shooting pocket',
     duration: 5,
     description: 'Tutorial on how to find your shooting pocket.',
@@ -330,25 +349,6 @@ export const drills: Drill[] = [
       { time:'1:38' , title: 'Rebounding tap drill',description:'Tap the ball two times on the backboard with one hand then catch the ball ,as soon as you land explode to the basket',type:'none'},
       { time:'3:03' , title: 'Double time',description:'Same as before , but switch side/hands after each rep',type:'none'}
     ],
-  },
-  {
-    title:'Shooting coaching with Sean Sweeney',
-    duration: 20,
-    description: 'Learn how to shoot and coach shooting from Sean Sweeney.',
-    videoUrl: 'https://youtu.be/3wvW1bwxcAc',
-    timestamps: [
-      { time: '0:12', label: 'Introduction' },
-      { time: '2:25', label: 'Lower body' },
-      { time: '4:37', label: 'Upper body' },
-      { time:'6:00', label: 'The shooting pocket'},
-      { time:'8:24', label: 'Bringing the ball straigth up to the shooting window' },
-      { time:'10:00', label: 'Form Shooting' },
-      { time:'13:35', label: 'Alignment' },
-      { time:'15:43', label: 'Using the legs to generate power' },
-      { time:'19:33', label: 'Stepping inot a catch and shoot' },
-      { time:'22:14', label: 'Conclusion - Q&A' }  
-    ],
-    tags: ['Shooting', 'advanced','lessons','Masterclass']
   },
   {
     title: 'Home vertical training workout (no equipment)',

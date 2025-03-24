@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StyleSheet, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { getProgress, saveProgress } from '@/utils/storage';
 import BasketballCourt from '../ui/BasketballCourt';
 import { ThemedText } from '@/components/ThemedText';
 import { useTranslation } from 'react-i18next';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
-import { Icon } from 'react-native-vector-icons/Icon';
 import { ThemedView } from '../ThemedView';
 
-const FreeShootingSession: React.FC = () => {
+export default function FreeShootingSession() {
   const { t } = useTranslation();
   const [selectedZone, setSelectedZone] = useState<string | null>(null);
   const [shotsAttempted, setShotsAttempted] = useState<string>('');
@@ -147,4 +144,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FreeShootingSession;
