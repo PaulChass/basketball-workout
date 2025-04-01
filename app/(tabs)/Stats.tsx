@@ -6,7 +6,6 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import FeedbackForm from '@/components/forms/FeedbackForm';
 
 export default function Stats() {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -31,7 +30,6 @@ export default function Stats() {
         <ThemedText>{t('Language')}</ThemedText>
         <LanguageSwitcher />
       </ThemedView>
-      <FeedbackForm />
     </ParallaxScrollView>
   );
 }
